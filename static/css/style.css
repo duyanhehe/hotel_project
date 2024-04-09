@@ -1,0 +1,40 @@
+.jumbotron {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../img/homeBanner.png');
+    background-size: cover;
+    background-position: center;
+    color: whitesmoke;
+    padding: 50px;
+    height: 75vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: -1;
+  }
+  
+  .jumbotron h1, .jumbotron p {
+    margin-bottom: 20px;
+  }
+  
+  .jumbotron a.btn {
+    margin-top: 20px;
+  }
+
+.signupImg {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../img/signupImg.jpg');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: -1;
+  height: 100vh;
+}
+
+.custom-ul .custom-li:hover {
+  background-color: #f2f2f2; /* Hover background color */
+}
+
+.custom-ul .custom-active {
+  background-color: #f2f2f2; /* Active background color */
+  font-weight: bold;
+}
