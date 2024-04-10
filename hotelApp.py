@@ -39,7 +39,7 @@ def login():
             session['is_login'] = True
             return redirect(url_for('homepage'))
         else:
-            flash('Wrong xdd', category='error')
+            flash('Wrong email or password', category='error')
     return render_template("user/login.html") 
 
 @app.route('/logout')
@@ -99,6 +99,28 @@ def sign_up():
 
     return render_template("user/sign_up.html")
 
+@app.route('/forgot_password', methods=['GET', 'POST'])
+def forgot_password():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        password1 = request.form['password1']
+
+        if password != password1:
+            flash('Password don\'t match.', category='error')
+            return redirect(url_for('forgot_password'))
+
+        user_model = dbModel.User()
+        if user_model.getByEmail(email):
+            if user_model.reset_password(email, password):
+                #redirect or render a success message
+                flash("Password reset successful", category='success')
+                return redirect(url_for('login'))
+            else:
+                flash("Failed to reset password. Please try again", category='error')
+                return redirect(url_for('forgot_password'))
+        flash('Email address not found', category='error')
+    return render_template("user/forgot_pass.html")
 
 # Error handling
 @app.errorhandler(404)

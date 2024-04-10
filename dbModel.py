@@ -76,3 +76,19 @@ class User(Model):
             if check_password_hash(user[5], password):
                 return True
         return False
+    
+    def reset_password(self, email, password):
+        hashed_password = generate_password_hash(password)
+        try:
+            self.dbcursor.execute('UPDATE users SET password = %s WHERE email = %s', (hashed_password, email))
+            self.conn.commit()
+            return True
+        except Error as e:
+            print(e)
+            return False
+
+    def verify_password(self, email, password):
+        hashed_password = self.get_hashed_password(email)
+        if hashed_password:
+            return check_password_hash(hashed_password, password)
+        return False
