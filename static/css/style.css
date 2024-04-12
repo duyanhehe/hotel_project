@@ -40,3 +40,24 @@
   background-color: #f2f2f2; /* Active background color */
   font-weight: bold;
 }
+
+.nav-link.has-dropdown {
+  position: relative; /* Ensure the parent link is positioned relatively */
+}
+
+.nav-link.has-dropdown .dropdown-arrow {
+  position: absolute; /* Position the arrow absolutely */
+  top: 50%; /* Align the arrow vertically at the middle */
+  right: 10px; /* Adjust the distance from the right edge */
+  transform: translateY(-50%); /* Center the arrow vertically */
+}
+
+.nav-link.has-dropdown .dropdown-arrow::after {
+  content: "";
+  border: solid black;
+  border-width: 0 2px 2px 0;
+  display: inline-block;
+  padding: 3px;
+  transform: rotate(45deg);
+  margin-left: 5px; /* Adjust the distance between the arrow and the text */
+}
