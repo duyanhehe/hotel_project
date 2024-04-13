@@ -41,6 +41,17 @@
   font-weight: bold;
 }
 
+
+
+.offcanvas-start {
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-in-out;
+}
+
+.offcanvas-start.show {
+  transform: translateX(0);
+}
+
 .nav-link.has-dropdown {
   position: relative; /* Ensure the parent link is positioned relatively */
 }

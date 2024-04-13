@@ -1,4 +1,5 @@
-CREATE DATABASE IF NOT EXISTS hotel_db;
+DROP DATABASE IF EXISTS hotel_db;
+CREATE DATABASE hotel_db;
 USE hotel_db;
 
 CREATE TABLE users(
