@@ -2,14 +2,13 @@
 
 {% block content %}
 
-{% for room in rooms %}
 <div class="container text-center">
-    <h3> {{room.room_name}} </h3>
+    <h3> Room name </h3>
 </div>
 <div id="carouselExample" class="carousel slide">
     <div class="carousel-inner">
-      <div class="carousel-item{% if loop.first %} active{% endif %}">
-        <img src="{{ room.room_img }}" class="d-block w-100" alt="{{ room.alt }}">
+      <div class="carousel-item active">
+        <img src="../../static/img/large_hotel_room.png" class="d-block w-100" alt="room.alt">
       </div>
     </div>
     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
@@ -23,7 +22,7 @@
   </div>
 
 <div class="container">
-    <p> {{room.room_description}} </p>
+    <p> description about the room </p>
 </div>
 
 {% endblock %}

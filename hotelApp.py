@@ -18,10 +18,9 @@ def booking_page():
     active_page = 'booking'
     return render_template("booking/booking.html", active_page = active_page)
 
-@app.route('/booking/<int:room_id>')
+@app.route('/booking/1')
 def room():
-    pass
-    # return render_template("booking/room.html")
+    return render_template("booking/room.html")
 
 @app.route('/contact')
 def contact_page():
@@ -132,6 +131,10 @@ def admin_login():
 def admin_dashboard():
     return render_template("admin/dashboard.html")
 
+@app.route('/admin/booking/all_bookings')
+def all_bookings():
+    return render_template("admin/booking/all_bookings.html")
+
 # Error handling
 @app.errorhandler(404)
 def page_not_found(e):
@@ -139,4 +142,4 @@ def page_not_found(e):
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)

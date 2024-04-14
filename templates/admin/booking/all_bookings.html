@@ -1,0 +1,46 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+<div class="container pt-4">
+    <h3>Dashboard</h3>
+    <p class="text-secondary">You have total 6969 booking's.</p>
+</div>
+
+<div class="container pt-4">
+    <div class="container bg-body-tertiary border border-secondary">
+        <div class="d-flex container py-2">
+            <div>
+                <select name="booking" id="booking">
+                    <option value="send_email">Send Email</option>
+                    <option value="delete_booking">Delete Booking</option>
+                </select>
+            </div>
+            <!-- <div>
+                <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names..">
+            </div> -->
+        </div>
+        <div class="container py-2">
+            <table class="table">
+                <tr>
+                    <td>ID</td>
+                    <td>Customer</td>
+                    <td>Package</td>
+                    <td>Booking</td>
+                    <td>Room Type</td>
+                    <td>Arrive</td>
+                    <td>Payment</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>DuyAnh</td>
+                    <td>Vacation</td>
+                    <td>Active</td>
+                    <td>Deluxe</td>
+                    <td>30 April 2023</td>
+                    <td>Paid</td>  
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
