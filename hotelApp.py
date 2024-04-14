@@ -7,6 +7,7 @@ from functools import wraps
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'asldjfasduosadfupoas'
 
+# USER
 @app.route('/')
 def homepage():
     active_page = 'home'
@@ -120,6 +121,12 @@ def forgot_password():
                 return redirect(url_for('forgot_password'))
         flash('Email address not found', category='error')
     return render_template("user/forgot_pass.html")
+
+
+# ADMIN
+@app.route('/admin')
+def admin_login():
+    return render_template("admin/login.html")
 
 @app.route('/admin/dashboard')
 def admin_dashboard():
