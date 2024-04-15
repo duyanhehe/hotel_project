@@ -53,10 +53,10 @@
                                     <a href="{{ url_for('all_bookings') }}" class="nav-link text-dark">All Bookings</a>
                                 </li>
                                 <li class="nav-item ps-4">
-                                    <a href="#" class="nav-link text-dark">Add Bookings</a>
+                                    <a href="{{ url_for('add_booking') }}" class="nav-link text-dark">Add Booking</a>
                                 </li>
                                 <li class="nav-item ps-4">
-                                    <a href="#" class="nav-link text-dark">Edit Bookings</a>
+                                    <a href="{{ url_for('edit_booking') }}" class="nav-link text-dark">Edit Booking</a>
                                 </li>
                             </ul>
                         </li>
@@ -73,7 +73,7 @@
                             </a>
                             <ul id="room" class="nav-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                                 <li class="nav-item ps-4">
-                                    <a href="#" class="nav-link text-dark">All rooms</a>
+                                    <a href="{{ url_for('all_rooms') }}" class="nav-link text-dark">All rooms</a>
                                 </li>
                                 <li class="nav-item ps-4">
                                     <a href="#" class="nav-link text-dark">Room Types</a>

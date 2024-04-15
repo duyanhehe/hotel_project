@@ -135,6 +135,18 @@ def admin_dashboard():
 def all_bookings():
     return render_template("admin/booking/all_bookings.html")
 
+@app.route('/admin/booking/add_booking')
+def add_booking():
+    return render_template("admin/booking/add_booking.html")
+
+@app.route('/admin/booking/edit_booking')
+def edit_booking():
+    return render_template("admin/booking/edit_booking.html")
+
+@app.route('/admin/room/all_rooms')
+def all_rooms():
+    return render_template("admin/room/all_rooms.html")
+
 # Error handling
 @app.errorhandler(404)
 def page_not_found(e):
