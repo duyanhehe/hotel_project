@@ -11,21 +11,21 @@ app.config['SECRET_KEY'] = 'asldjfasduosadfupoas'
 @app.route('/')
 def homepage():
     active_page = 'home'
-    return render_template("home.html", active_page = active_page)
+    return render_template("user/home.html", active_page = active_page)
 
 @app.route('/booking')
 def booking_page():
     active_page = 'booking'
-    return render_template("booking/booking.html", active_page = active_page)
+    return render_template("user/booking/booking.html", active_page = active_page)
 
 @app.route('/booking/1')
 def room():
-    return render_template("booking/room.html")
+    return render_template("user/booking/room.html")
 
 @app.route('/contact')
 def contact_page():
     active_page = 'contact'
-    return render_template("contact.html", active_page = active_page)
+    return render_template("user/contact.html", active_page = active_page)
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -39,7 +39,7 @@ def login():
             return redirect(url_for('homepage'))
         else:
             flash('Wrong email or password', category='error')
-    return render_template("user/login.html") 
+    return render_template("user/auth/login.html") 
 
 @app.route('/logout')
 def logout():
@@ -96,7 +96,7 @@ def sign_up():
         else:
             flash('Account created!', category='success')
 
-    return render_template("user/sign_up.html")
+    return render_template("user/auth/sign_up.html")
 
 @app.route('/forgot_password', methods=['GET', 'POST'])
 def forgot_password():
@@ -119,8 +119,11 @@ def forgot_password():
                 flash("Failed to reset password. Please try again", category='error')
                 return redirect(url_for('forgot_password'))
         flash('Email address not found', category='error')
-    return render_template("user/forgot_pass.html")
+    return render_template("user/auth/forgot_pass.html")
 
+@app.route('/edit_payment')
+def edit_payment():
+    return render_template("user/edit_payment.html")
 
 # ADMIN
 @app.route('/admin')

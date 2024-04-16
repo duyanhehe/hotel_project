@@ -16,7 +16,7 @@
     <header>
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container">
-              <a class="navbar-brand" href="/">
+              <a class="navbar-brand" href="{{ url_for('homepage') }}">
                 <img src="../static/img/faviconHotel.png" alt="brandImage" width="30" height="24">
                 Hotel
               </a>
@@ -27,13 +27,13 @@
               <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto text-center custom-ul">
                   <li class="nav-item mx-2">
-                    <a class="nav-link custom-li {% if active_page == 'home' %}custom-active{% endif %}" aria-current="page" href="/">Home</a>
+                    <a class="nav-link custom-li {% if active_page == 'home' %}custom-active{% endif %}" aria-current="page" href="{{ url_for('homepage') }}">Home</a>
                   </li>
                   <li class="nav-item mx-2">
-                    <a class="nav-link custom-li {% if active_page == 'booking' %}custom-active{% endif %}" href="/booking">Booking</a>
+                    <a class="nav-link custom-li {% if active_page == 'booking' %}custom-active{% endif %}" href="{{ url_for('booking_page') }}">Booking</a>
                   </li>
                   <li class="nav-item mx-2">
-                    <a class="nav-link custom-li {% if active_page == 'contact' %}custom-active{% endif %}" href="/contact">Contact</a>
+                    <a class="nav-link custom-li {% if active_page == 'contact' %}custom-active{% endif %}" href="{{ url_for('contact_page') }}">Contact</a>
                   </li>
                   <li class="nav-item dropdown mx-2">
                     <a class="nav-link dropdown-toggle custom-li" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -47,16 +47,19 @@
                         <li class="dropdown-item">
                           {{session.email}}
                         </li>
+                        <li>
+                          <a href="{{ url_for('edit_payment') }}" class="dropdown-item">Edit Payment</a>
+                        </li>
                         <hr class="dropdown-divider">
                         <li>
                           <a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a>
                         </li>
                       {% else: %}
                         <li>
-                            <a class="dropdown-item" href="/login">Login</a>
+                            <a class="dropdown-item" href="{{ url_for('login') }}">Login</a>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="/sign_up">Sign Up</a>
+                            <a class="dropdown-item" href="{{ url_for('sign_up') }}">Sign Up</a>
                         </li>
                       {% endif %}
                     </ul>
