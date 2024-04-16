@@ -12,148 +12,155 @@
     <title>Admin Hotel</title>
 </head>
 <body>
-    <header>
-        <nav class="navbar bg-body-tertiary">
-            <div class="container-fluid">
-                <button class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling">
-                    <span class="navbar-toggler-icon"></span>
+    <div class="wrapper">
+        <aside id="sidebar">
+            <div class="d-flex">
+                <button class="toggle-btn" type="button">
+                    <!-- Menu Icon -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
+                      </svg>
                 </button>
+                <div class="sidebar-logo">
+                    <a href="#"><span>Dashboard</span></a>
+                </div>
+            </div>
+            <ul class="sidebar-nav">
+                <!-- Dashboard -->
+                <li class="sidebar-item">
+                    <a href="{{ url_for('admin_dashboard') }}" class="sidebar-link">
+                        <!-- Dashboard Icon -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-columns-gap" viewBox="0 0 16 16">
+                            <path d="M6 1v3H1V1zM1 0a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1zm14 12v3h-5v-3zm-5-1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1zM6 8v7H1V8zM1 7a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1zm14-6v7h-5V1zm-5-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1z"/>
+                          </svg>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
 
-                <div class="offcanvas offcanvas-start bg-body-tertiary" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
-                  <div class="offcanvas-header">
-                      <button type="button" class="btn" data-bs-dismiss="offcanvas" aria-label="Close">
-                          <span class="navbar-toggler-icon"></span>
-                        </button>
-                        <h5 class="offcanvas-title fw-bold" id="offcanvasScrollingLabel">Admin Menu</h5>
-                        <hr class="divider bg-secondary" style="height: 2px;">
-                  </div>
-                  <div class="offcanvas-body d-flex flex-column">
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a href="{{ url_for('admin_dashboard') }}" class="nav-link text-dark fw-bold">
-                                <!-- Dashboard Icon -->
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-columns-gap" viewBox="0 0 16 16">
-                                    <path d="M6 1v3H1V1zM1 0a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1zm14 12v3h-5v-3zm-5-1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1zM6 8v7H1V8zM1 7a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1zm14-6v7h-5V1zm-5-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1z"/>
-                                  </svg>
-                                <span>Dashboard</span>
-                            </a>
+                <!-- Booking -->
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                        data-bs-target="#booking" aria-expanded="false" aria-controls="booking">
+                    <!-- Booking Icon -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-fill" viewBox="0 0 16 16">
+                        <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V5h16V4H0V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5"/>
+                      </svg>
+                    <span>Booking</span>
+                </a>
+                <ul id="booking" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                    <li class="sidebar-item">
+                        <a href="{{ url_for('all_bookings') }}" class="sidebar-link">All Bookings</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="{{ url_for('add_booking') }}" class="sidebar-link">Add Booking</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="{{ url_for('edit_booking') }}" class="sidebar-link">Edit Booking</a>
+                    </li>
+                </ul>
+                </li>
+
+                <!-- Room -->
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                        data-bs-target="#room" aria-expanded="false" aria-controls="room">
+                        <!-- Room Icon -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-houses-fill" viewBox="0 0 16 16">
+                            <path d="M7.207 1a1 1 0 0 0-1.414 0L.146 6.646a.5.5 0 0 0 .708.708L1 7.207V12.5A1.5 1.5 0 0 0 2.5 14h.55a2.5 2.5 0 0 1-.05-.5V9.415a1.5 1.5 0 0 1-.56-2.475l5.353-5.354z"/>
+                            <path d="M8.793 2a1 1 0 0 1 1.414 0L12 3.793V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v3.293l1.854 1.853a.5.5 0 0 1-.708.708L15 8.207V13.5a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 4 13.5V8.207l-.146.147a.5.5 0 1 1-.708-.708z"/>
+                            </svg>
+                        <span>Room</span>
+                    </a>
+                    <ul id="room" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                        <li class="sidebar-item">
+                            <a href="{{ url_for('all_rooms') }}" class="sidebar-link">All rooms</a>
                         </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link text-dark collapsed has-dropdown fw-bold" data-bs-toggle="collapse"
-                                data-bs-target="#booking" aria-expanded="false" aria-controls="booking">
-                                <!-- Booking Icon -->
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-fill" viewBox="0 0 16 16">
-                                    <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V5h16V4H0V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5"/>
-                                  </svg>
-                                <span>Booking</span>
-                                <span class="dropdown-arrow"></span>
-                            </a>
-                            <ul id="booking" class="nav-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
-                                <li class="nav-item ps-4">
-                                    <a href="{{ url_for('all_bookings') }}" class="nav-link text-dark">All Bookings</a>
-                                </li>
-                                <li class="nav-item ps-4">
-                                    <a href="{{ url_for('add_booking') }}" class="nav-link text-dark">Add Booking</a>
-                                </li>
-                                <li class="nav-item ps-4">
-                                    <a href="{{ url_for('edit_booking') }}" class="nav-link text-dark">Edit Booking</a>
-                                </li>
-                            </ul>
+                        <li class="sidebar-item">
+                            <a href="#" class="sidebar-link">Room Types</a>
                         </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link text-dark collapsed has-dropdown fw-bold" data-bs-toggle="collapse"
-                                data-bs-target="#room" aria-expanded="false" aria-controls="room">
-                                <!-- Room Icon -->
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-houses-fill" viewBox="0 0 16 16">
-                                    <path d="M7.207 1a1 1 0 0 0-1.414 0L.146 6.646a.5.5 0 0 0 .708.708L1 7.207V12.5A1.5 1.5 0 0 0 2.5 14h.55a2.5 2.5 0 0 1-.05-.5V9.415a1.5 1.5 0 0 1-.56-2.475l5.353-5.354z"/>
-                                    <path d="M8.793 2a1 1 0 0 1 1.414 0L12 3.793V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v3.293l1.854 1.853a.5.5 0 0 1-.708.708L15 8.207V13.5a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 4 13.5V8.207l-.146.147a.5.5 0 1 1-.708-.708z"/>
-                                  </svg>
-                                <span>Room</span>
-                                <span class="dropdown-arrow"></span>
-                            </a>
-                            <ul id="room" class="nav-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
-                                <li class="nav-item ps-4">
-                                    <a href="{{ url_for('all_rooms') }}" class="nav-link text-dark">All rooms</a>
-                                </li>
-                                <li class="nav-item ps-4">
-                                    <a href="#" class="nav-link text-dark">Room Types</a>
-                                </li>
-                            </ul>
+                    </ul>
+                </li>
+
+                <!-- Reports -->
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                        data-bs-target="#reports" aria-expanded="false" aria-controls="reports">
+                        <!-- Reports Icon -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-graph-up" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M0 0h1v15h15v1H0zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07"/>
+                            </svg>
+                        <span>Reports</span>
+                    </a>
+                    <ul id="reports" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                        <li class="sidebar-link">
+                            <a href="#" class="sidebar-link">Monthly Sales</a>
                         </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link text-dark collapsed has-dropdown fw-bold" data-bs-toggle="collapse"
-                                data-bs-target="#reports" aria-expanded="false" aria-controls="reports">
-                                <!-- Reports Icon -->
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-graph-up" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd" d="M0 0h1v15h15v1H0zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07"/>
-                                  </svg>
-                                <span>Reports</span>
-                                <span class="dropdown-arrow"></span>
-                            </a>
-                            <ul id="reports" class="nav-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
-                                <li class="nav-item ps-4">
-                                    <a href="#" class="nav-link text-dark fw-medium">Monthly Sales</a>
-                                </li>
-                                <li class="nav-item ps-4">
-                                    <a href="#" class="nav-link text-dark fw-medium">Hotel Sales</a>
-                                </li>
-                            </ul>
+                        <li class="sidebar-link">
+                            <a href="#" class="sidebar-link">Hotel Sales</a>
                         </li>
+                    </ul>
+                </li>
+
+                <!-- Customer -->
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <!-- Payment Icon -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-credit-card-2-back-fill" viewBox="0 0 16 16">
+                            <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v5H0zm11.5 1a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zM0 11v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-1z"/>
+                          </svg>
+                        <span>Payment</span>
+                    </a>
+                </li>
+
+                <!-- Support -->
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <!-- Chat Icon -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-dots-fill" viewBox="0 0 16 16">
+                            <path d="M16 8c0 3.866-3.582 7-8 7a9 9 0 0 1-2.347-.306c-.584.296-1.925.864-4.181 1.234-.2.032-.352-.176-.273-.362.354-.836.674-1.95.77-2.966C.744 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7M5 8a1 1 0 1 0-2 0 1 1 0 0 0 2 0m4 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0m3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
+                          </svg>
+                        <span>Support</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="sidebar-footer">
+                <a href="{{ url_for('logout') }}" class="sidebar-link">
+                    <!-- Logout Icon -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-door-open-fill" viewBox="0 0 16 16">
+                        <path d="M1.5 15a.5.5 0 0 0 0 1h13a.5.5 0 0 0 0-1H13V2.5A1.5 1.5 0 0 0 11.5 1H11V.5a.5.5 0 0 0-.57-.495l-7 1A.5.5 0 0 0 3 1.5V15zM11 2h.5a.5.5 0 0 1 .5.5V15h-1zm-2.5 8c-.276 0-.5-.448-.5-1s.224-1 .5-1 .5.448.5 1-.224 1-.5 1"/>
+                      </svg>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </aside>
+        <div class="main">
+            <nav class="navbar navbar-expand px-4 py-3">
+                <form action="#" class="d-none d-sm-inline-block">
+
+                </form>
+                <div class="navbar-collapse collapse">
+                    <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <a href="#" class="nav-link text-dark fw-bold">
-                                <!-- Customer Icon -->
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
-                                    <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>
-                                  </svg>
-                                <span>Customer</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link text-dark fw-bold">
-                                <!-- Payment Icon -->
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-credit-card-2-back-fill" viewBox="0 0 16 16">
-                                    <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v5H0zm11.5 1a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zM0 11v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-1z"/>
-                                  </svg>
-                                <span>Payment</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link text-dark fw-bold">
-                                <!-- Chat Icon -->
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-dots-fill" viewBox="0 0 16 16">
-                                    <path d="M16 8c0 3.866-3.582 7-8 7a9 9 0 0 1-2.347-.306c-.584.296-1.925.864-4.181 1.234-.2.032-.352-.176-.273-.362.354-.836.674-1.95.77-2.966C.744 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7M5 8a1 1 0 1 0-2 0 1 1 0 0 0 2 0m4 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0m3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
-                                  </svg>
-                                <span>Support</span>
+                            <a href="{{ url_for('admin_dashboard') }}" class="nav-link">
+                                <img src="../../static/img/faviconHotel.png" class="avatar img-fluid" alt="">
+                                <span>Admin Hotel</span>
                             </a>
                         </li>
                     </ul>
-                    <div class="flex-grow-1"></div>
-                    <div class="container">
-                        <a href="{{ url_for('logout') }}" class="nav-link text-dark fw-bold">
-                            <!-- Logout Icon -->
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-door-open-fill" viewBox="0 0 16 16">
-                                <path d="M1.5 15a.5.5 0 0 0 0 1h13a.5.5 0 0 0 0-1H13V2.5A1.5 1.5 0 0 0 11.5 1H11V.5a.5.5 0 0 0-.57-.495l-7 1A.5.5 0 0 0 3 1.5V15zM11 2h.5a.5.5 0 0 1 .5.5V15h-1zm-2.5 8c-.276 0-.5-.448-.5-1s.224-1 .5-1 .5.448.5 1-.224 1-.5 1"/>
-                              </svg>
-                            <span>Logout</span>
-                        </a>
-                    </div>
-                  </div>
                 </div>
+            </nav>
+            <main>
+                {% block content %}
+                {% endblock %}
+            </main>
+            <footer class="footer">
+            </footer>
+        </div>
+    </div>
 
-              <a class="navbar-brand" href="{{ url_for('admin_dashboard') }}">
-                <img src="../../static/img/faviconHotel.png" alt="Logo" width="30" height="24">
-                Hotel (Admin)
-              </a>
-            </div>
-          </nav>
-    </header>
-
-    <section>
-        {% block content %}
-        {% endblock %}
-    </section>
     <!-- JavaScript -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="../../static/js/bootstrap.bundle.min.js"></script>
+    <script src="../../static/js/script.js"></script>
 </body>
 </html>
