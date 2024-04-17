@@ -11,7 +11,7 @@ app.config['SECRET_KEY'] = 'asldjfasduosadfupoas'
 @app.route('/')
 def homepage():
     active_page = 'home'
-    return render_template("user/home.html", active_page = active_page)
+    return render_template("home.html", active_page = active_page)
 
 @app.route('/booking')
 def booking_page():
@@ -25,7 +25,7 @@ def room():
 @app.route('/contact')
 def contact_page():
     active_page = 'contact'
-    return render_template("user/contact.html", active_page = active_page)
+    return render_template("contact.html", active_page = active_page)
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -149,6 +149,10 @@ def edit_booking():
 @app.route('/admin/room/all_rooms')
 def all_rooms():
     return render_template("admin/room/all_rooms.html")
+
+@app.route('/admin/payment')
+def payment_methods():
+    return render_template('admin/payment/methods.html')
 
 # Error handling
 @app.errorhandler(404)
