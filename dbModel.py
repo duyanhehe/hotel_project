@@ -1,8 +1,15 @@
 import mysql.connector, dbfunc
 from mysql.connector import errorcode, Error
 from werkzeug.security import generate_password_hash, check_password_hash
+import random
 
 connect = dbfunc.getConnection()
+
+# Function to generate a random CAPTCHA string
+def generate_captcha():
+    captcha_chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
+    captcha = ''.join(random.choices(captcha_chars, k=6))
+    return captcha
 
 class Model:
     def __init__(self):

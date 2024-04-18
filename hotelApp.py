@@ -16,11 +16,11 @@ def homepage():
 @app.route('/booking')
 def booking_page():
     active_page = 'booking'
-    return render_template("user/booking/booking.html", active_page = active_page)
+    return render_template("booking/booking.html", active_page = active_page)
 
 @app.route('/booking/1')
 def room():
-    return render_template("user/booking/room.html")
+    return render_template("booking/room.html")
 
 @app.route('/contact')
 def contact_page():
@@ -57,6 +57,8 @@ def sign_up():
         phoneNumber = request.form.get('phoneNumber')
         password = request.form.get('password')
         password1 = request.form.get('password1')
+        captcha_input = request.form.get('captcha')
+        agree_terms = request.form.get('agree_terms')
         
         uniqueFlag = True
         user_model = dbModel.User()
@@ -66,6 +68,7 @@ def sign_up():
         user['firstName'] = request.form['firstName']
         user['lastName'] = request.form['lastName']
         user['phoneNumber'] = request.form['phoneNumber']
+        # Check if email is empty or already exists in the database
         if user['email'] == '' or user_model.getByEmail(user['email']):
             uniqueFlag = False
         if request.form['password']!='' and password == password1:
@@ -73,11 +76,16 @@ def sign_up():
         else:
             user['password']=''
         user['usertype'] = ''
-        if uniqueFlag and  user['password']!='':
+
+        # Check if agree_terms checkbox is checked
+
+        
+        # Add new user if all conditions are met
+        if uniqueFlag and  user['password']!='' and captcha_input == session['captcha']:
             user_model = dbModel.User()
             if user_model.addNew(user):
                 return redirect(url_for('login'))     
-        # print(user)
+
         # Flash error if the requirements are not met
         if len(email) < 4:
             flash('Email must be at least 3 characters.', category='error')
@@ -85,18 +93,27 @@ def sign_up():
             flash('First name must be at least 1 character.', category='error')
         elif len(lastName) < 2:
             flash('Last name must be at least 1 character.', category='error')
-        elif password != password1:
-            flash('Password don\'t match.', category='error')
-        elif len(password) > 7:
-            flash('Password must be at least 8 characters', category='error')
         elif not phoneNumber.replace('+','').isdigit():
             flash('Phone number only contain numbers.', category='error')
         elif len(phoneNumber) < 10:
             flash('Phone number must be at least 9 characters.', category='error')
+        elif len(password) > 7:
+            flash('Password must be at least 8 characters', category='error')
+        elif password != password1:
+            flash('Password don\'t match.', category='error')
+        elif captcha_input != session['captcha']:
+            flash('CAPTCHA incorrect. Please try again.', category='error')
+        elif not agree_terms:
+            flash('Please agree to the terms of service.', category='error')
         else:
             flash('Account created!', category='success')
 
-    return render_template("user/auth/sign_up.html")
+    session['captcha'] = dbModel.generate_captcha()     # Generaate CAPTCHA
+    return render_template("user/auth/sign_up.html", captcha=session['captcha'])
+
+@app.route('/terms_of_services')
+def terms_of_services():
+    return render_template("user/auth/ToS.html")
 
 @app.route('/forgot_password', methods=['GET', 'POST'])
 def forgot_password():
@@ -153,6 +170,10 @@ def all_rooms():
 @app.route('/admin/payment')
 def payment_methods():
     return render_template('admin/payment/methods.html')
+
+@app.route('/admin/customers/list')
+def customers_list():
+    return render_template('admin/customers/list.html')
 
 # Error handling
 @app.errorhandler(404)

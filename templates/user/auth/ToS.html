@@ -1,0 +1,63 @@
+{% extends "main.html" %}
+
+{% block content %}
+
+<div class="container">
+    <h3 class="text-center fw-bold">Terms of Service</h3>
+    <p>Welcome to [Hotel Name]!</p>
+    <p>These terms of service ("Terms") govern your access to and use of [Hotel Name]'s website and services (collectively, the "Services"). 
+        Please read these Terms carefully before accessing or using our Services. 
+        By accessing or using any part of the Services, you agree to be bound by these Terms. 
+        If you do not agree to all the terms and conditions of this agreement, then you may not access the Services.
+    </p>
+
+    <br>
+
+    <h5 class="fw-semibold">1. Account Creation</h5>
+    <p>1.1. In order to access certain features of the Services, you may be required to create an account. 
+        When creating an account, you must provide accurate and complete information. 
+        You are solely responsible for the activity that occurs on your account, and you must keep your account password secure.
+    </p>
+    <p>1.2. You must be at least 18 years old to create an account and use the Services. 
+        By creating an account, you represent and warrant that you are at least 18 years old.
+    </p>
+
+    <h5 class="fw-semibold">2. Use of the Services</h5>
+    <p>2.1. You agree to use the Services only for lawful purposes and in accordance with these Terms. 
+        You are solely responsible for your conduct and any data, text, information, graphics, photos, profiles, audio and video clips, links, and other content that you submit, post, or display on or via the Services.
+    </p>
+    <p>2.2. You agree not to:
+        <ul>
+            <li>Use the Services in any way that violates any applicable law or regulation.</li>
+            <li>Use the Services to engage in any activity that could harm, disable, overburden, or impair our servers or networks.</li>
+            <li>Attempt to gain unauthorized access to any part of the Services or any other systems or networks connected to the Services.</li>
+        </ul>
+    </p>
+
+    <h5 class="fw-semibold">3. Reservation and Payment</h5>
+    <p>3.1. When making a reservation through our website, you agree to provide accurate and complete information about yourself and any guests accompanying you.</p>
+    <p>3.2. Payment for reservations is required at the time of booking, unless otherwise stated. Payment details are securely processed through our designated payment gateway.</p>
+
+    <h5 class="fw-semibold">4. Cancellation and Refunds</h5>
+    <p>4.1. Our cancellation and refund policy is outlined on our website. Please review it carefully before making a reservation.</p>
+
+    <h5 class="fw-semibold">5. Privacy</h5>
+    <p>5.1. Your privacy is important to us. Please review our Privacy Policy to understand how we collect, use, and disclose information about you.</p>
+
+    <h5 class="fw-semibold">6. Modification of Terms</h5>
+    <p>6.1. We reserve the right to modify these Terms at any time without prior notice. 
+        Any changes will be effective immediately upon posting. 
+        Your continued use of the Services after the posting of revised Terms constitutes your acceptance of such changes.
+    </p>
+
+    <h5 class="fw-semibold">7. Contact Us</h5>
+    <p>7.1. If you have any questions about these Terms or the Services, please contact us at [contact email or phone number].</p>
+
+    <br>
+
+    <p>By creating an account or using our Services, you agree to abide by these Terms. Thank you for choosing [Hotel Name]!</p>
+    <a href="{{ url_for('sign_up') }}">Return to sign up</a>
+
+</div>
+
+{% endblock %}
