@@ -93,9 +93,7 @@ def sign_up():
             user['password'] = password
         else:
             user['password']=''
-        user['usertype'] = ''
-
-        # Check if agree_terms checkbox is checked
+        user['usertype'] = 'standard'
 
         
         # Add new user if all conditions are met
@@ -113,7 +111,7 @@ def sign_up():
             flash('Last name must be at least 1 character.', category='error')
         elif not phoneNumber.replace('+','').isdigit():
             flash('Phone number only contain numbers.', category='error')
-        elif len(phoneNumber) < 10:
+        elif len(phoneNumber) > 8:
             flash('Phone number must be at least 9 characters.', category='error')
         elif len(password) > 7:
             flash('Password must be at least 8 characters', category='error')

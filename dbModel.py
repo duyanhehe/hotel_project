@@ -41,8 +41,8 @@ class User(Model):
     def addNew(self, user):
         try:
             self.dbcursor.execute('insert into '+ self.tbName + 
-                                ' (email, firstName, lastName, phoneNumber, password_hash) values (%s, %s, %s, %s, %s)',
-                                    (user['email'], user['firstName'], user['lastName'], user['phoneNumber'], generate_password_hash(user['password'])))
+                                ' (email, firstName, lastName, phoneNumber, password_hash, usertype) values (%s, %s, %s, %s, %s, %s)',
+                                    (user['email'], user['firstName'], user['lastName'], user['phoneNumber'], generate_password_hash(user['password']), user['usertype']))
             my_result = self.conn.commit()
         except Error as e:
             print(e)
