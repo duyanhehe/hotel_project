@@ -7,6 +7,17 @@ from functools import wraps
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'asldjfasduosadfupoas'
 
+# Check Login
+def login_required(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        if 'is_login' in session:
+            return f(*args, **kwargs)
+        else:            
+            print("You need to login first")
+            return render_template('users/login.html', error='You need to login first')    
+    return wrap
+
 # USER
 @app.route('/')
 def homepage():
@@ -36,7 +47,11 @@ def login():
         if user_model.checkLogin(email, password):
             session['email'] = email
             session['is_login'] = True
-            return redirect(url_for('homepage'))
+            user = user_model.getByEmail(email)
+            if user[6]=='standard':
+                return redirect(url_for('homepage'))
+            else:
+                return redirect(url_for('admin_dashboard'))
         else:
             flash('Wrong email or password', category='error')
     return render_template("user/auth/login.html") 
@@ -139,39 +154,43 @@ def forgot_password():
     return render_template("user/auth/forgot_pass.html")
 
 @app.route('/edit_payment')
+@login_required
 def edit_payment():
     return render_template("user/edit_payment.html")
 
 # ADMIN
-@app.route('/admin')
-def admin_login():
-    return render_template("admin/login.html")
-
 @app.route('/admin/dashboard')
+@login_required
 def admin_dashboard():
     return render_template("admin/dashboard.html")
 
 @app.route('/admin/booking/all_bookings')
+@login_required
 def all_bookings():
     return render_template("admin/booking/all_bookings.html")
 
 @app.route('/admin/booking/add_booking')
+@login_required
 def add_booking():
     return render_template("admin/booking/add_booking.html")
 
 @app.route('/admin/booking/edit_booking')
+@login_required
 def edit_booking():
     return render_template("admin/booking/edit_booking.html")
 
 @app.route('/admin/room/all_rooms')
+@login_required
 def all_rooms():
     return render_template("admin/room/all_rooms.html")
 
 @app.route('/admin/payment')
+@login_required
 def payment_methods():
     return render_template('admin/payment/methods.html')
 
 @app.route('/admin/customers/list')
+@login_required
 def customers_list():
     return render_template('admin/customers/list.html')
 
