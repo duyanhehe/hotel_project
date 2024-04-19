@@ -18,7 +18,7 @@ email VARCHAR(120) NOT NULL UNIQUE,
 firstName VARCHAR(50) NOT NULL,
 lastName VARCHAR(50) NOT NULL,
 phoneNumber VARCHAR(15) NOT NULL UNIQUE,
-password_hash VARCHAR(255),
+password_hash VARCHAR(255), 
 usertype VARCHAR(8) DEFAULT 'admin'
 );
 
@@ -37,7 +37,7 @@ CREATE TABLE hotels (
 
 
 CREATE TABLE room_types (
-    type_id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    room_type_id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
     description VARCHAR(255) NOT NULL,
     price_per_night DECIMAL(10, 2) NOT NULL, 
@@ -48,10 +48,10 @@ CREATE TABLE room_types (
 CREATE TABLE rooms (
     room_number INT AUTO_INCREMENT NOT NULL PRIMARY KEY, 
     hotel_id INT NOT NULL, 
-    type_id INT NOT NULL,
+    room_type_id INT NOT NULL,
     status VARCHAR(20), 
     FOREIGN KEY (hotel_id) REFERENCES hotels(hotel_id), 
-    FOREIGN KEY (type_id) REFERENCES room_types(type_id)
+    FOREIGN KEY (room_type_id) REFERENCES room_types(room_type_id)
 );
 
 
