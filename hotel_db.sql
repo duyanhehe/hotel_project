@@ -22,7 +22,7 @@ password_hash VARCHAR(255),
 usertype VARCHAR(8) DEFAULT 'admin'
 );
 
-INSERT INTO admin_users VALUES (1, "admin@gmail.com", "ad", "min", "99999999", "password")
+INSERT INTO admin_users (email, firstName, lastName, phoneNumber, password_hash) VALUES (1, "admin@gmail.com", "ad", "min", "99999999", "password");
 
 
 CREATE TABLE hotels (

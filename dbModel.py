@@ -52,9 +52,9 @@ class User(Model):
                 return False            
         return True
     
-    def getById(self, id):
+    def getById(self, users_id):
         try:
-            self.dbcursor.execute('select * from '+ self.tbName + ' where id = {}'.format(id))
+            self.dbcursor.execute('select * from '+ self.tbName + ' where users_id = {}'.format(users_id))
             my_result = self.dbcursor.fetchone()
         except Error as e:
             print(e)
@@ -99,7 +99,7 @@ class User(Model):
         if hashed_password:
             return check_password_hash(hashed_password, password)
         return False
-    
+
 class Hotels(Model):
     def __init__(self):
         super().__init__()
