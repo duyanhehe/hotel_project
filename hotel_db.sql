@@ -12,17 +12,8 @@ password_hash VARCHAR(255),
 usertype VARCHAR(8) DEFAULT 'standard'
 );
 
-CREATE TABLE admin_users(
-admin_users_id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
-email VARCHAR(120) NOT NULL UNIQUE,
-firstName VARCHAR(50) NOT NULL,
-lastName VARCHAR(50) NOT NULL,
-phoneNumber VARCHAR(15) NOT NULL UNIQUE,
-password_hash VARCHAR(255), 
-usertype VARCHAR(8) DEFAULT 'admin'
-);
-
-INSERT INTO admin_users (email, firstName, lastName, phoneNumber, password_hash) VALUES (1, "admin@gmail.com", "ad", "min", "99999999", "password");
+INSERT INTO users (email, firstName, lastName, phoneNumber, password_hash, usertype)
+VALUES ('admin@gmail.com', 'Ad', 'Min', '1231684968', 'password', 'admin');
 
 
 CREATE TABLE hotels (

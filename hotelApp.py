@@ -15,7 +15,7 @@ def login_required(f):
             return f(*args, **kwargs)
         else:            
             print("You need to login first")
-            return render_template('users/login.html', error='You need to login first')    
+            return render_template('user/auth/login.html', error='You need to login first')    
     return wrap
 
 # USER
@@ -48,6 +48,9 @@ def login():
             session['email'] = email
             session['is_login'] = True
             user = user_model.getByEmail(email)
+            print("Session variables set:", session)  # Add this line to check session variables
+            print(user)
+            print(user[6])
             if user[6]=='standard':
                 return redirect(url_for('homepage'))
             else:
