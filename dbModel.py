@@ -108,7 +108,7 @@ class Hotels(Model):
     def addNew(self, hotel):
         try:
             self.dbcursor.execute('INSERT INTO ' + self.tbName + 
-                                  ' (address, email, phone, stars, check_in_time, check_out_time) VALUES (%s, %s, %s, %s, %s, %s)',
+                                  ' (address, email, phone, stars, check_in_time, check_out_time) VALUES (%s, %s, %s, %d, %s, %s)',
                                   (hotel['address'], hotel['email'], hotel['phone'], hotel['stars'], hotel['check_in_time'], hotel['check_out_time']))
             my_result = self.conn.commit()
         except Error as e:
@@ -140,8 +140,8 @@ class Room(Model):
     def addNew(self, room):
         try:
             self.dbcursor.execute('INSERT INTO ' + self.tbName + 
-                                  ' (hotel_id, room_type_id, status) VALUES (%s, %s, %s)',
-                                  (room['hotel_id'], room['room_type_id'], room['status']))
+                                ' (status) VALUES (%s)',
+                                (room['status']))
             self.conn.commit()
         except Error as e:
             print(e)
@@ -172,7 +172,7 @@ class RoomTypes(Model):
     def addNew(self, room_type):
         try:
             self.dbcursor.execute('INSERT INTO ' + self.tbName + 
-                                  ' (name, description, price_per_night, capacity) VALUES (%s, %s, %s, %s)',
+                                  ' (name, description, price_per_night, capacity) VALUES (%s, %s, %s, %d)',
                                   (room_type['name'], room_type['description'], room_type['price_per_night'], room_type['capacity']))
             self.conn.commit()
         except Error as e:
@@ -204,8 +204,8 @@ class Bookings(Model):
     def addNew(self, booking):
         try:
             self.dbcursor.execute('INSERT INTO ' + self.tbName + 
-                                  ' (guest_ID, room_number, check_in_date, check_out_date, total_price) VALUES (%s, %s, %s, %s, %s)',
-                                  (booking['guest_ID'], booking['room_number'], booking['check_in_date'], booking['check_out_date'], booking['total_price']))
+                                  ' (check_in_date, check_out_date, total_price) VALUES (%s, %s, %s)',
+                                  (booking['check_in_date'], booking['check_out_date'], booking['total_price']))
             self.conn.commit()
         except Error as e:
             print(e)
@@ -236,8 +236,8 @@ class Payment(Model):
     def addNew(self, payment):
         try:
             self.dbcursor.execute('INSERT INTO ' + self.tbName + 
-                                  ' (booking_ID, amount, payment_date, payment_method) VALUES (%s, %s, %s, %s)',
-                                  (payment['booking_ID'], payment['amount'], payment['payment_date'], payment['payment_method']))
+                                  ' (amount, payment_date, payment_method) VALUES (%s, %s, %s)',
+                                  (payment['amount'], payment['payment_date'], payment['payment_method']))
             self.conn.commit()
         except Error as e:
             print(e)
