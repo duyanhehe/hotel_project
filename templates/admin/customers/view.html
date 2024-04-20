@@ -1,0 +1,38 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+<div class="container pt-4">
+    <h3>Customer's Details</h3>
+</div>
+
+{% if user: %}
+<div class="container pt-4">
+    <div class="container bg-body-tertiary border border-secondary">
+        <div class="container py-2">
+            <table class="table table-sm text-center">
+                <tr>
+                    <td>User ID</td>
+                    <td>Email</td>
+                    <td>Name</td>
+                    <td>Phone Number</td>
+                    <td>Usertype</td>
+                </tr>
+
+                <tr>
+                    <!-- User ID -->
+                    <td>{{user[0]}}</td>
+                    <!-- Email -->
+                    <td>{{user[1]}}</td>
+                    <!-- Name -->
+                    <td>{{user[2]}} {{user[3]}}</td>
+                    <!-- Phone Number -->
+                    <td>{{user[4]}}</td>
+                    <!-- Usertype -->
+                    <td>{{user[6]}}</td>
+                </tr>
+
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

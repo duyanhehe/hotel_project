@@ -193,7 +193,11 @@ def payment_methods():
 @app.route('/admin/customers/list')
 @login_required
 def customers_list():
-    return render_template('admin/customers/list.html')
+    customer = dbModel.User()
+    users = customer.getAll()
+    # print(users)
+    email = session ['email'] if 'email' in session and session['email'] != '' else ''
+    return render_template('admin/customers/list.html', eamil = email, users = users)
 
 # Error handling
 @app.errorhandler(404)

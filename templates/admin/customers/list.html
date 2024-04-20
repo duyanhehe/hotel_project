@@ -40,50 +40,26 @@
         <div class="container py-2">
             <table class="table table-sm text-center">
                 <tr>
-                    <td>User</td>
-                    <td>Last Package</td>
-                    <td>Phone</td>
-                    <td>Verified</td>
-                    <td>Last Check Out</td>
-                    <td>Group</td>
-                    <td>
-                        <div class="dropdown dropdown-menu-end">
-                            <button class="btn dropdown-toggle-split" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                <!-- Filter Icon -->
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filter-right" viewBox="0 0 16 16">
-                                    <path d="M14 10.5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 .5-.5m0-3a.5.5 0 0 0-.5-.5h-7a.5.5 0 0 0 0 1h7a.5.5 0 0 0 .5-.5m0-3a.5.5 0 0 0-.5-.5h-11a.5.5 0 0 0 0 1h11a.5.5 0 0 0 .5-.5"/>
-                                  </svg>
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <li>
-                                    <div class="dropdown-item">
-                                        <input class="form-check-input" type="checkbox" id="filter">
-                                        <label class="form-check-label" for="filter">Group</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="dropdown-item">
-                                        <input class="form-check-input" type="checkbox" id="filter">
-                                        <label class="form-check-label" for="filter">Phone</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="dropdown-item">
-                                        <input class="form-check-input" type="checkbox" id="filter">
-                                        <label class="form-check-label" for="filter">Verified</label>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>duyanh@gmail.com</td>
-                    <td>Vacation</td>
-                    <td>+84 393736860</td>
+                    <td>User ID</td>
                     <td>Email</td>
-                    <td>9 May 2024</td>
-                    <td>Diamond</td>
+                    <td>Name</td>
+                    <td>Phone Number</td>
+                    <td>Usertype</td>
+                    <td></td>
+                </tr>
+
+                {% for user in users: %}
+                <tr>
+                    <!-- User ID -->
+                    <td>{{user[0]}}</td>
+                    <!-- Email -->
+                    <td>{{user[1]}}</td>
+                    <!-- Name -->
+                    <td>{{user[2]}} {{user[3]}}</td>
+                    <!-- Phone Number -->
+                    <td>{{user[4]}}</td>
+                    <!-- Usertype -->
+                    <td>{{user[6]}}</td>
                     <td>
                         <div class="dropdown dropdown-menu-end">
                             <button class="btn dropdown-toggle-split" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
@@ -136,6 +112,8 @@
 
                     </td>
                 </tr>
+                {% endfor %}
+
             </table>
         </div>
     </div>

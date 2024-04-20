@@ -64,6 +64,10 @@ class User(Model):
                 my_result = ()            
         return my_result
     
+    # def getDetailById(self, users_id):
+    #     try:
+    #         self.dbcursor.execute('select * from ' + self.tbName + ' where users_id = {}'.format(users_id))
+    
     def getByEmail(self, email):
         try:
             self.dbcursor.execute('select * from '+ self.tbName + ' where email = %s',(email,))
