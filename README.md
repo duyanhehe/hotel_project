@@ -7,5 +7,5 @@
 1. Make venv and install everything in requirements.txt
 2. Run hotel_db.sql
 3. Make your own dbfunc.py file
-![dbfuncImg](https://github.com/duyanhehe/hotel_project/assets/152079929/84f7a70e-8828-4fc9-89a0-87dc2f321692)
+![image](https://github.com/duyanhehe/hotel_project/assets/152079929/469521ea-6e3d-485e-8216-dc01bd4f872d)
 4. Run hotelApp.py
