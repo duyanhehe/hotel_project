@@ -6,33 +6,32 @@
 </div>
 
 {% if user: %}
-<div class="container pt-4">
-    <div class="container bg-body-tertiary border border-secondary">
-        <div class="container py-2">
-            <table class="table table-sm text-center">
-                <tr>
-                    <td>User ID</td>
-                    <td>Email</td>
-                    <td>Name</td>
-                    <td>Phone Number</td>
-                    <td>Usertype</td>
-                </tr>
+<div class="container bg-body-tertiary border border-secondary pt-4">      
+    <div class="row">
+        <h5>User ID:</h5>
+        <p>{{user[0]}}</p>
+    </div>  
+    <div class="row">
+        <h5>Email:</h5>
+        <p>{{user[1]}}</p>
+    </div>  
+    <div class="row">
+        <h5>First Name:</h5>
+        <p>{{user[2]}}</p>
+    </div>  
+    <div class="row">
+        <h5>Last Name:</h5>
+        <p>{{user[3]}}</p>
+    </div>  
+    <div class="row">
+        <h5>Phone Number:</h5>
+        <p>{{user[4]}}</p>
+    </div>  
+    <div class="row">
+        <h5>Usertype:</h5>
+        <p>{{user[6]}}</p>
+    </div> 
+{% endif %}
 
-                <tr>
-                    <!-- User ID -->
-                    <td>{{user[0]}}</td>
-                    <!-- Email -->
-                    <td>{{user[1]}}</td>
-                    <!-- Name -->
-                    <td>{{user[2]}} {{user[3]}}</td>
-                    <!-- Phone Number -->
-                    <td>{{user[4]}}</td>
-                    <!-- Usertype -->
-                    <td>{{user[6]}}</td>
-                </tr>
 
-            </table>
-        </div>
-    </div>
-</div>
 {% endblock %}

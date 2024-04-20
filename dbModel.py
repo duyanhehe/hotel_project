@@ -64,9 +64,9 @@ class User(Model):
                 my_result = ()            
         return my_result
     
-    # def getDetailById(self, users_id):
-    #     try:
-    #         self.dbcursor.execute('select * from ' + self.tbName + ' where users_id = {}'.format(users_id))
+    # TODO: getDetailById
+    def getDetailById(self, users_id):
+        pass
     
     def getByEmail(self, email):
         try:
@@ -88,15 +88,21 @@ class User(Model):
                 return True
         return False
     
-    def reset_password(self, email, password):
-        hashed_password = generate_password_hash(password)
+    def update_user(self, user):
         try:
-            self.dbcursor.execute('UPDATE users SET password = %s WHERE email = %s', (hashed_password, email))
-            self.conn.commit()
-            return True
+            self.dbcursor.execute('update ' + self.tbName +
+                                  ' set email = %s, firstName = %s, lastName = %s, phoneNumber = %s, password_hash = %s, usertype = %s \
+                                    where users_id = %s',
+                                    (user['email'], user['firstName'], user['lastName'], user['phoneNumber'], generate_password_hash(user['password']), user['usertype'], user['users_id']))
+            my_result = self.conn.commit()
         except Error as e:
             print(e)
-            return False
+            my_result = ()
+        else:
+            if self.dbcursor.rowcount == 0:
+                return False
+        
+        return True  
 
     def verify_password(self, email, password):
         hashed_password = self.get_hashed_password(email)

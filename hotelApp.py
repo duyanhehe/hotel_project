@@ -197,7 +197,40 @@ def customers_list():
     users = customer.getAll()
     # print(users)
     email = session ['email'] if 'email' in session and session['email'] != '' else ''
-    return render_template('admin/customers/list.html', eamil = email, users = users)
+    return render_template('admin/customers/list.html', email = email, users = users)
+
+@app.route('/admin/customers/<users_id>')
+@login_required
+def customers_details(users_id):
+    customer = dbModel.User()
+    user_detail = customer.getById(users_id)
+    email = session ['email'] if 'email' in session and session['email'] != '' else ''
+    return render_template('admin/customers/view.html', user = user_detail, email = email)
+
+@app.route('/admin/customers/edit/<users_id>', methods=['GET', 'POST'])
+@login_required
+def customers_edit(users_id):
+    email = session ['email'] if 'email' in session and session['email'] != '' else ''
+    customer = dbModel.User()
+    if request.method == "POST":
+        user = dict()
+        user['users_id'] = users_id
+        user['email'] = request.form['email'] if request.form['email'] != '' else ''
+        user['firstName'] = request.form['firstName'] if request.form['firstName'] != '' else ''
+        user['lastName'] = request.form['lastName'] if request.form['lastName'] != '' else ''
+        user['password'] = request.form['password'] if request.form['password'] != '' else ''
+        user['usertype'] = request.form['usertype'] if request.form['usertype'] != '' else ''
+
+        if customer.update_user(user):
+            print('Update successfully')
+            return redirect(url_for('customers_details', users_id = user['users_id']), email = email)
+        else:
+            print('Error')
+            print(user)
+            return redirect(url_for('customers_edit', users_id = user['users_id']), email = email)
+    else:
+        users = customer.getById(users_id)
+    return render_template('admin/customers/edit.html', user = users, email = email)
 
 # Error handling
 @app.errorhandler(404)

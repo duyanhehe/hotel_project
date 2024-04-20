@@ -1,0 +1,40 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+<div class="container pt-4">
+    <h3>Edit Customer</h3>
+</div>
+
+<div class="container py-4">
+    {% if user: %}
+    <h5>Student Detail</h5>
+    <form action="{{ url_for('customers_edit') }}" method="POST">
+        <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" class="form-control" id="email" name="email" value="{{user[1]}}">
+        </div>
+        <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input type="text" class="form-control" id="firstName" name="firstName" value="{{user[2]}}">
+        </div>
+        <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input type="text" class="form-control" id="lastName" name="lastName" value="{{user[3]}}">
+        </div>
+        <div class="form-group">
+            <label for="phoneNumber">Phone Number</label>
+            <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" pattern="[0-9\+]+" value="{{user[4]}}">
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="text" class="form-control" id="password" name="password" value="{{user[5]}}">
+        </div>
+        <div class="form-group">
+            <label for="usertype">Usertype</label>
+            <input type="text" class="form-control" id="usertype" name="usertype" value="{{user[6]}}">
+        </div>
+    </form>
+    {% endif %}
+</div>
+
+{% endblock %}
