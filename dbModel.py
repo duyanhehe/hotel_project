@@ -33,6 +33,7 @@ class Model:
                 my_result = ()            
         return my_result
     
+
 class User(Model):
     def __init__(self):
         super().__init__()
@@ -110,26 +111,13 @@ class User(Model):
             return check_password_hash(hashed_password, password)
         return False
 
-class Hotels(Model):
+
+class Hotel(Model):
     def __init__(self):
         super().__init__()
-        self.tbName = 'hotels'
+        self.tbName = 'hotel'
     
-    def addNew(self, hotel):
-        try:
-            self.dbcursor.execute('INSERT INTO ' + self.tbName + 
-                                  ' (address, email, phone, stars, check_in_time, check_out_time) VALUES (%s, %s, %s, %d, %s, %s)',
-                                  (hotel['address'], hotel['email'], hotel['phone'], hotel['stars'], hotel['check_in_time'], hotel['check_out_time']))
-            my_result = self.conn.commit()
-        except Error as e:
-            print(e)
-            return False
-        else:
-            if self.dbcursor.rowcount == 0:
-                return False
-        return True
-    
-    def getByHotelId(self, hotel_id):
+    def getById(self, hotel_id):
         try:
             self.dbcursor.execute('SELECT * FROM ' + self.tbName + ' WHERE hotel_id = %s', (hotel_id,))
             my_result = self.dbcursor.fetchone()
@@ -141,18 +129,44 @@ class Hotels(Model):
                 my_result = ()      
         return my_result
 
+    def addNew(self, hotel):
+        try:
+            self.dbcursor.execute('INSERT INTO ' + self.tbName + 
+                                  ' (city, hotel_name, email, phone, capacity) VALUES (%s, %s, %s, %s, %d)',
+                                  (hotel['city'], hotel['hotel_name'], hotel['email'], hotel['phone'], hotel['capacity']))
+            my_result = self.conn.commit()
+        except Error as e:
+            print(e)
+            return False
+        else:
+            if self.dbcursor.rowcount == 0:
+                return False
+        return True
+    
 
 class Room(Model):
     def __init__(self):
         super().__init__()
-        self.tbName = 'rooms'
+        self.tbName = 'room'
+
+    def getById(self, room_id):
+        try:
+            self.dbcursor.execute('SELECT * FROM ' + self.tbName + ' WHERE room_id = %s', (room_id,))
+            my_result = self.dbcursor.fetchone()
+        except Error as e:
+            print(e)
+            my_result = ()
+        else:
+            if self.dbcursor.rowcount == 0:
+                my_result = ()
+        return my_result
 
     def addNew(self, room):
         try:
-            self.dbcursor.execute('INSERT INTO ' + self.tbName + 
-                                ' (status) VALUES (%s)',
-                                (room['status']))
-            self.conn.commit()
+            self.dbcursor.execute('INSERT INTO ' + self.tbName + ' (hotel_id, room_type, features, base_price, peak_season_price, off_peak_price, status) \
+                                  VALUES (%s, %s, %s, %s, %s, %s, %s)', 
+                                  (room['hotel_id'], room['room_type'], room['features'], room['base_price'], room['base_price'], room['peak_season_price'], room['off_peak_price'], room['status']))
+            my_result = self.conn.commit()
         except Error as e:
             print(e)
             return False
@@ -161,61 +175,18 @@ class Room(Model):
                 return False
         return True
 
-    def getByRoomNumber(self, room_number):
-        try:
-            self.dbcursor.execute('SELECT * FROM ' + self.tbName + ' WHERE room_number = %s', (room_number,))
-            my_result = self.dbcursor.fetchone()
-        except Error as e:
-            print(e)
-            my_result = ()
-        else:
-            if self.dbcursor.rowcount == 0:
-                my_result = ()
-        return my_result
 
-
-class RoomTypes(Model):
+class Booking(Model):
     def __init__(self):
         super().__init__()
-        self.tbName = 'room_types'
-
-    def addNew(self, room_type):
-        try:
-            self.dbcursor.execute('INSERT INTO ' + self.tbName + 
-                                  ' (name, description, price_per_night, capacity) VALUES (%s, %s, %s, %d)',
-                                  (room_type['name'], room_type['description'], room_type['price_per_night'], room_type['capacity']))
-            self.conn.commit()
-        except Error as e:
-            print(e)
-            return False
-        else:
-            if self.dbcursor.rowcount == 0:
-                return False
-        return True
-
-    def getById(self, room_type_id):
-        try:
-            self.dbcursor.execute('SELECT * FROM ' + self.tbName + ' WHERE room_type_id = %s', (room_type_id,))
-            my_result = self.dbcursor.fetchone()
-        except Error as e:
-            print(e)
-            my_result = ()
-        else:
-            if self.dbcursor.rowcount == 0:
-                my_result = ()
-        return my_result
-
-
-class Bookings(Model):
-    def __init__(self):
-        super().__init__()
-        self.tbName = 'bookings'
+        self.tbName = 'booking'
 
     def addNew(self, booking):
         try:
             self.dbcursor.execute('INSERT INTO ' + self.tbName + 
-                                  ' (check_in_date, check_out_date, total_price) VALUES (%s, %s, %s)',
-                                  (booking['check_in_date'], booking['check_out_date'], booking['total_price']))
+                                  ' (users_id, room_id, check_in_date, check_out_date, total_price, booking_date) \
+                                      VALUES (%s, %s, %s, %s, %s, %s)',
+                                  (booking['users_id'], booking['room_id'] ,booking['check_in_date'], booking['check_out_date'], booking['total_price'], booking['booking_date']))
             self.conn.commit()
         except Error as e:
             print(e)

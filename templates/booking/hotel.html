@@ -1,0 +1,39 @@
+{% extends "main.html" %}
+
+{% block content %}
+
+<div class="container py-4">
+    
+    {% if hotels: %}
+        <table class="table table-responsive table-striped text-center">
+            <tr>
+                <th>City</th>
+                <th>Hotel</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Capacity</th>
+                <th></th>
+            </tr>
+            {% for hotel in hotels %}
+            <tr>
+                <td>{{hotel[1]}}</td>
+                <td>{{hotel[2]}}</td>
+                <td>{{hotel[3]}}</td>
+                <td>{{hotel[4]}}</td>
+                <td>{{hotel[5]}}</td>
+                <td>
+                    <a href="{{ url_for('room_page', hotel_id=hotel[0]) }}" class="btn btn-primary">View Rooms</a>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </ul>
+    {% endif %}
+</div>
+
+
+{% endblock %}

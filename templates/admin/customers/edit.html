@@ -8,7 +8,7 @@
 <div class="container py-4">
     {% if user: %}
     <h5>Student Detail</h5>
-    <form action="{{ url_for('customers_edit') }}" method="POST">
+    <form action="{{ url_for('customers_edit', users_id=user[0]) }}" method="POST">
         <div class="form-group">
             <label for="email">Email Address</label>
             <input type="email" class="form-control" id="email" name="email" value="{{user[1]}}">

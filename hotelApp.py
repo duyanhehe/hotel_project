@@ -22,15 +22,22 @@ def login_required(f):
 @app.route('/')
 def homepage():
     active_page = 'home'
-    return render_template("home.html", active_page = active_page)
+    email = ''
+    if 'email' in session and 'is_login' in session and session['is_login']:
+        email = session['email']
+    return render_template("home.html", active_page = active_page, email = email)
 
 @app.route('/booking')
-def booking_page():
-    active_page = 'booking'
-    return render_template("booking/booking.html", active_page = active_page)
+def hotel_page():
+    active_page = 'hotel'
+    hotel = dbModel.Hotel()
+    hotels = hotel.getAll()
+    # print(hotels)
+    email = session ['email'] if 'email' in session and session['email'] != '' else ''
+    return render_template("booking/hotel.html", active_page = active_page, email = email, hotels = hotels)
 
-@app.route('/booking/1')
-def room():
+@app.route('/booking/<hotel_id>')
+def room_page():
     return render_template("booking/room.html")
 
 @app.route('/contact')
