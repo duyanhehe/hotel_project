@@ -51,8 +51,11 @@
                           Booking History
                         </li>
                         {% if session.usertype == 'admin' %}
-                        <li class="dropdown-item">
-                          Admin Dashboard
+                        <hr class="dropdown-divider">
+                        <li>
+                          <a href="{{ url_for('admin_dashboard')}}" class="dropdown-item">
+                            Admin Dashboard
+                          </a>
                         </li>
                         {% endif %}
                         <hr class="dropdown-divider">

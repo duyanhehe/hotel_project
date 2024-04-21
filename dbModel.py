@@ -65,9 +65,20 @@ class User(Model):
                 my_result = ()            
         return my_result
     
-    # TODO: getDetailById
+
     def getDetailById(self, users_id):
-        pass
+        try:
+            self.dbcursor.execute('SELECT users.*, booking.* FROM users LEFT JOIN \
+                                   booking ON users.users_id = booking.users_id \
+                                   WHERE users.users_id = {}'.format(users_id))
+            my_result = self.dbcursor.fetchone()
+        except Error as e:
+            print(e)
+            my_result = ()
+        else:
+            if self.dbcursor.rowcount == 0:
+                my_result = ()
+        return my_result
     
     def getByEmail(self, email):
         try:
@@ -131,6 +142,23 @@ class Hotel(Model):
                 my_result = ()      
         return my_result
 
+    def getDetailById(self, hotel_id):
+        try:
+            self.dbcursor.execute('''
+                SELECT hotel.*, room.room_id, room.room_type, room.features, room.base_price, room.peak_season_price, room.off_peak_price, room.status
+                FROM hotel
+                LEFT JOIN room ON hotel.hotel_id = room.hotel_id
+                WHERE hotel.hotel_id = %s
+            ''', (hotel_id,))
+            my_result = self.dbcursor.fetchall()
+        except Error as e:
+            print(e)
+            my_result = ()
+        else:
+            if self.dbcursor.rowcount == 0:
+                my_result = ()
+        return my_result
+
     def addNew(self, hotel):
         try:
             self.dbcursor.execute('INSERT INTO ' + self.tbName + 
@@ -149,6 +177,14 @@ class Hotel(Model):
         try:
             delete_query = "DELETE FROM {} WHERE hotel_id = %s".format(self.tbName)
             self.dbcursor.execute(delete_query, (hotel_id,))
+            self.conn.commit()
+        except Error as e:
+            print(e)
+
+    def delete_room(self, room_id):
+        try:
+            delete_query = "DELETE FROM room WHERE room_id = %s"
+            self.dbcursor.execute(delete_query, (room_id,))
             self.conn.commit()
         except Error as e:
             print(e)
@@ -172,7 +208,21 @@ class Room(Model):
     
     #TODO: Get detail by id
     def getDetailById(self, room_id):
-        pass
+        try:
+            self.dbcursor.execute('''
+                SELECT room.*, hotel.city, hotel.hotel_name, hotel.email, hotel.phone
+                FROM room
+                INNER JOIN hotel ON room.hotel_id = hotel.hotel_id
+                WHERE room.room_id = %s
+            ''', (room_id,))
+            my_result = self.dbcursor.fetchone()
+        except Error as e:
+            print(e)
+            my_result = ()
+        else:
+            if self.dbcursor.rowcount == 0:
+                my_result = ()
+        return my_result
 
     def addNew(self, room):
         try:

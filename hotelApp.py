@@ -62,6 +62,7 @@ def login():
             session['email'] = email
             session['is_login'] = True
             user = user_model.getByEmail(email)
+            session['usertype'] = user[6]
             print("Session variables set:", session)  # Add this line to check session variables
             print(user)
             print(user[6])
@@ -172,30 +173,42 @@ def forgot_password():
 @app.route('/admin/dashboard')
 @login_required
 def admin_dashboard():
-    # user_model = dbModel.User()
-    # user = user_model.getAll()
-    # if len(user) >= 7 and user[6] != 'admin':
-    #     return redirect(url_for("homepage"), error='Unauthorized access')
+    if session['usertype'] != 'admin':
+        flash('Unauthorized Access', category='error')
+        return redirect(url_for('homepage'))
     return render_template("admin/dashboard.html")
 
 @app.route('/admin/booking/all_bookings')
 @login_required
 def all_bookings():
+    if session['usertype'] != 'admin':
+        flash('Unauthorized Access', category='error')
+        return redirect(url_for('homepage'))
     return render_template("admin/booking/all_bookings.html")
 
 @app.route('/admin/booking/add')
 @login_required
 def add_booking():
+    if session['usertype'] != 'admin':
+        flash('Unauthorized Access', category='error')
+        return redirect(url_for('homepage'))
     return render_template("admin/booking/add.html")
 
 @app.route('/admin/booking/edit')
 @login_required
 def edit_booking():
+    if session['usertype'] != 'admin':
+        flash('Unauthorized Access', category='error')
+        return redirect(url_for('homepage'))
     return render_template("admin/booking/edit.html")
 
 @app.route('/admin/all_hotels', methods=['GET', 'POST'])
 @login_required
 def all_hotels():
+    if session['usertype'] != 'admin':
+        flash('Unauthorized Access', category='error')
+        return redirect(url_for('homepage'))
+
     hotel = dbModel.Hotel()
     hotels = hotel.getAll()
     # print(hotels)
@@ -206,14 +219,39 @@ def all_hotels():
         hotel.delete(delete_hotel)
     return render_template("admin/room/hotel_list.html", email = email, hotels = hotels)
 
+@app.route('/admin/room_list/<hotel_id>', methods=['GET', 'POST'])
+@login_required
+def room_list(hotel_id):
+    if session['usertype'] != 'admin':
+        flash('Unauthorized Access', category='error')
+        return redirect(url_for('homepage'))
+    
+    hotel = dbModel.Hotel()
+    hotel_detail = hotel.getDetailById(hotel_id)
+    # print(hotel_detail)
+    email = session ['email'] if 'email' in session and session['email'] != '' else ''
+    if request.method == 'POST':
+        delete_room = request.form.get('delete_room')
+        print("Deleting hotel with ID:", delete_room)
+        hotel.delete_room(delete_room)
+
+    return render_template("admin/room/room_list.html", hotel_detail = hotel_detail, email = email)
+
 @app.route('/admin/payment')
 @login_required
 def payment_methods():
+    if session['usertype'] != 'admin':
+        flash('Unauthorized Access', category='error')
+        return redirect(url_for('homepage'))
     return render_template('admin/payment/methods.html')
 
 @app.route('/admin/customers/list', methods=['GET', 'POST'])
 @login_required
 def customers_list():
+    if session['usertype'] != 'admin':
+        flash('Unauthorized Access', category='error')
+        return redirect(url_for('homepage'))
+
     customer = dbModel.User()
     users = customer.getAll()
     # print(users)
@@ -228,14 +266,22 @@ def customers_list():
 @app.route('/admin/customers/<users_id>')
 @login_required
 def customers_details(users_id):
+    if session['usertype'] != 'admin':
+        flash('Unauthorized Access', category='error')
+        return redirect(url_for('homepage'))
+
     customer = dbModel.User()
-    user_detail = customer.getById(users_id)
+    user_detail = customer.getDetailById(users_id)
     email = session ['email'] if 'email' in session and session['email'] != '' else ''
     return render_template('admin/customers/view.html', user = user_detail, email = email)
 
 @app.route('/admin/customers/edit/<users_id>', methods=['GET', 'POST'])
 @login_required
 def customers_edit(users_id):
+    if session['usertype'] != 'admin':
+        flash('Unauthorized Access', category='error')
+        return redirect(url_for('homepage'))
+
     email = session ['email'] if 'email' in session and session['email'] != '' else ''
     customer = dbModel.User()
     if request.method == "POST":
@@ -245,15 +291,16 @@ def customers_edit(users_id):
         user['firstName'] = request.form['firstName'] if request.form['firstName'] != '' else ''
         user['lastName'] = request.form['lastName'] if request.form['lastName'] != '' else ''
         user['password'] = request.form['password'] if request.form['password'] != '' else ''
+        user['phoneNumber'] = request.form['phoneNumber'] if request.form['phoneNumber'] != '' else ''
         user['usertype'] = request.form['usertype'] if request.form['usertype'] != '' else ''
 
         if customer.update_user(user):
             print('Update successfully')
-            return redirect(url_for('customers_details', users_id = user['users_id']), email = email)
+            return redirect(url_for('customers_details', users_id = user['users_id']))
         else:
             print('Error')
             print(user)
-            return redirect(url_for('customers_edit', users_id = user['users_id']), email = email)
+            return redirect(url_for('customers_edit', users_id = user['users_id']))
     else:
         users = customer.getById(users_id)
     return render_template('admin/customers/edit.html', user = users, email = email)
