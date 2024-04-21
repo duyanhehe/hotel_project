@@ -82,7 +82,7 @@ def create_tables():
             peak_season_price DECIMAL(10, 2) NOT NULL, 
             off_peak_price DECIMAL(10, 2) NOT NULL, 
             status VARCHAR(20), 
-            FOREIGN KEY (hotel_id) REFERENCES hotel(hotel_id)
+            FOREIGN KEY (hotel_id) REFERENCES hotel(hotel_id) ON DELETE CASCADE
         )""")
 
         # Create booking table
@@ -95,9 +95,21 @@ def create_tables():
             check_out_date DATE NOT NULL,
             total_price DECIMAL(10, 2) NOT NULL,
             booking_date DATE NOT NULL,
-            FOREIGN KEY (users_id) REFERENCES users(users_id),
-            FOREIGN KEY (room_id) REFERENCES room(room_id)
+            FOREIGN KEY (users_id) REFERENCES users(users_id) ON DELETE CASCADE,
+            FOREIGN KEY (room_id) REFERENCES room(room_id) ON DELETE CASCADE
         )""")
+
+        # Create trigger to update room status to "unavailable" when a booking is inserted
+        cursor.execute("""
+        CREATE TRIGGER update_room_status
+        AFTER INSERT ON booking
+        FOR EACH ROW
+        BEGIN
+            UPDATE room
+            SET status = 'Unavailable'
+            WHERE room_id = NEW.room_id;
+        END;
+        """)
 
         # Create payment table
         # cursor.execute("""
@@ -117,6 +129,11 @@ def create_tables():
         cursor.execute("""INSERT INTO users (email, firstName, lastName, phoneNumber, password_hash, usertype)
                         VALUES ('admin@gmail.com', 'Ad', 'Min', '1231684968', %s, 'admin')""", (password,))
         
+        # Insert User
+        user_password = generate_password_hash('password')
+        cursor.execute("""INSERT INTO users (email, firstName, lastName, phoneNumber, password_hash, usertype)
+                        VALUES ('test@gmail.com', 'User', 'Test', '123123123', %s, 'standard')""", (user_password,))
+
         # Insert hotels
         cursor.execute("""INSERT INTO hotel (city, hotel_name, email, phone, capacity)
                     VALUES ('Aberdeen', 'Aberdeen Hotel', 'aberdeenHotel@gmail.com', '999999999', 90)""")
@@ -155,6 +172,10 @@ def create_tables():
                        VALUES (4, 'Double', 'Wifi, TV, mini-bar, AC', 80.00, 90.00, 70.00, 'Available')""")
         cursor.execute("""INSERT INTO room (hotel_id, room_type, features, base_price, peak_season_price, off_peak_price, status)
                        VALUES (4, 'Family', 'Wifi, TV, AC, mini-bar, breakfast', 150.00, 200.00, 120.00, 'Available')""")
+
+        # Insert into booking
+        cursor.execute("""INSERT INTO booking (users_id, room_id, check_in_date, check_out_date, total_price, booking_date)
+                       VALUES (2, 4, '2024-06-25', '2024-06-28', 49.99, '2024-04-21')""")
 
         connection.commit()
         connection.close()

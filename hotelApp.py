@@ -37,8 +37,15 @@ def hotel_page():
     return render_template("booking/hotel.html", active_page = active_page, email = email, hotels = hotels)
 
 @app.route('/booking/<hotel_id>')
-def room_page():
-    return render_template("booking/room.html")
+def room_page(hotel_id):
+    active_page = 'hotel'
+    room = dbModel.Room()
+    rooms = room.getAll()
+    hotel = dbModel.Hotel()
+    hotels = hotel.getAll()
+    # print(rooms)
+    email = session ['email'] if 'email' in session and session['email'] != '' else ''
+    return render_template("booking/room.html", active_page = active_page, email = email, rooms = rooms, hotels = hotels)
 
 @app.route('/contact')
 def contact_page():
@@ -161,15 +168,14 @@ def forgot_password():
         flash('Email address not found', category='error')
     return render_template("user/auth/forgot_pass.html")
 
-@app.route('/edit_payment')
-@login_required
-def edit_payment():
-    return render_template("user/edit_payment.html")
-
 # ADMIN
 @app.route('/admin/dashboard')
 @login_required
 def admin_dashboard():
+    # user_model = dbModel.User()
+    # user = user_model.getAll()
+    # if len(user) >= 7 and user[6] != 'admin':
+    #     return redirect(url_for("homepage"), error='Unauthorized access')
     return render_template("admin/dashboard.html")
 
 @app.route('/admin/booking/all_bookings')
@@ -177,33 +183,46 @@ def admin_dashboard():
 def all_bookings():
     return render_template("admin/booking/all_bookings.html")
 
-@app.route('/admin/booking/add_booking')
+@app.route('/admin/booking/add')
 @login_required
 def add_booking():
-    return render_template("admin/booking/add_booking.html")
+    return render_template("admin/booking/add.html")
 
-@app.route('/admin/booking/edit_booking')
+@app.route('/admin/booking/edit')
 @login_required
 def edit_booking():
-    return render_template("admin/booking/edit_booking.html")
+    return render_template("admin/booking/edit.html")
 
-@app.route('/admin/room/all_rooms')
+@app.route('/admin/all_hotels', methods=['GET', 'POST'])
 @login_required
-def all_rooms():
-    return render_template("admin/room/all_rooms.html")
+def all_hotels():
+    hotel = dbModel.Hotel()
+    hotels = hotel.getAll()
+    # print(hotels)
+    email = session ['email'] if 'email' in session and session['email'] != '' else ''
+    if request.method == 'POST':
+        delete_hotel = request.form.get('delete_hotel')
+        print("Deleting hotel with ID:", delete_hotel)
+        hotel.delete(delete_hotel)
+    return render_template("admin/room/hotel_list.html", email = email, hotels = hotels)
 
 @app.route('/admin/payment')
 @login_required
 def payment_methods():
     return render_template('admin/payment/methods.html')
 
-@app.route('/admin/customers/list')
+@app.route('/admin/customers/list', methods=['GET', 'POST'])
 @login_required
 def customers_list():
     customer = dbModel.User()
     users = customer.getAll()
     # print(users)
     email = session ['email'] if 'email' in session and session['email'] != '' else ''
+
+    if request.method == 'POST':
+        delete_customer = request.form.get('delete_customer')
+        # print("Deleting user with ID:", delete_customer)
+        customer.delete(delete_customer)
     return render_template('admin/customers/list.html', email = email, users = users)
 
 @app.route('/admin/customers/<users_id>')

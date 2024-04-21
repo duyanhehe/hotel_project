@@ -2,10 +2,10 @@
 
 {% block content %}
 <div class="container pt-4">
-    <h3>Room List</h3>
-    <p class="text-secondary">Here is our verious rooms.</p>
+    <h3>Hotel List</h3>
+    <p class="text-secondary">List of hotels</p>
 </div>
-
+{% if hotels: %}
 <div class="container pt-4">
     <div class="container bg-body-tertiary border border-secondary">
         <div class="d-flex container py-2 bg-light">
@@ -40,14 +40,13 @@
         <div class="container py-2">
             <table class="table table-sm text-center">
                 <tr>
-                    <td>ID</td>
-                    <td>Customer</td>
-                    <td>Package</td>
-                    <td>Booking</td>
-                    <td>Room Type</td>
-                    <td>Arrive</td>
-                    <td>Payment</td>
-                    <td>
+                    <th>Hotel ID</th>
+                    <th>City</th>
+                    <th>Hotel Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Capacity</th>
+                    <th>
                         <div class="dropdown dropdown-menu-end">
                             <button class="btn dropdown-toggle-split" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                 <!-- Filter Icon -->
@@ -76,16 +75,16 @@
                                 </li>
                             </ul>
                         </div>
-                    </td>
+                    </th>
                 </tr>
+                {% for hotel in hotels %}
                 <tr>
-                    <td>101</td>
-                    <td>Single</td>
-                    <td>AC</td>
-                    <td>None</td>
-                    <td>1</td>
-                    <td>69.00 USD</td>
-                    <td>Booked</td>
+                    <td>{{hotel[0]}}</td>
+                    <td>{{hotel[1]}}</td>
+                    <td>{{hotel[2]}}</td>
+                    <td>{{hotel[3]}}</td>
+                    <td>{{hotel[4]}}</td>
+                    <td>{{hotel[5]}}</td>
                     <td>
                         <div class="dropdown dropdown-menu-end">
                             <button class="btn dropdown-toggle-split" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
@@ -94,7 +93,7 @@
                                     <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
                                 </svg>
                             </button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <ul class="dropdown-menu text-center" aria-labelledby="dropdownMenuButton">
                                 <li>
                                     <a class="dropdown-item" href="#">
                                         <!-- Edit Icon -->
@@ -105,21 +104,26 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" href="#">
-                                        <!-- Delete Icon -->
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
-                                            <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/>
-                                          </svg>
-                                        Delete
-                                    </a>
+                                    <form action="{{ url_for('all_hotels') }}" method="POST" class="dropdown-item">
+                                        <input type="hidden" name="delete_hotel" id="delete_hotel" value="{{hotel[0]}}">
+                                        <button type="submit" class="dropdown-item">
+                                            <!-- Delete Icon -->
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                                <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/>
+                                                </svg>
+                                            Delete
+                                        </button>
+                                    </form>
                                 </li>
                             </ul>
                         </div>
 
                     </td>
                 </tr>
+                {% endfor %}
             </table>
         </div>
     </div>
 </div>
+{% endif %}
 {% endblock %}

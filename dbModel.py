@@ -105,11 +105,13 @@ class User(Model):
         
         return True  
 
-    def verify_password(self, email, password):
-        hashed_password = self.get_hashed_password(email)
-        if hashed_password:
-            return check_password_hash(hashed_password, password)
-        return False
+    def delete(self, users_id):
+        try:
+            delete_query = "DELETE FROM {} WHERE users_id = %s".format(self.tbName)
+            self.dbcursor.execute(delete_query, (users_id,))
+            self.conn.commit()
+        except Error as e:
+            print(e)
 
 
 class Hotel(Model):
@@ -142,7 +144,14 @@ class Hotel(Model):
             if self.dbcursor.rowcount == 0:
                 return False
         return True
-    
+
+    def delete(self, hotel_id):
+        try:
+            delete_query = "DELETE FROM {} WHERE hotel_id = %s".format(self.tbName)
+            self.dbcursor.execute(delete_query, (hotel_id,))
+            self.conn.commit()
+        except Error as e:
+            print(e)
 
 class Room(Model):
     def __init__(self):
@@ -160,6 +169,10 @@ class Room(Model):
             if self.dbcursor.rowcount == 0:
                 my_result = ()
         return my_result
+    
+    #TODO: Get detail by id
+    def getDetailById(self, room_id):
+        pass
 
     def addNew(self, room):
         try:
@@ -196,41 +209,9 @@ class Booking(Model):
                 return False
         return True
 
-    def getByBookingId(self, booking_ID):
+    def getById(self, booking_ID):
         try:
             self.dbcursor.execute('SELECT * FROM ' + self.tbName + ' WHERE booking_ID = %s', (booking_ID,))
-            my_result = self.dbcursor.fetchone()
-        except Error as e:
-            print(e)
-            my_result = ()
-        else:
-            if self.dbcursor.rowcount == 0:
-                my_result = ()
-        return my_result
-
-
-class Payment(Model):
-    def __init__(self):
-        super().__init__()
-        self.tbName = 'payment'
-
-    def addNew(self, payment):
-        try:
-            self.dbcursor.execute('INSERT INTO ' + self.tbName + 
-                                  ' (amount, payment_date, payment_method) VALUES (%s, %s, %s)',
-                                  (payment['amount'], payment['payment_date'], payment['payment_method']))
-            self.conn.commit()
-        except Error as e:
-            print(e)
-            return False
-        else:
-            if self.dbcursor.rowcount == 0:
-                return False
-        return True
-
-    def getById(self, payment_ID):
-        try:
-            self.dbcursor.execute('SELECT * FROM ' + self.tbName + ' WHERE payment_ID = %s', (payment_ID,))
             my_result = self.dbcursor.fetchone()
         except Error as e:
             print(e)

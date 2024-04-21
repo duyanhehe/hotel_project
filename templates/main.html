@@ -47,9 +47,14 @@
                         <li class="dropdown-item">
                           {{session.email}}
                         </li>
-                        <li>
-                          <a href="{{ url_for('edit_payment') }}" class="dropdown-item">Edit Payment</a>
+                        <li class="dropdown-item">
+                          Booking History
                         </li>
+                        {% if session.usertype == 'admin' %}
+                        <li class="dropdown-item">
+                          Admin Dashboard
+                        </li>
+                        {% endif %}
                         <hr class="dropdown-divider">
                         <li>
                           <a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a>
