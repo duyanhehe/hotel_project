@@ -21,16 +21,6 @@ def getConnection():
         else:
             conn.close()
 
-# Working with image files
-def convertToBinary(fileName):
-    with open(fileName, 'rb') as file:
-        binaryData = file.read()
-    return binaryData
-
-def convertBinaryToFile(binaryData, fileName):
-    with open(fileName, 'wb') as file:
-        file.write(binaryData)
-
 # create tables and insert mock data
 def create_tables():
     try:

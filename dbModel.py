@@ -206,7 +206,6 @@ class Room(Model):
                 my_result = ()
         return my_result
     
-    #TODO: Get detail by id
     def getDetailById(self, room_id):
         try:
             self.dbcursor.execute('''
@@ -259,6 +258,27 @@ class Booking(Model):
                 return False
         return True
 
+    def getAll(self, limit=10):
+        try:
+            self.dbcursor.execute('''
+                SELECT booking.booking_ID, booking.users_id, booking.room_id, booking.check_in_date, booking.check_out_date, 
+                       booking.total_price, booking.booking_date,
+                       users.email, users.firstName, users.lastName, users.phoneNumber,
+                       room.room_type, room.features, room.base_price, room.peak_season_price, room.off_peak_price
+                FROM booking
+                LEFT JOIN users ON booking.users_id = users.users_id
+                LEFT JOIN room ON booking.room_id = room.room_id
+                LIMIT %s
+            ''', (limit,))
+            bookings = self.dbcursor.fetchall()
+        except Error as e:
+            print(e)
+            bookings = ()
+        else:
+            if self.dbcursor.rowcount == 0:
+                bookings = ()
+        return bookings
+
     def getById(self, booking_ID):
         try:
             self.dbcursor.execute('SELECT * FROM ' + self.tbName + ' WHERE booking_ID = %s', (booking_ID,))
@@ -270,3 +290,22 @@ class Booking(Model):
             if self.dbcursor.rowcount == 0:
                 my_result = ()
         return my_result
+
+    def getDetailById(self, booking_id):
+        try:
+            self.dbcursor.execute('''
+                SELECT booking.*, users.email, users.firstName, users.lastName, users.phoneNumber,
+                       room.room_type, room.features, room.base_price, room.peak_season_price, room.off_peak_price
+                FROM booking
+                LEFT JOIN users ON booking.users_id = users.users_id
+                LEFT JOIN room ON booking.room_id = room.room_id
+                WHERE booking.booking_ID = %s
+            ''', (booking_id,))
+            detail = self.dbcursor.fetchall()
+        except Error as e:
+            print(e)
+            detail = ()
+        else:
+            if self.dbcursor.rowcount == 0:
+                detail = ()
+        return detail
