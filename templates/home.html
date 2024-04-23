@@ -11,7 +11,7 @@
     </div>
 </div>
 
-<div class="container pt-5 pb-5">
+<div class="container py-5">
     <h1>Welcome to our luxurious hotel!</h1>
     <p>At [Hotel], we strive to provide you with an unforgettable experience filled with comfort, elegance, and exceptional service. From the moment you step into our grand lobby, you'll be enveloped in an atmosphere of warmth and hospitality.
        Whether you're here for business or pleasure, our dedicated staff is committed to ensuring your stay exceeds all expectations. Indulge in our exquisite amenities, savor delectable cuisine at our renowned restaurants, and unwind in our serene spa.
@@ -19,177 +19,71 @@
 
 </div>
 
-<div class="container">
-    <div class="row align-items-center">
-    <div class="col-1">
-    </div>
-    <div class="col-10">
-        <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-inner">
-                <div class="carousel-item active c2-item">
-                    <div class="card mb-3">
-                    <div class="row g-0">
-                        <div class="col-md-6">
-                        <div class="card">
-                            <img src="../static/img/small_hotel_room.png" class="c2-img" alt="img1">
-                        </div>
-                        </div>
-                        <div class="col-md-6">
-                        <div class="card-body">
-                            <h3><small>SUPERIOR SUITE</h3>
-                            <br>
-                            <p class="fs-6">The Superior Suite of Hotel Clement Prague is a 2-room suite featuring an adjoined bedroom and living room equipped with 2 working desks, comfortable seating... </p>
-                            <p class="fs-6">Rates from 75,60 €</p>
-                            <br>
-                            <br>
-                            <br>
-                            <a class="nav-link active text-center" href="{{ url_for('hotel_page') }}">
-                                <button type="button" class="btn btn-warning">BOOK NOW</button>
-                            </a>
-                        </div>
-                        </div>
+<div class="bg-body-secondary">
+    <div class="container py-4" align="center">
+        <div class="row">
+            <div class="col">
+                <div class="image-text-container">
+                    <div class="image">
+                        <img src="../static/img/small_hotel_room.png" alt="Image">
                     </div>
-                    </div>
-                </div>
-                <div class="carousel-item c2-item">
-                    <div class="card mb-3">
-                    <div class="row g-0">
-                        <div class="col-md-6">
-                        <div class="card">
-                            <img src="../static/img/large_hotel_room.png" class="c2-img" alt="img1">
-                        </div>
-                        </div>
-                        <div class="col-md-6">
-                        <div class="card-body">
-                            <h3><small>SUPERIOR WITH BALCONY</h3>
-                                <br>
-                                <p class="fs-6">Superior Rooms with Balcony are located on the top floors of Hotel  Clement Prague and thanks to it offers magnifient view of the city of Prague over its rooftops.</p>
-                                <p class="fs-6">Rates from 75,60 €</p>
-                                <br>
-                                <br>
-                                <br>
-                                <a class="nav-link active text-center" href="{{ url_for('hotel_page') }}">
-                                    <button type="button" class="btn btn-warning">BOOK NOW</button>
-                                </a>
-                        </div>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-                <div class="carousel-item c2-item">
-                    <div class="card mb-3">
-                    <div class="row g-0">
-                        <div class="col-md-6">
-                        <div class="card">
-                            <img src="../static/img/medium_hotel_room.png" class="c2-img" alt="img1">
-                        </div>
-                        </div>
-                        <div class="col-md-6">
-                        <div class="card-body">
-                            <h3><small>SUPERIOR WITH PANORAMIC WINDOW</h3>
-                                <br>
-                                <p class="fs-6">Our most romantic rooms - Superior Room with Panoramic window are located on the top floor of Hotel Clement Prague and thanks to it offers magnifient view of the city...</p>
-                                <p class="fs-6">Rates from 49,56 €</p>
-                                <br>
-                                <br>
-                                <br>
-                                <a class="nav-link active text-center" href="{{ url_for('hotel_page') }}">
-                                    <button type="button" class="btn btn-warning">BOOK NOW</button>
-                                </a>
-                        </div>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-                <div class="carousel-item c2-item">
-                    <div class="card mb-3">
-                    <div class="row g-0">
-                        <div class="col-md-6">
-                        <div class="card">
-                            <img src="../static/img/small_hotel_room.png" class="c2-img" alt="img1">
-                        </div>
-                        </div>
-                        <div class="col-md-6">
-                        <div class="card-body">
-                            <h3><small>SUPERIOR ROOM</h3>
-                                <br>
-                                <p class="fs-6">Thanks to its location on the 8th floor, the Superior rooms of Hotel Clement Prague are full of sun and light, featuring mostly view over the rooftops or on the river.</p>
-                                <p class="fs-6">Rates from 41,16 €</p>
-                                <br>
-                                <br>
-                                <br>
-                                <a class="nav-link active text-center" href="{{ url_for('hotel_page') }}">
-                                    <button type="button" class="btn btn-warning">BOOK NOW</button>
-                                </a>
-                        </div>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-                <div class="carousel-item c2-item">
-                    <div class="card mb-3">
-                    <div class="row g-0">
-                        <div class="col-md-6">
-                        <div class="card">
-                            <img src="../static/img/medium_hotel_room.png" class="c2-img" alt="img1">
-                        </div>
-                        </div>
-                        <div class="col-md-6">
-                        <div class="card-body">
-                            <h3><small>JUNIOR SUITE</h3>
-                                <br>
-                                <p class="fs-6">Love the space? Then the Junior Suite of Hotel Clement is the best choice for you. Decorated in light natural colours it offers extra space for relaxing...</p>
-                                <p class="fs-6">Rates from 41,16 €</p>
-                                <br>
-                                <br>
-                                <br>
-                                <a class="nav-link active text-center" href="{{ url_for('hotel_page') }}">
-                                    <button type="button" class="btn btn-warning">BOOK NOW</button>
-                                </a>
-                        </div>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-                <div class="carousel-item c2-item">
-                    <div class="card mb-3">
-                    <div class="row g-0">
-                        <div class="col-md-6">
-                        <div class="card">
-                            <img src="../static/img/large_hotel_room.png" class="c2-img" alt="img1">
-                        </div>
-                        </div>
-                        <div class="col-md-6">
-                        <div class="card-body">
-                            <h3><small>COMFORT DOUBLE/TWIN ROOM</h3>
-                                <br>
-                                <p class="fs-6">City or street view and more space – those are the main benefits of Comfortable rooms over the same-looking Standard rooms.</p>
-                                <p class="fs-6">Rates from 36,96 €</p>
-                                <br>
-                                <br>
-                                <br>
-                                <br>
-                                <a class="nav-link active text-center" href="{{ url_for('hotel_page') }}">
-                                    <button type="button" class="btn btn-warning">BOOK NOW</button>
-                                </a>
-                        </div>
-                        </div>
-                    </div>
+                    <div class="text my-2">
+                        <h2>Standard</h2>
+                        <p>The standard hotel room is a comfortable space with a cozy bed and fresh linens.
+                            It offers complimentary WiFi for convenient internet access. 
+                            A flat-screen TV is provided for entertainment with a variety of channels. 
+                            There is a work desk or seating area for productivity or relaxation. 
+                            The en-suite bathroom includes modern fixtures and complimentary toiletries.</p>
+                        <p><a href="{{ url_for('hotel_page') }}" class="btn btn-primary">BOOK NOW</a></p>
                     </div>
                 </div>
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-            </button>
         </div>
     </div>
-    <div class="col-1">
+</div>
+
+<div class="container py-4" align="center">
+    <div class="row">
+        <div class="col">
+            <div class="image-text-container">
+                <div class="image">
+                    <img src="../static/img/medium_hotel_room.png" alt="Image">
+                </div>
+                <div class="text my-2">
+                    <h2>Double</h2>
+                    <p>The double room is a spacious and inviting retreat for two guests. 
+                        It features a comfortable bed with fresh linens, ensuring a restful sleep. 
+                        Guests can stay connected with complimentary WiFi and enjoy their favorite shows on the flat-screen TV. 
+                        The room also offers a mini bar stocked with a selection of beverages for a refreshing indulgence. 
+                        Whether for leisure or business, the double room provides a relaxing ambiance with modern amenities.</p>
+                    <p><a href="{{ url_for('hotel_page') }}" class="btn btn-primary">BOOK NOW</a></p>
+                </div>
+            </div>
+        </div>
     </div>
+</div>
+
+<div class="bg-body-secondary">
+    <div class="container py-4" align="center">
+        <div class="row">
+            <div class="col">
+                <div class="image-text-container">
+                    <div class="image">
+                        <img src="../static/img/large_hotel_room.png" alt="Image">
+                    </div>
+                    <div class="text my-2">
+                        <h2>Family</h2>
+                        <p>The family room is a perfect choice for a comfortable stay with loved ones. 
+                            It offers ample space to accommodate the whole family. 
+                            Guests can stay connected with complimentary WiFi and enjoy a wide range of entertainment on the flat-screen TV. 
+                            The room also features a convenient mini bar, providing refreshments for all family members. 
+                            Additionally, a delicious breakfast is included, ensuring a great start to the day for everyone. 
+                            The family room combines modern amenities with a welcoming atmosphere, creating a memorable stay for families.</p>
+                        <p><a href="{{ url_for('hotel_page') }}" class="btn btn-primary">BOOK NOW</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

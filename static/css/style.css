@@ -14,13 +14,41 @@
     z-index: -1;
   }
   
-  .jumbotron h1, .jumbotron p {
-    margin-bottom: 20px;
+.jumbotron h1, .jumbotron p {
+  margin-bottom: 20px;
+}
+
+.jumbotron a.btn {
+  margin-top: 20px;
+}
+
+.image-text-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.image-text-container .image {
+  flex: 0 0 50%;
+  max-width: 50%;
+  margin-right: 20px;
+}
+.image-text-container .image img {
+  max-width: 75%; /* 25% smaller */
+  height: auto;
+}
+.image-text-container .text {
+  flex: 1;
+  max-width: 50%;
+}
+@media (max-width: 768px) {
+  .image-text-container .image,
+  .image-text-container .text {
+      max-width: 100%;
+      flex: 0 0 100%;
+      margin-right: 0;
   }
-  
-  .jumbotron a.btn {
-    margin-top: 20px;
-  }
+}
 
 .signupImg {
   background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../img/signupImg.jpg');
