@@ -124,6 +124,15 @@ class User(Model):
         except Error as e:
             print(e)
 
+    def reset_password(self, new_password, email):
+        try:
+            password = generate_password_hash(new_password)
+            self.dbcursor.execute("UPDATE users SET password = %s WHERE email = %s", (password, email))
+            my_result = self.conn.commit()
+            return True
+        except Error as e:
+            print(e)
+            return False
 
 class Hotel(Model):
     def __init__(self):
