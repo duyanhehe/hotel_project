@@ -36,16 +36,17 @@ def hotel_page():
     email = session ['email'] if 'email' in session and session['email'] != '' else ''
     return render_template("booking/hotel.html", active_page = active_page, email = email, hotels = hotels)
 
-@app.route('/booking/<hotel_id>')
+@app.route('/booking/<int:hotel_id>')
 def room_page(hotel_id):
     active_page = 'hotel'
     room = dbModel.Room()
-    rooms = room.getAll()
+    rooms = room.getAll(hotel_id)
+
     hotel = dbModel.Hotel()
     hotels = hotel.getAll()
-    # print(rooms)
-    email = session ['email'] if 'email' in session and session['email'] != '' else ''
-    return render_template("booking/room.html", active_page = active_page, email = email, rooms = rooms, hotels = hotels)
+    email = session['email'] if 'email' in session and session['email'] != '' else ''
+    return render_template("booking/room.html", active_page=active_page, email=email, rooms=rooms, hotels=hotels)
+
 
 @app.route('/contact')
 def contact_page():
@@ -228,15 +229,18 @@ def all_hotels():
         hotel.delete(delete_hotel)
     return render_template("admin/room/hotel_list.html", email = email, hotels = hotels)
 
-@app.route('/admin/room_list/<hotel_id>', methods=['GET', 'POST'])
+@app.route('/admin/room_list/<int:hotel_id>', methods=['GET', 'POST'])
 @login_required
 def room_list(hotel_id):
     if session['usertype'] != 'admin':
         flash('Unauthorized Access', category='error')
         return redirect(url_for('homepage'))
     
+    room = dbModel.Room()
+    rooms = room.getAll(hotel_id)
+
     hotel = dbModel.Hotel()
-    hotel_detail = hotel.getDetailById(hotel_id)
+    hotels = hotel.getAll()
     # print(hotel_detail)
     email = session ['email'] if 'email' in session and session['email'] != '' else ''
     if request.method == 'POST':
@@ -244,7 +248,7 @@ def room_list(hotel_id):
         print("Deleting hotel with ID:", delete_room)
         hotel.delete_room(delete_room)
 
-    return render_template("admin/room/room_list.html", hotel_detail = hotel_detail, email = email)
+    return render_template("admin/room/room_list.html", email=email, rooms=rooms, hotels=hotels)
 
 @app.route('/admin/payment')
 @login_required

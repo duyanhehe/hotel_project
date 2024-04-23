@@ -8,7 +8,7 @@
 
 
 
-{% if hotel_detail: %}
+{% if rooms: %}
 <div class="container pt-4">
     <div class="container bg-body-tertiary border border-secondary">
         <div class="d-flex container py-2 bg-light">
@@ -45,7 +45,6 @@
                 <tr>
                     <th>Room Type</th>
                     <th>Features</th>
-                    <th>Base Price</th>
                     <th>Peak Season Price</th>
                     <th>Off Peak Price</th>
                     <th>Status</th>
@@ -80,14 +79,18 @@
                         </div>
                     </th>
                 </tr>
-                {% for hotel in hotel_detail %}
+                {% for room in rooms %}
                 <tr>
-                    <td>{{hotel[7]}}</td>
-                    <td>{{hotel[8]}}</td>
-                    <td>{{hotel[9]}}</td>
-                    <td>{{hotel[10]}}</td>
-                    <td>{{hotel[11]}}</td>
-                    <td>{{hotel[12]}}</td>
+                    <!-- Room Type -->
+                    <td>{{room[2]}}</td>
+                    <!-- Features -->
+                    <td>{{room[3]}}</td>
+                    <!-- Peak Season Price -->
+                    <td>{{room[4]}}</td>
+                    <!-- Off Peak Price -->
+                    <td>{{room[5]}}</td>
+                    <!-- Status -->
+                    <td>{{room[6]}}</td>
                     <td>
                         <div class="dropdown dropdown-menu-end">
                             <button class="btn dropdown-toggle-split" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
@@ -107,8 +110,8 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <form action="{{ url_for('room_list') }}" method="POST" class="dropdown-item">
-                                        <input type="hidden" name="delete_room" id="delete_room" value="{{hotel[6]}}">
+                                    <form action="{{ url_for('room_list', hotel_id=room[0]) }}" method="POST" class="dropdown-item">
+                                        <input type="hidden" name="delete_room" id="delete_room" value="">
                                         <button type="submit" class="dropdown-item">
                                             <!-- Delete Icon -->
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
