@@ -9,7 +9,6 @@
       <tr>
           <th>Room Type</th>
           <th>Features</th>
-          <th>Base Price</th>
           <th>Peak Season Price</th>
           <th>Off Peak Price</th>
           <th>Status</th>
@@ -21,13 +20,9 @@
           <td>{{room[3]}}</td>
           <td>{{room[4]}}</td>
           <td>{{room[5]}}</td>
-          <td>{{room[6]}}</td>
-          <td><p class="{% if room[7] == 'Available' %} text-success {% else %} text-danger {% endif %}">{{room[7]}}</p></td>
+          <td><p class="{% if room[6] == 'Available' %} text-success {% else %} text-danger {% endif %}">{{room[6]}}</p></td>
           <td>
-              <br>
-              <br>
-              <br>
-              <br>
+            <a href="{{ url_for('confirm_booking', hotel_id=room[1], room_id=room[0]) }}" class="btn btn-primary">Add to booking</a>
           </td>
       </tr>
       {% endfor %}

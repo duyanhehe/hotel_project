@@ -3,6 +3,7 @@ import dbModel, mysql.connector
 from mysql.connector import Error
 from markupsafe import escape
 from functools import wraps
+from datetime import datetime
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'asldjfasduosadfupoas'
@@ -46,6 +47,33 @@ def room_page(hotel_id):
     hotels = hotel.getAll()
     email = session['email'] if 'email' in session and session['email'] != '' else ''
     return render_template("booking/room.html", active_page=active_page, email=email, rooms=rooms, hotels=hotels)
+
+@app.route('/booking/<int:hotel_id>/confirm_booking/<int:room_id>', methods=['GET', 'POST'])
+def confirm_booking(hotel_id, room_id):
+    booking_model = dbModel.Booking()
+    booking_details = booking_model.getDetailById(room_id, hotel_id)
+    # print(booking)
+    if request.method == 'POST':
+        check_in_date = request.form['check_in_date']
+        check_out_date = request.form['check_out_date']
+        booking_date = datetime.now().date()
+        users_id = session['users_id'] if 'users_id' in session else None
+        # Calculate total price
+        booking = {
+            'users_id': users_id,
+            'room_id': room_id,
+            'check_in_date': check_in_date,
+            'check_out_date': check_out_date,
+            'booking_date': datetime.now().date()
+        }
+        success, total_price = booking_model.calculate_total_price(booking)
+        if success:
+            return redirect(url_for('homepage'))
+        else:
+            return redirect(url_for('room_page'))
+
+    email = session ['email'] if 'email' in session and session['email'] != '' else ''
+    return render_template("booking/confirm_booking.html", email = email, booking_details = booking_details)
 
 
 @app.route('/contact')

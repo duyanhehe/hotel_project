@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="../../static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
     <!-- CSS -->
-    <link rel="stylesheet" href="../../static/css/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <!-- Tab Icon -->
-    <link rel="shortcut icon" href="../../static/img/favicon.ico">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
     <title>Admin Hotel</title>
 </head>
 <body>
@@ -164,7 +164,7 @@
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
                             <a href="{{ url_for('admin_dashboard') }}" class="nav-link">
-                                <img src="../../static/img/faviconHotel.png" class="avatar img-fluid" alt="">
+                                <img src="{{ url_for('static', filename='img/faviconHotel.png') }}" class="avatar img-fluid" alt="">
                                 <span>Admin Hotel</span>
                             </a>
                         </li>
@@ -182,7 +182,7 @@
 
     <!-- JavaScript -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script type="text/javascript" src="../../static/js/bootstrap.bundle.min.js"></script>
-    <script src="../../static/js/script.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>

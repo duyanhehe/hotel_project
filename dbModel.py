@@ -267,46 +267,50 @@ class Booking(Model):
         super().__init__()
         self.tbName = 'booking'
 
+    def calculate_total_price(self, booking):
+        # Extract relevant booking information
+        booking['booking_date'] = datetime.now().date()
+        check_in_date = booking['check_in_date']
+        room_id = booking['room_id']
+
+        # Fetch peak_season_price and off_peak_price from room table based on room_id
+        room_details = self.getDetailById(room_id)
+        if room_details:
+            peak_season_price = room_details['peak_season_price']
+            off_peak_price = room_details['off_peak_price']
+        else:
+            # If room details are not available, default to base_price
+            peak_season_price = 0
+            off_peak_price = 0
+
+        # Check if check in date is in peak season (April - August, November - December)
+        if check_in_date.month in [4, 5, 6, 7, 8, 11, 12]:
+            total_price = peak_season_price
+        else:
+            total_price = off_peak_price
+
+        # Calc the difference between check-in date and booking date
+        current_date = booking['booking_date']
+        days_difference = (check_in_date - current_date).days
+
+        # Determine discount % based on days difference
+        if days_difference > 90:
+            return False, "You can not book over 3 months in advance"
+        elif days_difference >= 80 and days_difference <= 90:
+            discount_percentage = 0.3   # 30% discount
+        elif days_difference >= 60 and days_difference < 80:
+            discount_percentage = 0.2   # 20% discount
+        elif days_difference >= 45 and days_difference < 60:
+            discount_percentage = 0.1   # 10% discount
+        else:
+            discount_percentage = 0.0   # No discount
+        # Calc total price
+        total_price -= total_price * discount_percentage
+        return True, total_price
+
     def addNew(self, booking):
         try:
-            # Extract relevant booking information
-            booking['booking_date'] = datetime.now().date()
-            check_in_date = booking['check_in_date']
-            room_id = booking['room_id']
-
-            # Fetch peak_season_price and off_peak_price from room table based on room_id
-            room_details = self.getDetailById(room_id)
-            if room_details:
-                peak_season_price = room_details['peak_season_price']
-                off_peak_price = room_details['off_peak_price']
-            else:
-                # If room details are not available, default to base_price
-                peak_season_price = 0
-                off_peak_price = 0
-
-            # Check if check in date is in peak season (April - August, November - December)
-            if check_in_date.month in [4, 5, 6, 7, 8, 11, 12]:
-                total_price = peak_season_price
-            else:
-                total_price = off_peak_price
-
-            # Calc the difference between check-in date and booking date
-            current_date = booking['booking_date']
-            days_difference = (check_in_date - current_date).days
-
-            # Determine discount % based on days difference
-            if days_difference > 90:
-                return False, "You can not book over 3 months in advance"
-            elif days_difference >= 80 and days_difference <= 90:
-                discount_percentage = 0.3   # 30% discount
-            elif days_difference >= 60 and days_difference < 80:
-                discount_percentage = 0.2   # 20% discount
-            elif days_difference >= 45 and days_difference < 60:
-                discount_percentage = 0.1   # 10% discount
-            else:
-                discount_percentage = 0.0   # No discount
-            # Calc total price
-            total_price -= total_price * discount_percentage
+            total_price = self.calculate_total_price(booking)
             #  Insert into database
             self.dbcursor.execute('INSERT INTO ' + self.tbName + 
                                   ' (users_id, room_id, check_in_date, check_out_date, total_price, booking_date) \
@@ -321,26 +325,28 @@ class Booking(Model):
                 return False
         return True
 
-    def getAll(self, limit=10):
+    def getAll(self, hotel_id, room_id, limit=10):
         try:
-            self.dbcursor.execute('''
+            query = '''
                 SELECT booking.booking_ID, booking.users_id, booking.room_id, booking.check_in_date, booking.check_out_date, 
-                       booking.total_price, booking.booking_date,
-                       users.email, users.firstName, users.lastName, users.phoneNumber,
-                       room.room_type, room.features, room.peak_season_price, room.off_peak_price
+                    booking.total_price, booking.booking_date,
+                    users.email, users.firstName, users.lastName, users.phoneNumber,
+                    room.room_type, room.features, room.peak_season_price, room.off_peak_price
                 FROM booking
                 LEFT JOIN users ON booking.users_id = users.users_id
                 LEFT JOIN room ON booking.room_id = room.room_id
+                WHERE room.hotel_id = %s AND room.room_id = %s
                 LIMIT %s
-            ''', (limit,))
-            bookings = self.dbcursor.fetchall()
+            '''
+            self.dbcursor.execute(query, (hotel_id, room_id, limit))
+            my_result = self.dbcursor.fetchall()
         except Error as e:
             print(e)
-            bookings = ()
+            my_result = ()
         else:
             if self.dbcursor.rowcount == 0:
-                bookings = ()
-        return bookings
+                my_result = ()
+        return my_result
 
     def getById(self, booking_ID):
         try:
@@ -354,7 +360,7 @@ class Booking(Model):
                 my_result = ()
         return my_result
 
-    def getDetailById(self, booking_id):
+    def getDetailById(self, hotel_id, booking_id):
         try:
             self.dbcursor.execute('''
                 SELECT booking.*, users.email, users.firstName, users.lastName, users.phoneNumber,
@@ -362,13 +368,13 @@ class Booking(Model):
                 FROM booking
                 LEFT JOIN users ON booking.users_id = users.users_id
                 LEFT JOIN room ON booking.room_id = room.room_id
-                WHERE booking.booking_ID = %s
-            ''', (booking_id,))
-            detail = self.dbcursor.fetchall()
+                WHERE room.room_id = %s AND booking.booking_ID = %s 
+            ''', (hotel_id,booking_id,))
+            my_result = self.dbcursor.fetchone()
         except Error as e:
             print(e)
-            detail = ()
+            my_result = ()
         else:
             if self.dbcursor.rowcount == 0:
-                detail = ()
-        return detail
+                my_result = ()
+        return my_result
