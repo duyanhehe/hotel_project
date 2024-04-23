@@ -176,7 +176,12 @@ def admin_dashboard():
     if session['usertype'] != 'admin':
         flash('Unauthorized Access', category='error')
         return redirect(url_for('homepage'))
-    return render_template("admin/dashboard.html")
+    
+    customer = dbModel.User()
+    users = customer.getAll(5)
+    # print(users)
+    email = session ['email'] if 'email' in session and session['email'] != '' else ''
+    return render_template("admin/dashboard.html", email = email, users = users)
 
 @app.route('/admin/booking/all_bookings')
 @login_required
