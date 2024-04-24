@@ -28,20 +28,21 @@ def homepage():
         email = session['email']
     return render_template("home.html", active_page = active_page, email = email)
 
-@app.route('/booking')
+@app.route('/booking', methods=['GET', 'POST'])
 def hotel_page():
     active_page = 'hotel'
     
     # Get all hotels
     hotel = dbModel.Hotel()
     hotels = hotel.getAll()
+    # Initialize selected_city variable
+    selected_city = None
     
-    # Get distinct cities
-    cities = hotel.getDistinctCities()
-    
+    if request.method == 'POST':
+        selected_city = request.form.get('city')
+
     email = session['email'] if 'email' in session and session['email'] != '' else ''
-    
-    return render_template("booking/hotel.html", active_page=active_page, email=email, hotels=hotels, cities=cities)
+    return render_template("booking/hotel.html", active_page=active_page, email=email, hotels=hotels, selected_city = selected_city)
 
 @app.route('/booking/<int:hotel_id>')
 def room_page(hotel_id):

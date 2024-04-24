@@ -8,17 +8,19 @@
             <label for="city">Select City:</label>
             <select class="form-control" id="city" name="city">
                 <option value="">All Cities</option>
-                {% for city in cities %}
-                    <option value="{{ city }}" {% if city == selected_city %} selected {% endif %}>{{ city }}</option>
+                {% if hotels: %}
+                {% for hotel in hotels %}
+                <option value="{{ hotel[1] }}" {% if selected_city == hotel[1] %} selected {% endif %} >{{ hotel[1] }}</option>
                 {% endfor %}
+                {% endif %}
             </select>
         </div>
         <button type="submit" class="btn btn-primary">Filter</button>
     </form>
     
-    {% if hotels %}
-        {% if selected_city %}
-            <h3>Hotels in {{ selected_city }}</h3>
+    {% if hotels: %}
+        {% if hotels.cities %}
+            <h3>Hotels in {{ hotel[1] }}</h3>
         {% else %}
             <h3>All Hotels</h3>
         {% endif %}
