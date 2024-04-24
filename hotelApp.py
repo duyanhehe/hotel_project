@@ -31,11 +31,17 @@ def homepage():
 @app.route('/booking')
 def hotel_page():
     active_page = 'hotel'
+    
+    # Get all hotels
     hotel = dbModel.Hotel()
     hotels = hotel.getAll()
-    # print(hotels)
-    email = session ['email'] if 'email' in session and session['email'] != '' else ''
-    return render_template("booking/hotel.html", active_page = active_page, email = email, hotels = hotels)
+    
+    # Get distinct cities
+    cities = hotel.getDistinctCities()
+    
+    email = session['email'] if 'email' in session and session['email'] != '' else ''
+    
+    return render_template("booking/hotel.html", active_page=active_page, email=email, hotels=hotels, cities=cities)
 
 @app.route('/booking/<int:hotel_id>')
 def room_page(hotel_id):

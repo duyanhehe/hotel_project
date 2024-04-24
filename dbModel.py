@@ -198,7 +198,29 @@ class Hotel(Model):
             self.conn.commit()
         except Error as e:
             print(e)
-
+            
+    def getDistinctCities(self):
+        connection = None
+        try:
+            connection = mysql.connector.connect(host='your_host',
+                                                database='your_database',
+                                                user='your_user',
+                                                password='your_password')
+            if connection.is_connected():
+                cursor = connection.cursor()
+                cursor.execute("SELECT DISTINCT city FROM hotels")
+                cities = [row[0] for row in cursor.fetchall()]
+                print("Cities:", cities)  # Add this line for debugging
+                return cities
+        except Error as e:
+            print("Error while connecting to MySQL", e)
+        finally:
+            if connection is not None and connection.is_connected():
+                cursor.close()
+                connection.close()
+                print("MySQL connection is closed")
+        return []
+    
 class Room(Model):
     def __init__(self):
         super().__init__()
