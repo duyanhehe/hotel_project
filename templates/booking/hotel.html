@@ -3,11 +3,27 @@
 {% block content %}
 
 <div class="container py-4">
+    <form method="POST">
+        <div class="form-group">
+            <label for="city">Select City:</label>
+            <select class="form-control" id="city" name="city">
+                <option value="">All Cities</option>
+                {% for city in cities %}
+                    <option value="{{ city }}" {% if city == selected_city %} selected {% endif %}>{{ city }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Filter</button>
+    </form>
     
-    {% if hotels: %}
+    {% if hotels %}
+        {% if selected_city %}
+            <h3>Hotels in {{ selected_city }}</h3>
+        {% else %}
+            <h3>All Hotels</h3>
+        {% endif %}
         <table class="table table-responsive table-striped text-center">
             <tr>
-                <th>City</th>
                 <th>Hotel</th>
                 <th>Email</th>
                 <th>Phone</th>
@@ -15,25 +31,20 @@
                 <th></th>
             </tr>
             {% for hotel in hotels %}
-            <tr>
-                <td>{{hotel[1]}}</td>
-                <td>{{hotel[2]}}</td>
-                <td>{{hotel[3]}}</td>
-                <td>{{hotel[4]}}</td>
-                <td>{{hotel[5]}}</td>
-                <td>
-                    <a href="{{ url_for('room_page', hotel_id=hotel[0]) }}" class="btn btn-primary">View Rooms</a>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                </td>
-            </tr>
+                <tr>
+                    <td>{{ hotel[2] }}</td>
+                    <td>{{ hotel[3] }}</td>
+                    <td>{{ hotel[4] }}</td>
+                    <td>{{ hotel[5] }}</td>
+                    <td>
+                        <a href="{{ url_for('room_page', hotel_id=hotel[0]) }}" class="btn btn-primary">View Rooms</a>
+                    </td>
+                </tr>
             {% endfor %}
         </table>
-    </ul>
+    {% else %}
+        <p>No hotels found.</p>
     {% endif %}
 </div>
-
 
 {% endblock %}
