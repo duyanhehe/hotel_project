@@ -58,8 +58,8 @@ def room_page(hotel_id):
 @app.route('/booking/<int:hotel_id>/confirm_booking/<int:room_id>', methods=['GET', 'POST'])
 def confirm_booking(hotel_id, room_id):
     booking_model = dbModel.Booking()
-    booking_details = booking_model.getDetailById(room_id, hotel_id)
-    # print(booking)
+    booking_details = booking_model.getDetailById(hotel_id, room_id)
+    print(booking_details)
     if request.method == 'POST':
         check_in_date = request.form['check_in_date']
         check_out_date = request.form['check_out_date']

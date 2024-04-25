@@ -18,40 +18,45 @@ async function validateForm() {
     // Simple email validation
     var emailRegex = /\S+@\S+\.\S+/;
     if (!emailRegex.test(email)) {
-        alert("Please enter a valid email address.");
+        document.getElementById('error_message').innerHTML="Please enter a valid email address.";
+        document.getElementById('error_message').style.display='block';
         return false;
     }
 
     // Check if first name and last name are not empty
     if (firstName.trim() === "" || lastName.trim() === "") {
-        alert("Please enter your first name and last name.");
+        document.getElementById('error_message').innerHTML="Please enter your first name and last name.";
+        document.getElementById('error_message').style.display='block';
         return false;
     }
 
     // Phone number validation
     var phoneNumberRegex = /^\d{10,}$/;
     if (!phoneNumberRegex.test(phoneNumber)) {
-        alert("Please enter a valid phone number (at least 10 digits).");
+        document.getElementById('error_message').innerHTML="Please enter a valid phone number (at least 10 digits).";
+        document.getElementById('error_message').style.display='block';
         return false;
     }
 
     // Password length validation
     if (password.length < 8) {
-        alert("Password must be at least 8 characters long.");
+        document.getElementById('error_message').innerHTML="Password must be at least 8 characters long.";
+        document.getElementById('error_message').style.display='block';
         return false;
     }
 
     // Password match validation
     if (password !== password1) {
-        alert("Passwords do not match.");
+        document.getElementById('error_message').innerHTML="Passwords do not match.";
+        document.getElementById('error_message').style.display='block';
         return false;
     }
 
     // CAPTCHA validation
-    if (captcha !== "{{ captcha }}") {
-        alert("CAPTCHA is incorrect.");
-        return false;
-    }
+    // if (captcha != "{{ captcha }}") {
+    //     alert("CAPTCHA is incorrect.");
+    //     return false;
+    // }
 
     // Terms agreement validation
     if (!agreeTerms) {
@@ -60,33 +65,33 @@ async function validateForm() {
     }
 
     // Check if email already exists asynchronously
-    try {
-        const response = await fetch(`/check_email?email=${email}`);
-        const data = await response.json();
-        if (data.exists) {
-            alert("This email address is already registered.");
-            return false;
-        }
-    } catch (error) {
-        console.error("Error checking email:", error);
-        alert("An error occurred. Please try again later.");
-        return false;
-    }
+    // try {
+    //     const response = await fetch(`/check_email?email=${email}`);
+    //     const data = await response.json();
+    //     if (data.exists) {
+    //         alert("This email address is already registered.");
+    //         return false;
+    //     }
+    // } catch (error) {
+    //     console.error("Error checking email:", error);
+    //     alert("An error occurred. Please try again later.");
+    //     return false;
+    // }
 
     // Check if phone number is unique asynchronously
-    try {
-        const response = await fetch(`/check_phone?phoneNumber=${phoneNumber}`);
-        const data = await response.json();
-        if (data.exists) {
-            alert("This phone number is already registered with another account.");
-            return false;
-        }
-    } catch (error) {
-        console.error("Error checking phone number:", error);
-        alert("An error occurred. Please try again later.");
-        return false;
-    }
-
+    // try {
+    //     const response = await fetch(`/check_phone?phoneNumber=${phoneNumber}`);
+    //     const data = await response.json();
+    //     if (data.exists) {
+    //         alert("This phone number is already registered with another account.");
+    //         return false;
+    //     }
+    // } catch (error) {
+    //     console.error("Error checking phone number:", error);
+    //     alert("An error occurred. Please try again later.");
+    //     return false;
+    // }
+    document.getElementById('signupForm').submit()
     return true;  // Form validation successful
 }
 
