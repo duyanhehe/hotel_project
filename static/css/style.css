@@ -280,7 +280,8 @@ a.sidebar-link:hover {
 }
 
 .chart-container{
-  width: 200px;
+  width: 400px;
+  height: inherit;
 }
 
 .programming-stats{
