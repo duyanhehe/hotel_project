@@ -1,71 +1,65 @@
+//////////      Toggle sidebar nav      //////////
 const hamBurger = document.querySelector(".toggle-btn");
 
 hamBurger.addEventListener("click", function () {
   document.querySelector("#sidebar").classList.toggle("expand");
 });
 
+//////////      Form validation     ////////// 
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.querySelector('form');
 
-async function validateForm() {
-    var email = document.getElementById("email").value;
-    var firstName = document.getElementById("firstName").value;
-    var lastName = document.getElementById("lastName").value;
-    var phoneNumber = document.getElementById("phoneNumber").value;
-    var password = document.getElementById("password").value;
-    var password1 = document.getElementById("password1").value;
-    var captcha = document.getElementById("captcha").value;
-    var agreeTerms = document.getElementById("agree_terms").checked;
+    form.addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent the form from submitting initially
 
-    // Simple email validation
-    var emailRegex = /\S+@\S+\.\S+/;
-    if (!emailRegex.test(email)) {
-        alert("Please enter a valid email address.");
-        return false;
-    }
+        // Validate email
+        const email = document.getElementById('email').value.trim();
+        if (!isValidEmail(email)) {
+            alert('Please enter a valid email address.');
+            return;
+        }
 
-    // Check if first name and last name are not empty
-    if (firstName.trim() === "" || lastName.trim() === "") {
-        alert("Please enter your first name and last name.");
-        return false;
-    }
+        // Validate first name
+        const firstName = document.getElementById('firstName').value.trim();
+        if (firstName === '') {
+            alert('Please enter your first name.');
+            return;
+        }
 
-    // Phone number validation
-    var phoneNumberRegex = /^\d{10,}$/;
-    if (!phoneNumberRegex.test(phoneNumber)) {
-        alert("Please enter a valid phone number (at least 10 digits).");
-        return false;
-    }
+        // Validate last name
+        const lastName = document.getElementById('lastName').value.trim();
+        if (lastName === '') {
+            alert('Please enter your last name.');
+            return;
+        }
 
-    // Password length validation
-    if (password.length < 8) {
-        alert("Password must be at least 8 characters long.");
-        return false;
-    }
+        // Validate phone number
+        const phoneNumber = document.getElementById('phoneNumber').value.trim();
+        if (!isValidPhoneNumber(phoneNumber)) {
+            alert('Please enter a valid phone number.');
+            return;
+        }
 
-    // Password match validation
-    if (password !== password1) {
-        alert("Passwords do not match.");
-        return false;
-    }
+        // Validate password
+        const password = document.getElementById('password').value;
+        if (password.length < 8) {
+            alert('Password must be at least 8 characters long.');
+            return;
+        }
 
-    // CAPTCHA validation
-    if (captcha !== "{{ captcha }}") {
-        alert("CAPTCHA is incorrect.");
-        return false;
-    }
+        // Validate confirm password
+        const confirmPassword = document.getElementById('password1').value;
+        if (confirmPassword !== password) {
+            alert('Passwords do not match.');
+            return;
+        }
 
-    // Terms agreement validation
-    if (!agreeTerms) {
-        alert("Please agree to the terms of service.");
-        return false;
-    }
-
-    // Check if email already exists asynchronously
-    try {
-        const response = await fetch(`/check_email?email=${email}`);
-        const data = await response.json();
-        if (data.exists) {
-            alert("This email address is already registered.");
-            return false;
+        // Validate CAPTCHA
+        const captchaInput = document.getElementById('captcha').value.trim();
+        const captchaSpan = document.getElementById('captcha').textContent.trim();
+        if (captchaInput !== captchaSpan) {
+            alert('CAPTCHA verification failed. Please try again.');
+            return;
         }
     } catch (error) {
         console.error("Error checking email:", error);
