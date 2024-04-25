@@ -140,21 +140,27 @@ def sign_up():
         # Check if email is empty or already exists in the database
         if user['email'] == '' or user_model.getByEmail(user['email']):
             uniqueFlag = False
+        elif user['phoneNumber'] == '' or user_model.getByPhoneNumber(user['phoneNumber']):
+            uniqueFlag = False
         if request.form['password']!='' and password == password1:
             user['password'] = password
         else:
             user['password']=''
         user['usertype'] = 'standard'
-
         
         # Add new user if all conditions are met
         if uniqueFlag and  user['password']!='' and captcha_input == session['captcha']:
             user_model = dbModel.User()
             if user_model.addNew(user):
+                flash('Account created!', category='success')
                 return redirect(url_for('login'))     
 
         # Flash error if the requirements are not met
-        if len(email) < 4:
+        if user['email'] == '' or user_model.getByEmail(user['email']):
+            flash('Email already exists', category='error')
+        elif user['phoneNumber'] == '' or user_model.getByPhoneNumber(user['phoneNumber']):
+            flash('Phone Number already exists', category='error')
+        elif len(email) < 4:
             flash('Email must be at least 3 characters.', category='error')
         elif len(firstName) < 2:
             flash('First name must be at least 1 character.', category='error')
@@ -162,9 +168,9 @@ def sign_up():
             flash('Last name must be at least 1 character.', category='error')
         elif not phoneNumber.replace('+','').isdigit():
             flash('Phone number only contain numbers.', category='error')
-        elif len(phoneNumber) > 8:
+        elif len(phoneNumber) < 9:
             flash('Phone number must be at least 9 characters.', category='error')
-        elif len(password) > 7:
+        elif len(password) < 8:
             flash('Password must be at least 8 characters', category='error')
         elif password != password1:
             flash('Password don\'t match.', category='error')
@@ -172,10 +178,9 @@ def sign_up():
             flash('CAPTCHA incorrect. Please try again.', category='error')
         elif not agree_terms:
             flash('Please agree to the terms of service.', category='error')
-        else:
-            flash('Account created!', category='success')
 
-    session['captcha'] = dbModel.generate_captcha()     # Generaate CAPTCHA
+
+    session['captcha'] = dbModel.generate_captcha()     # Generate CAPTCHA
     return render_template("user/auth/sign_up.html", captcha=session['captcha'])
 
 @app.route('/terms_of_services')

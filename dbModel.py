@@ -93,6 +93,18 @@ class User(Model):
                 my_result = ()            
         return my_result
     
+    def getByPhoneNumber(self, phoneNumber):
+        try:
+            self.dbcursor.execute('SELECT * FROM '+ self.tbName + ' WHERE phoneNumber = %s',(phoneNumber,))
+            my_result = self.dbcursor.fetchone()
+        except Error as e:
+            print(e)
+            my_result = ()
+        else:    
+            if self.dbcursor.rowcount == 0:
+                my_result = ()            
+        return my_result
+    
     def checkLogin(self, email, password):
         user = self.getByEmail(email)
         if user:
