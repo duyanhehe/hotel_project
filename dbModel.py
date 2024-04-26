@@ -373,21 +373,24 @@ class Booking(Model):
                 my_result = ()
         return my_result
 
-    def getDetailById(self, hotel_id, booking_id):
+    def getDetailById(self, hotel_id, room_id):
         try:
-            self.dbcursor.execute('''
-                SELECT booking.*, users.email, users.firstName, users.lastName, users.phoneNumber,
-                       room.room_type, room.features, room.peak_season_price, room.off_peak_price
+            query = '''
+                SELECT booking.booking_ID, booking.users_id, booking.room_id, booking.check_in_date, booking.check_out_date, 
+                    booking.total_price, booking.booking_date,
+                    users.email, users.firstName, users.lastName, users.phoneNumber,
+                    room.room_type, room.features, room.peak_season_price, room.off_peak_price
                 FROM booking
                 LEFT JOIN users ON booking.users_id = users.users_id
                 LEFT JOIN room ON booking.room_id = room.room_id
-                WHERE room.room_id = %s AND booking.booking_ID = %s 
-            ''', (hotel_id,booking_id,))
-            my_result = self.dbcursor.fetchone()
+                WHERE room.hotel_id = %s AND booking.room_id = %s
+            '''
+            self.dbcursor.execute(query, (hotel_id, room_id))
+            booking_details = self.dbcursor.fetchall()
         except Error as e:
             print(e)
-            my_result = ()
+            booking_details = ()
         else:
-            if self.dbcursor.rowcount == 0:
-                my_result = ()
-        return my_result
+            if not booking_details:
+                print("No booking details found.")
+        return booking_details

@@ -2,26 +2,41 @@
 
 {% block content %}
 
-    {% if booking_details: %}
     <div class="container bg-body-tertiary">
-        <form action="{{ url_for('confirm_booking') }}" method="POST">
-            <h3 align="center">Confirm Booking</h3>
-            <div>
-                <h5>Email:</h5>
-                <p>{{ booking_details.email }}</p>
-            </div>
-            <div>
-                <h5>Full name:</h5>
-                <p>{{ booking_details.firstName }} {{ booking_details.lastName }}</p>
-            </div>
-            <div>
-                <h5>Phone Number:</h5>
-                <p>{{ booking_details.phoneNumber }}</p>
-            </div>
-            <div>
-                <h5>Room Type:</h5>
-                <p>{{ booking_details.room_type }}</p>
-            </div>
+        <h3 align="center">Confirm Booking</h3>
+        {% if user_details: %}
+        <div>
+            <h5>Email:</h5>
+            <p>{{ user_details[1] }}</p>
+        </div>
+        <div>
+            <h5>Full name:</h5>
+            <p>{{ user_details[2] }} {{ user_details[3] }}</p>
+        </div>
+        <div>
+            <h5>Phone Number:</h5>
+            <p>{{ user_details[4] }}</p>
+        </div>
+        {% endif %}
+        {% if room_details: %}
+        <div>
+            <h5>Hotel Name:</h5>
+            <p>{{ room_details[8] }}</p>
+        </div>
+        <div>
+            <h5>Room Type:</h5>
+            <p>{{ room_details[3] }}</p>
+        </div>
+        <div>
+            <h5>Room Features:</h5>
+            <p>{{ room_details[4] }}</p>
+        </div>
+        {% endif %}
+        <div>
+            <h5>Booking Date:</h5>
+            <p>{{ booking_date }}</p>
+        </div>
+        <form id="bookingForm" action="{{ url_for('confirm_booking', hotel_id=hotel_id, room_id=room_id) }}" method="POST">
             <div class="form-group">
                 <label for="check_in_date">Check In Date</label>
                 <input type="date" class="form-control" id="check_in_date" name="check_in_date" placeholder="Enter Check In Date">
@@ -30,18 +45,15 @@
                 <label for="check_out_date">Check Out Date</label>
                 <input type="date" class="form-control" id="check_out_date" name="check_out_date" placeholder="Enter Check Out Date">
             </div>
-            <div>
-                <h5>Booking Date:</h5>
-                <p>{{ booking_details.booking_date }}</p>
-            </div>
+
             <div>
                 <h5>Total Price:</h5>
-                <p>{{ total_price }} €</p>
+                <p><span id="total_price">{{ total_price }}</span> €</p>
             </div>
+
             <br>
             <button type="submit" class="btn btn-primary">Confirm Booking</button>
         </form>
     </div>
-    {% endif %}
 
 {% endblock %}

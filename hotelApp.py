@@ -57,17 +57,26 @@ def room_page(hotel_id):
 
 @app.route('/booking/<int:hotel_id>/confirm_booking/<int:room_id>', methods=['GET', 'POST'])
 def confirm_booking(hotel_id, room_id):
+    room = dbModel.Room()
+    room_details = room.getDetailById(room_id)
+    print(room_details)
     booking_model = dbModel.Booking()
-    booking_details = booking_model.getDetailById(hotel_id, room_id)
-    print(booking_details)
+    user_model = dbModel.User()
+    booking_date = datetime.now().date()  # Define booking_date outside the conditional block
+
+    email = session.get('email', '')  # Retrieve email from session
+    user_details = user_model.getByEmail(email)
+
+    print(user_details)
+    total_price = None
+
+
     if request.method == 'POST':
         check_in_date = request.form['check_in_date']
         check_out_date = request.form['check_out_date']
-        booking_date = datetime.now().date()
-        users_id = session['users_id'] if 'users_id' in session else None
         # Calculate total price
         booking = {
-            'users_id': users_id,
+            'email': email,
             'room_id': room_id,
             'check_in_date': check_in_date,
             'check_out_date': check_out_date,
@@ -75,12 +84,13 @@ def confirm_booking(hotel_id, room_id):
         }
         success, total_price = booking_model.calculate_total_price(booking)
         if success:
-            return redirect(url_for('homepage'))
+            booking = booking_model.addNew()
+            return redirect(url_for('homepage',hotel_id=hotel_id, room_id=room_id, total_price=total_price))
         else:
-            return redirect(url_for('room_page'))
+            return redirect(url_for('room_page', hotel_id=hotel_id, room_id=room_id, total_price=total_price))
 
     email = session ['email'] if 'email' in session and session['email'] != '' else ''
-    return render_template("booking/confirm_booking.html", email = email, booking_details = booking_details)
+    return render_template("booking/confirm_booking.html", email = email, hotel_id=hotel_id, room_id = room_id, room_details = room_details, booking_date = booking_date, total_price = total_price, user_details = user_details)
 
 
 @app.route('/contact')
@@ -186,29 +196,6 @@ def sign_up():
 @app.route('/terms_of_services')
 def terms_of_services():
     return render_template("user/auth/ToS.html")
-
-@app.route('/forgot_password', methods=['GET', 'POST'])
-def forgot_password():
-    if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
-        password1 = request.form['password1']
-
-        if password != password1:
-            flash('Password don\'t match.', category='error')
-            return redirect(url_for('forgot_password'))
-
-        user_model = dbModel.User()
-        if user_model.getByEmail(email):
-            if user_model.reset_password(email, password):
-                #redirect or render a success message
-                flash("Password reset successful", category='success')
-                return redirect(url_for('login'))
-            else:
-                flash("Failed to reset password. Please try again", category='error')
-                return redirect(url_for('forgot_password'))
-        flash('Email address not found', category='error')
-    return render_template("user/auth/forgot_pass.html")
 
 # ADMIN
 @app.route('/admin/dashboard')
