@@ -89,16 +89,16 @@ def confirm_booking(hotel_id, room_id):
             'room_id': room_id,
             'check_in_date': check_in_date,
             'check_out_date': check_out_date,
-            'total_price': total_price,
             'booking_date': datetime.now().date()
         }
         success, total_price = booking_model.calculate_total_price(booking)
         if success:
-            if booking_model.addNew(booking):
-                flash('Book Completed!', category='success')
-                return redirect(url_for('homepage',hotel_id=hotel_id, room_id=room_id, total_price=total_price))
+            booking['total_price'] = total_price
+            booking_model.addNew(booking)
+            flash('Book Completed!', category='success')
+            return redirect(url_for('homepage',hotel_id=hotel_id, room_id=room_id, total_price=total_price))
         else:
-            return redirect(url_for('room_page', hotel_id=hotel_id, room_id=room_id, total_price=total_price))
+            flash('Failed to book. Please try again', category='error')
 
     email = session ['email'] if 'email' in session and session['email'] != '' else ''
     return render_template("booking/confirm_booking.html", email = email, hotel_id=hotel_id, room_id = room_id, room_details = room_details, booking_date = booking_date, total_price = total_price, user_details = user_details)

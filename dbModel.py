@@ -298,6 +298,12 @@ class Room(Model):
                 return False
         return True
 
+    def updateRoomStatus(self, room_id, status):
+        try:
+            self.dbcursor.execute('UPDATE ' + self.tbName + ' SET status = %s WHERE room_id = %s', (status, room_id))
+            self.conn.commit()
+        except Error as e:
+            print(e)
 
 class Booking(Model):
     def __init__(self):
@@ -308,6 +314,7 @@ class Booking(Model):
         # Extract relevant booking information
         booking['booking_date'] = datetime.now().date()
         check_in_date_str = booking['check_in_date']
+        check_out_date_str = booking['check_out_date']
         room_id = booking['room_id']
 
         # Fetch peak_season_price and off_peak_price from room table based on room_id
@@ -343,23 +350,45 @@ class Booking(Model):
             discount_percentage = 0.1   # 10% discount
         else:
             discount_percentage = 0.0   # No discount
-        # Calc total price
+        # Calc total price after discount
         total_price -= total_price * discount_percentage
-        return True, total_price
+
+        # Calculate days staying
+        check_out_date = datetime.strptime(check_out_date, '%Y-%m-%d')
+        days_staying = (check_out_date - check_in_date).days
+
+        # Calculate total price multiplied by the number of days staying
+        if days_staying == 0:
+            return True, total_price
+        else:
+            total_price *= days_staying
+            return True, total_price
 
     def addNew(self, booking):
+        # Update room status to "unavailable"
+        room_instance = Room()
+        room_instance.updateRoomStatus(booking['room_id'], 'Unavailable')
         try:
             success, total_price = self.calculate_total_price(booking)
             if not success:
                 return False, total_price
             
-            total_price = float(total_price)
+            total_price = str(total_price)
 
             #  Insert into database
             self.dbcursor.execute('INSERT INTO ' + self.tbName + 
                                   ' (users_id, room_id, check_in_date, check_out_date, total_price, booking_date) \
-                                      VALUES (%s, %s, %s, %f, %s, %s)',
+                                      VALUES (%s, %s, %s, %s, %s, %s)',
                                   (booking['users_id'], booking['room_id'] ,booking['check_in_date'], booking['check_out_date'], total_price, booking['booking_date']))
+            self.conn.commit()
+
+            # Schedule task to update room status back to "available" after check_out_date
+            check_out_date = datetime.strptime(booking['check_out_date'], '%Y-%m-%d').date()
+            schedule_task = datetime.combine(check_out_date, datetime.min.time()) + timedelta(days=1)
+            schedule_task = schedule_task.strftime('%Y-%m-%d %H:%M:%S')
+            self.dbcursor.execute(f"CREATE EVENT IF NOT EXISTS Room_Availability_{booking['room_id']} \
+                                    ON SCHEDULE AT '{schedule_task}' \
+                                    DO UPDATE {room_instance.tbName} SET status = 'Available' WHERE room_id = {booking['room_id']};")
             self.conn.commit()
         except Error as e:
             print(e)
