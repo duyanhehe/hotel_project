@@ -2,7 +2,7 @@
 
 {% block content %}
 
-{% if all_bookings: %}
+{% if all_booking: %}
 <div class="container pt-4">
     <h3>Booking Lists</h3>
     <p class="text-secondary">You have total 6969 booking's.</p>
@@ -82,7 +82,8 @@
                         </div>
                     </td>
                 </tr>
-                {% for booking in all_bookings %}
+
+                {% for booking in all_booking %}
                 <tr>
                     <!-- Booking ID -->
                     <td>{{ booking[0] }}</td>

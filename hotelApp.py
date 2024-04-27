@@ -262,11 +262,11 @@ def all_bookings():
     if session['usertype'] != 'admin':
         flash('Unauthorized Access', category='error')
         return redirect(url_for('homepage'))
-    booking = dbModel.Booking()
-    all_bookings = booking.getAll()
-    # print(all_bookings)
     email = session ['email'] if 'email' in session and session['email'] != '' else ''
-    return render_template("admin/booking/all_bookings.html", email = email, all_bookings = all_bookings)
+    booking_model = dbModel.Booking()
+    all_booking = booking_model.getAll()
+    print(all_booking)
+    return render_template("admin/booking/all_bookings.html", email = email, all_booking = all_booking)
 
 @app.route('/admin/booking/add')
 @login_required

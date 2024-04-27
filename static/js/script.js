@@ -12,7 +12,8 @@ async function validateForm() {
     var phoneNumber = document.getElementById("phoneNumber").value;
     var password = document.getElementById("password").value;
     var password1 = document.getElementById("password1").value;
-    var captcha = document.getElementById("captcha").value;
+    var captcha = document.getElementById("enter_captcha").value;
+    var captchaValue = document.getElementById("captcha_value").value;
     var agreeTerms = document.getElementById("agree_terms").checked;
 
     // Simple email validation
@@ -53,14 +54,19 @@ async function validateForm() {
     }
 
     // CAPTCHA validation
-    // if (captcha != "{{ captcha }}") {
-    //     alert("CAPTCHA is incorrect.");
-    //     return false;
-    // }
+    if (captcha !== captchaValue) {
+        document.getElementById('error_message').innerHTML="Captcha is incorrect.";
+        document.getElementById('error_message').style.display='block';
+        console.log("Entered CAPTCHA:", captcha);
+        console.log("Actual CAPTCHA:", captchaValue);
+
+        return false;
+    }
 
     // Terms agreement validation
     if (!agreeTerms) {
-        alert("Please agree to the terms of service.");
+        document.getElementById('error_message').innerHTML="Please agree to the terms of service.";
+        document.getElementById('error_message').style.display='block';
         return false;
     }
 

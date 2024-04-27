@@ -345,29 +345,6 @@ class Booking(Model):
                 return False
         return True
 
-    def getAll(self, hotel_id, room_id, limit=10):
-        try:
-            query = '''
-                SELECT booking.booking_ID, booking.users_id, booking.room_id, booking.check_in_date, booking.check_out_date, 
-                    booking.total_price, booking.booking_date,
-                    users.email, users.firstName, users.lastName, users.phoneNumber,
-                    room.room_type, room.features, room.peak_season_price, room.off_peak_price
-                FROM booking
-                LEFT JOIN users ON booking.users_id = users.users_id
-                LEFT JOIN room ON booking.room_id = room.room_id
-                WHERE room.hotel_id = %s AND room.room_id = %s
-                LIMIT %s
-            '''
-            self.dbcursor.execute(query, (hotel_id, room_id, limit))
-            my_result = self.dbcursor.fetchall()
-        except Error as e:
-            print(e)
-            my_result = ()
-        else:
-            if self.dbcursor.rowcount == 0:
-                my_result = ()
-        return my_result
-
     def getById(self, booking_ID):
         try:
             self.dbcursor.execute('SELECT * FROM ' + self.tbName + ' WHERE booking_ID = %s', (booking_ID,))
@@ -393,11 +370,49 @@ class Booking(Model):
                 WHERE booking.room_id = %s
             '''
             self.dbcursor.execute(query, (room_id,))
-            booking_details = self.dbcursor.fetchall()
+            my_result = self.dbcursor.fetchall()
         except Error as e:
             print("Error retrieving booking details:", e)
-            booking_details = ()
+            my_result = ()
         else:
-            if not booking_details:
+            if not my_result:
                 print("No booking details found.")
-        return booking_details
+        return my_result
+    
+    def getAll(self, limit=10):
+        try:
+            sql = '''
+                SELECT 
+                    booking.booking_ID, 
+                    booking.users_id, 
+                    booking.room_id, 
+                    booking.check_in_date, 
+                    booking.check_out_date, 
+                    booking.total_price, 
+                    booking.booking_date,
+                    users.email, 
+                    users.firstName, 
+                    users.lastName, 
+                    users.phoneNumber,
+                    room.room_type, 
+                    room.features, 
+                    room.peak_season_price, 
+                    room.off_peak_price
+                FROM 
+                    booking
+                JOIN 
+                    users ON booking.users_id = users.users_id
+                JOIN 
+                    room ON booking.room_id = room.room_id
+                LIMIT %s
+            '''
+
+            self.dbcursor.execute(sql, (limit,))
+            my_result = self.dbcursor.fetchall()
+        except Error as e:
+            print("Error retrieving booking details:", e)
+            my_result = ()
+        else:
+            if not my_result:
+                print("No booking details found.")
+        return my_result

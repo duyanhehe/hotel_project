@@ -36,7 +36,8 @@
                             </div>
                             <div class="form-group">
                                 <label for="captcha">CAPTCHA: <br> <span id="captcha" class="captcha fw-bold fs-2">{{ captcha }}</span></label>
-                                <input type="text" class="form-control" id="captcha" name="captcha" placeholder="Enter CAPTCHA" required>
+                                <input type="hidden" id="captcha_value" value="{{ captcha }}">
+                                <input type="text" class="form-control" id="enter_captcha" name="captcha" placeholder="Enter CAPTCHA" required>
                             </div>
                             <div class="form-group form-check">
                                 <input type="checkbox" class="form-check-input" id="agree_terms" name="agree_terms">
