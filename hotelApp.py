@@ -56,6 +56,7 @@ def room_page(hotel_id):
     return render_template("booking/room.html", active_page=active_page, email=email, rooms=rooms, hotels=hotels)
 
 @app.route('/booking/<int:hotel_id>/confirm_booking/<int:room_id>', methods=['GET', 'POST'])
+@login_required
 def confirm_booking(hotel_id, room_id):
     room = dbModel.Room()
     room_details = room.getDetailById(room_id)
@@ -94,6 +95,10 @@ def confirm_booking(hotel_id, room_id):
     email = session ['email'] if 'email' in session and session['email'] != '' else ''
     return render_template("booking/confirm_booking.html", email = email, hotel_id=hotel_id, room_id = room_id, room_details = room_details, booking_date = booking_date, total_price = total_price, user_details = user_details)
 
+@app.route('/booking/history')
+@login_required
+def booking_history():
+    return render_template("user/booking_history.html")
 
 @app.route('/contact')
 def contact_page():
@@ -124,7 +129,7 @@ def login():
 
 @app.route('/logout')
 def logout():
-    session.pop('username', None)
+    session.pop('email', None)
     session.pop('is_login', None)
     session.clear()
     return redirect(url_for('homepage'))
@@ -198,6 +203,28 @@ def sign_up():
 @app.route('/terms_of_services')
 def terms_of_services():
     return render_template("user/auth/ToS.html")
+
+@app.route('/reset_password', methods=['GET', 'POST'])
+@login_required
+def reset_password():
+    email = session ['email'] if 'email' in session and session['email'] != '' else ''
+
+    if request.method == 'POST':
+        new_password = request.form['new_password']
+        confirm_password = request.form['confirm_password']
+        if new_password != confirm_password:
+            flash('Passwords do not match. Please try again.', category='error')
+            return redirect(url_for('reset_password'))
+        elif len(new_password) < 8:
+            return redirect(url_for('reset_password'))
+        
+        if new_password != '':
+            user_model = dbModel.User()
+            if user_model.reset_password(new_password, email):
+                flash('Password changed!', category='success')
+                return redirect(url_for('login'))     
+        
+    return render_template("user/auth/reset_password.html", email = email)
 
 # ADMIN
 @app.route('/admin/dashboard')

@@ -47,13 +47,19 @@
                         <li class="dropdown-item">
                           {{session.email}}
                         </li>
-                        <li class="dropdown-item">
-                          Booking History
+                        <hr class="dropdown-divider">
+                        <li>
+                          <a href="{{ url_for('reset_password') }}" class="dropdown-item">Change Password</a>
+                        </li>
+                        <li>
+                          <a href="{{ url_for('booking_history') }}"  class="dropdown-item">
+                            Booking History
+                          </a>
                         </li>
                         {% if session.usertype == 'admin' %}
                         <hr class="dropdown-divider">
                         <li>
-                          <a href="{{ url_for('admin_dashboard')}}" class="dropdown-item">
+                          <a href="{{ url_for('admin_dashboard') }}" class="dropdown-item">
                             Admin Dashboard
                           </a>
                         </li>

@@ -137,10 +137,9 @@ class User(Model):
         except Error as e:
             print(e)
 
-    def reset_password(self, new_password, email):
+    def reset_password(self, password, email):
         try:
-            password = generate_password_hash(new_password)
-            self.dbcursor.execute("UPDATE users SET password = %s WHERE email = %s", (password, email))
+            self.dbcursor.execute("UPDATE users SET password_hash = %s WHERE email = %s", (generate_password_hash(password), email))
             my_result = self.conn.commit()
             return True
         except Error as e:
