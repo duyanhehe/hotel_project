@@ -32,9 +32,9 @@ async function validateForm() {
     }
 
     // Phone number validation
-    var phoneNumberRegex = /^\d{10,}$/;
+    var phoneNumberRegex = /^\d{9,}$/;
     if (!phoneNumberRegex.test(phoneNumber)) {
-        document.getElementById('error_message').innerHTML="Please enter a valid phone number (at least 10 digits).";
+        document.getElementById('error_message').innerHTML="Please enter a valid phone number (at least 9 digits).";
         document.getElementById('error_message').style.display='block';
         return false;
     }
@@ -57,9 +57,8 @@ async function validateForm() {
     if (captcha !== captchaValue) {
         document.getElementById('error_message').innerHTML="Captcha is incorrect.";
         document.getElementById('error_message').style.display='block';
-        console.log("Entered CAPTCHA:", captcha);
-        console.log("Actual CAPTCHA:", captchaValue);
-
+        console.log(captcha)
+        console.log(captchaValue)
         return false;
     }
 
@@ -70,37 +69,57 @@ async function validateForm() {
         return false;
     }
 
-    // Check if email already exists asynchronously
-    // try {
-    //     const response = await fetch(`/check_email?email=${email}`);
-    //     const data = await response.json();
-    //     if (data.exists) {
-    //         alert("This email address is already registered.");
-    //         return false;
-    //     }
-    // } catch (error) {
-    //     console.error("Error checking email:", error);
-    //     alert("An error occurred. Please try again later.");
-    //     return false;
-    // }
+    // AJAX request to check if email exists
+    try {
+        const emailResponse = await fetch('/check-email', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email: email })
+        });
 
-    // Check if phone number is unique asynchronously
-    // try {
-    //     const response = await fetch(`/check_phone?phoneNumber=${phoneNumber}`);
-    //     const data = await response.json();
-    //     if (data.exists) {
-    //         alert("This phone number is already registered with another account.");
-    //         return false;
-    //     }
-    // } catch (error) {
-    //     console.error("Error checking phone number:", error);
-    //     alert("An error occurred. Please try again later.");
-    //     return false;
-    // }
-    document.getElementById('signupForm').submit()
-    return true;  // Form validation successful
+        if (!emailResponse.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const emailData = await emailResponse.json();
+
+        if (emailData.exists) {
+            document.getElementById('error_message').innerHTML = "Email already exists.";
+            document.getElementById('error_message').style.display = 'block';
+            return false;
+        }
+
+        // If email doesn't exist, proceed to check phone number
+        const phoneResponse = await fetch('/check-phone-number', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ phoneNumber: phoneNumber })
+        });
+
+        if (!phoneResponse.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const phoneData = await phoneResponse.json();
+
+        if (phoneData.exists) {
+            document.getElementById('error_message').innerHTML = "Phone number already exists.";
+            document.getElementById('error_message').style.display = 'block';
+            return false;
+        }
+
+        // If both email and phone number are unique, continue with form submission
+        document.getElementById('signupForm').submit();
+        return true;
+    } catch (error) {
+        console.error('Error:', error);
+        return false;
+    }
 }
-
 
 
 //chart js

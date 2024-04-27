@@ -1,4 +1,4 @@
-from flask import Flask, render_template, flash, request, url_for, redirect, session
+from flask import Flask, render_template, flash, request, url_for, redirect, session, jsonify
 import dbModel, mysql.connector
 from mysql.connector import Error
 from markupsafe import escape
@@ -94,8 +94,9 @@ def confirm_booking(hotel_id, room_id):
         }
         success, total_price = booking_model.calculate_total_price(booking)
         if success:
-            booking_add = booking_model.addNew(booking)
-            return redirect(url_for('homepage',hotel_id=hotel_id, room_id=room_id, total_price=total_price))
+            if booking_model.addNew(booking):
+                flash('Book Completed!', category='success')
+                return redirect(url_for('homepage',hotel_id=hotel_id, room_id=room_id, total_price=total_price))
         else:
             return redirect(url_for('room_page', hotel_id=hotel_id, room_id=room_id, total_price=total_price))
 
@@ -215,6 +216,24 @@ def sign_up():
 
     session['captcha'] = dbModel.generate_captcha()     # Generate CAPTCHA
     return render_template("user/auth/sign_up.html", captcha=session['captcha'])
+
+@app.route('/check-email', methods=['POST'])
+def check_email():
+    email = request.json['email']
+    user_model = dbModel.User()
+    if user_model.check_email_exists(email):
+        return jsonify({'exists': True})
+    else:
+        return jsonify({'exists': False})
+    
+@app.route('/check-phone-number', methods=['POST'])
+def check_phone_number():
+    phoneNumber = request.json['phoneNumber']
+    user_model = dbModel.User()
+    if user_model.check_phone_number_exists(phoneNumber):
+        return jsonify({'exists': True})
+    else:
+        return jsonify({'exists': False})
 
 @app.route('/terms_of_services')
 def terms_of_services():

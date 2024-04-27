@@ -114,6 +114,30 @@ class User(Model):
                 return True
         return False
     
+    def check_email_exists(self, email):
+        try:
+            self.dbcursor.execute("SELECT COUNT(*) FROM users WHERE email = %s", (email,))
+            my_result = self.dbcursor.fetchone()[0]
+        except Error as e:
+            print(e)
+            my_result = ()
+        else:    
+            if self.dbcursor.rowcount == 0:
+                my_result = ()            
+        return my_result
+    
+    def check_phone_number_exists(self, phoneNumber):
+        try:
+            self.dbcursor.execute("SELECT COUNT(*) FROM users WHERE phoneNumber = %s", (phoneNumber,))
+            my_result = self.dbcursor.fetchone()[0]
+        except Error as e:
+            print(e)
+            my_result = ()
+        else:    
+            if self.dbcursor.rowcount == 0:
+                my_result = ()            
+        return my_result
+    
     def update_user(self, user):
         try:
             self.dbcursor.execute('update ' + self.tbName +
