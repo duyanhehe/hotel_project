@@ -69,8 +69,9 @@ class User(Model):
 
     def getDetailById(self, users_id):
         try:
-            self.dbcursor.execute('SELECT users.*, booking.* FROM users LEFT JOIN \
-                                   booking ON users.users_id = booking.users_id \
+            self.dbcursor.execute('SELECT users.*, booking.*, room.room_id, room.room_type FROM users \
+                                   LEFT JOIN booking ON users.users_id = booking.users_id \
+                                   LEFT JOIN room ON booking.room_id = room.room_id \
                                    WHERE users.users_id = {}'.format(users_id))
             my_result = self.dbcursor.fetchone()
         except Error as e:

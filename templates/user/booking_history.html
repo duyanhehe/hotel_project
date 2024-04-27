@@ -1,17 +1,43 @@
 {% extends "main.html" %}
 
 {% block content %}
-<div class="signupImg">
-    <div class="container mt-5 pt-5 mb-5 pb-5">
-        <div class="row">
-            <div class="col-12 col-sm-8 col-md-6 m-auto">
-                <div class="card">
-                    <div class="card-body">
-                        <h3 align="center">Booking History</h3>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="container py-4">
+    <h3 align="center">Booking History</h3>
+    <table class="table table-sm text-center">
+        <thead>
+            <tr>
+                <th>Booking Date</th>
+                <th>Check In Date</th>
+                <th>Check Out Date</th>
+                <th>Room Type</th>
+                <th>Total Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if user_details %}
+
+                <tr>
+                    <!-- Booking Date -->
+                    <td>{{ user_details[13] }}</td>
+                    <!-- Check In Date -->
+                    <td>{{ user_details[10] }}</td>
+                    <!-- Check Out Date -->
+                    <td>{{ user_details[11] }}</td>
+                    <!-- Room Type -->
+                    <td>{{ user_details[15] }}</td>
+                    <!-- Total Price -->
+                    <td>{{ user_details[12] }}</td>
+                </tr>
+
+            {% else %}
+                <tr>
+                    <td colspan="5">
+                        <p>No booking history available</p>
+                        <a href="{{ url_for('hotel_page') }}" class="btn btn-primary">BOOK NOW</a>
+                    </td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
 </div>
 {% endblock %}

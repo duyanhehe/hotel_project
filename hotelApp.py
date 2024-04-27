@@ -8,6 +8,13 @@ from datetime import datetime
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'asldjfasduosadfupoas'
 
+# Define the strftime filter
+def format_datetime(value, format='%Y-%m-%d'):
+    return value.strftime(format)
+
+# Register the filter with the app
+app.jinja_env.filters['strftime'] = format_datetime
+
 # Check Login
 def login_required(f):
     @wraps(f)
@@ -98,7 +105,16 @@ def confirm_booking(hotel_id, room_id):
 @app.route('/booking/history')
 @login_required
 def booking_history():
-    return render_template("user/booking_history.html")
+    email = session['email'] if 'email' in session and session['email'] != '' else ''
+    user_model = dbModel.User()
+    user = user_model.getByEmail(email)
+    user_id = user[0]
+    user_details = user_model.getDetailById(user_id)
+
+    user_details = list(user_details)  # Convert user_details to a list if it's not already
+
+    print(user_details)
+    return render_template("user/booking_history.html", user_details = user_details)
 
 @app.route('/contact')
 def contact_page():
