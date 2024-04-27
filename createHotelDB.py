@@ -68,8 +68,8 @@ def create_tables():
             hotel_id INT NOT NULL, 
             room_type VARCHAR(50) NOT NULL,
             features VARCHAR(255) NOT NULL,
-            peak_season_price DECIMAL(10, 2) NOT NULL, 
-            off_peak_price DECIMAL(10, 2) NOT NULL, 
+            peak_season_price FLOAT NOT NULL, 
+            off_peak_price FLOAT NOT NULL, 
             status VARCHAR(20), 
             FOREIGN KEY (hotel_id) REFERENCES hotel(hotel_id) ON DELETE CASCADE
         )""")
@@ -82,7 +82,7 @@ def create_tables():
             room_id INT NOT NULL,
             check_in_date DATE NOT NULL,
             check_out_date DATE NOT NULL,
-            total_price DECIMAL(10, 2) NOT NULL,
+            total_price FLOAT NOT NULL,
             booking_date DATE NOT NULL,
             FOREIGN KEY (users_id) REFERENCES users(users_id) ON DELETE CASCADE,
             FOREIGN KEY (room_id) REFERENCES room(room_id) ON DELETE CASCADE
@@ -105,7 +105,7 @@ def create_tables():
         # CREATE TABLE IF NOT EXISTS payment (
         #     payment_ID INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
         #     booking_ID INT NOT NULL,
-        #     amount DECIMAL(10, 2) NOT NULL,
+        #     amount FLOAT NOT NULL,
         #     payment_date DATE NOT NULL,
         #     payment_method VARCHAR(50) NOT NULL,
         #     FOREIGN KEY (booking_ID) REFERENCES bookings(booking_ID)

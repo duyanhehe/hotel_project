@@ -66,9 +66,10 @@ def confirm_booking(hotel_id, room_id):
 
     email = session.get('email', '')  # Retrieve email from session
     user_details = user_model.getByEmail(email)
+    users_id = user_details[0]
 
     print(user_details)
-    total_price = None
+    total_price = 0
 
 
     if request.method == 'POST':
@@ -76,15 +77,16 @@ def confirm_booking(hotel_id, room_id):
         check_out_date = request.form['check_out_date']
         # Calculate total price
         booking = {
-            'email': email,
+            'users_id': users_id,
             'room_id': room_id,
             'check_in_date': check_in_date,
             'check_out_date': check_out_date,
+            'total_price': total_price,
             'booking_date': datetime.now().date()
         }
         success, total_price = booking_model.calculate_total_price(booking)
         if success:
-            booking = booking_model.addNew()
+            booking_add = booking_model.addNew(booking)
             return redirect(url_for('homepage',hotel_id=hotel_id, room_id=room_id, total_price=total_price))
         else:
             return redirect(url_for('room_page', hotel_id=hotel_id, room_id=room_id, total_price=total_price))
