@@ -32,8 +32,8 @@
                     <td>{{ booking[5] }}</td>
                     <!-- links -->
                     <td>
-                        <a href="{{ url_for('change_booking', booking_id = booking[0]) }}">Change</a>
-                        <a href="#">Delete</a>
+                        <a href="{{ url_for('change_booking', booking_id = booking[0]) }}" class="text-decoration-none">Change</a>
+                        <a href="{{ url_for('cancel_booking', booking_id = booking[0]) }}" class="text-decoration-none">Cancel</a>
                     </td>
                 </tr>
                 {% endfor %}

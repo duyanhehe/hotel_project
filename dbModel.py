@@ -451,6 +451,53 @@ class Booking(Model):
                 return False
         return True
 
+    def calculate_cancellation_charges(self, booking_id):
+        try:
+            # Get booking details
+            booking_details = self.getDetailById(booking_id)
+            print("Booking details:", booking_details)
+            if not booking_details:
+                return False, "Booking not found"
+            # Extract relevant information
+            total_price = booking_details[5]
+            booking_date = booking_details[6]
+            current_date = datetime.now().date()
+            print("Booking date:", booking_date)
+            print("Current date:", current_date)
+            days_difference = (booking_date - current_date).days
+            print("Days difference:", days_difference)
+            # Calculate cancellation charges based on days difference
+            if days_difference >= 60:
+                cancellation_charges = 0  # No charges before 60 days
+            elif 30 <= days_difference < 60:
+                cancellation_charges = 0.5 * total_price  # 50% charges between 30 and 60 days
+            else:
+                cancellation_charges = total_price  # 100% charges within 30 days
+            print("Cancellation charges:", cancellation_charges)
+            return True, cancellation_charges
+        except Exception as e:
+            print(e)
+            return False, "Error occurred during cancellation charge calculation"
+
+
+    def delete_booking(self, booking_id):
+        try:
+            # Fetch booking details
+            booking_details = self.getDetailById(booking_id)
+            if booking_details:
+                room_id = booking_details[2]
+                # Delete the booking from the database
+                self.dbcursor.execute('DELETE FROM ' + self.tbName + ' WHERE booking_ID = %s', (booking_id,))
+                self.conn.commit()
+
+                # Update the room status to 'available'
+                room_model = Room()
+                room_model.updateRoomStatus(room_id, 'Available')
+            return True, "Booking deleted successfully"
+        except Exception as e:
+            print(e)
+            return False, "Error occurred during booking deletion"
+
     def getById(self, booking_ID):
         try:
             self.dbcursor.execute('SELECT * FROM ' + self.tbName + ' WHERE booking_ID = %s', (booking_ID,))

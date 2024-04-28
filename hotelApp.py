@@ -143,8 +143,33 @@ def change_booking(booking_id):
     email = session ['email'] if 'email' in session and session['email'] != '' else ''
     return render_template("user/booking/edit.html", booking_details=booking_details, booking_id=booking_id, email = email)
 
-
-
+@app.route('/booking/cancel/<int:booking_id>', methods=['GET', 'POST'])
+@login_required
+def cancel_booking(booking_id):
+    booking_model = dbModel.Booking()
+    booking_details = booking_model.getDetailById(booking_id)
+    if request.method == 'POST':
+        confirmation = request.form.get('confirmation')
+        if confirmation == 'yes':
+            # Calculate cancellation charges
+            success, cancellation_charges = booking_model.calculate_cancellation_charges(booking_id)
+            if success:
+                # Delete booking
+                success, message = booking_model.delete_booking(booking_id)
+                if success:
+                    flash("Cancellation charges: ${:.2f}".format(cancellation_charges), category='error')
+                    flash("Booking deleted successfully", category='success')
+                    return redirect(url_for('booking_history'))
+                else:
+                    flash(message, category='error')
+                    return redirect(url_for('booking_history'))  # Redirect if deletion fails
+            else:
+                flash("Error calculating cancellation charges", category='error')
+                return redirect(url_for('booking_history', booking_id=booking_id))  # Redirect if calculation fails
+        else:
+            return redirect(url_for('booking_history', booking_id=booking_id))
+    else:
+        return render_template('user/booking/delete.html', booking_id=booking_id)
 @app.route('/contact')
 def contact_page():
     active_page = 'contact'
