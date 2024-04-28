@@ -20,6 +20,9 @@
             </div>
             <div class="flex-grow-1"></div>
             <div>
+                <a href="{{ url_for('add_room', hotel_id=rooms[0][1]) }}" class="text-decoration-none">Add room</a>
+            </div>
+            <div>
                 <div class="dropdown dropdown-menu-end">
                     <button class="btn dropdown-toggle-split" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                         <!-- Option Icon -->
@@ -90,7 +93,7 @@
                     <!-- Off Peak Price -->
                     <td>{{room[5]}}</td>
                     <!-- Status -->
-                    <td>{{room[6]}}</td>
+                    <td class="{% if room[6] == 'Available' %} text-success {% else %} text-danger {% endif %}">{{room[6]}}</td>
                     <td>
                         <div class="dropdown dropdown-menu-end">
                             <button class="btn dropdown-toggle-split" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
@@ -110,16 +113,13 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <form action="{{ url_for('room_list', hotel_id=room[0]) }}" method="POST" class="dropdown-item">
-                                        <input type="hidden" name="delete_room" id="delete_room" value="">
-                                        <button type="submit" class="dropdown-item">
-                                            <!-- Delete Icon -->
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
-                                                <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/>
-                                                </svg>
-                                            Delete
-                                        </button>
-                                    </form>
+                                    <a href="#" class="dropdown-item">
+                                        <!-- Delete Icon -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                            <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/>
+                                            </svg>
+                                        Delete
+                                    </a>
                                 </li>
                             </ul>
                         </div>

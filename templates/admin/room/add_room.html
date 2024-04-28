@@ -1,0 +1,53 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+
+<div class="container pt-4">
+    <h3>Add New Room</h3>
+</div>
+
+<div class="container py-4 bg-body-tertiary border">
+    {% if hotels: %}
+    <form action="{{ url_for('add_room', hotel_id=hotels[0]) }}" method="POST">
+        <div>
+            <h5>Hotel ID:</h5>
+            <p>{{ hotels[0] }}</p>
+        </div>
+        <div>
+            <h5>City:</h5>
+            <p>{{ hotels[1] }}</p>
+        </div>
+        <div>
+            <h5>Hotel Name:</h5>
+            <p>{{ hotels[2] }}</p>
+        </div>
+        <div class="form-group">
+            <label for="room_type" class="h5">Room Type:</label>
+            <input type="text" class="form-control" id="room_type" name="room_type" placeholder="Enter Room Type" required>
+        </div>
+        <div class="form-group">
+            <label for="features" class="h5">Room Features:</label>
+            <input type="text" class="form-control" id="features" name="features" placeholder="Enter Room Features" required>
+        </div>
+        <div class="form-group">
+            <label for="peak_season_price" class="h5">Peak Season Price:</label>
+            <input type="number" step="0.01" min="0.00" class="form-control" id="peak_season_price" name="peak_season_price" placeholder="Enter Peak Season Price" required>
+        </div>
+        <div class="form-group">
+            <label for="off_peak_price" class="h5">Off Peak Price:</label>
+            <input type="number" step="0.01" min="0.00" class="form-control" id="off_peak_price" name="off_peak_price" placeholder="Enter Off Peak Price" required>
+        </div>
+        <div>
+            <h5>Status</h5>
+            <p>{{status}}</p>
+        </div>
+
+        <br>
+        <div align="center">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+    {% endif %}
+</div>
+
+{% endblock %}

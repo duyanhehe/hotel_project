@@ -47,6 +47,7 @@
                     <th>Email</th>
                     <th>Phone</th>
                     <th>Capacity</th>
+                    <th></th>
                     <th>
                         <div class="dropdown dropdown-menu-end">
                             <button class="btn dropdown-toggle-split" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
@@ -87,6 +88,11 @@
                     <td>{{hotel[4]}}</td>
                     <td>{{hotel[5]}}</td>
                     <td>
+                        <a class="text-decoration-none" href="{{ url_for('room_list', hotel_id=hotel[0]) }}">
+                            View Rooms
+                        </a>
+                    </td>
+                    <td>
                         <div class="dropdown dropdown-menu-end">
                             <button class="btn dropdown-toggle-split" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                 <!-- Three Dots Icon -->
@@ -95,17 +101,6 @@
                                 </svg>
                             </button>
                             <ul class="dropdown-menu text-center" aria-labelledby="dropdownMenuButton">
-                                <li>
-                                    <a class="dropdown-item" href="{{ url_for('room_list', hotel_id=hotel[0]) }}">
-                                        <!-- Eye Icon -->
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
-                                            <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
-                                            <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
-                                          </svg>
-                                        View Rooms
-                                    </a>
-                                </li>                
-                                <hr class="dropdown-divider">
                                 <li>
                                     <a class="dropdown-item" href="#">
                                         <!-- Edit Icon -->
@@ -116,16 +111,13 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <form action="{{ url_for('all_hotels') }}" method="POST" class="dropdown-item">
-                                        <input type="hidden" name="delete_hotel" id="delete_hotel" value="{{hotel[0]}}">
-                                        <button type="submit" class="dropdown-item">
-                                            <!-- Delete Icon -->
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
-                                                <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/>
-                                                </svg>
-                                            Delete
-                                        </button>
-                                    </form>
+                                    <a href="#" class="dropdown-item">
+                                        <!-- Delete Icon -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                            <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/>
+                                            </svg>
+                                        Delete
+                                    </a>
                                 </li>
                             </ul>
                         </div>

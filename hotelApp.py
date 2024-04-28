@@ -340,23 +340,7 @@ def all_bookings():
     print(all_booking)
     return render_template("admin/booking/all_bookings.html", email = email, all_booking = all_booking)
 
-@app.route('/admin/booking/add')
-@login_required
-def add_booking():
-    if session['usertype'] != 'admin':
-        flash('Unauthorized Access', category='error')
-        return redirect(url_for('homepage'))
-    return render_template("admin/booking/add.html")
-
-@app.route('/admin/booking/edit')
-@login_required
-def edit_booking():
-    if session['usertype'] != 'admin':
-        flash('Unauthorized Access', category='error')
-        return redirect(url_for('homepage'))
-    return render_template("admin/booking/edit.html")
-
-@app.route('/admin/all_hotels', methods=['GET', 'POST'])
+@app.route('/admin/all_hotels')
 @login_required
 def all_hotels():
     if session['usertype'] != 'admin':
@@ -367,10 +351,6 @@ def all_hotels():
     hotels = hotel.getAll()
     # print(hotels)
     email = session ['email'] if 'email' in session and session['email'] != '' else ''
-    if request.method == 'POST':
-        delete_hotel = request.form.get('delete_hotel')
-        print("Deleting hotel with ID:", delete_hotel)
-        hotel.delete(delete_hotel)
     return render_template("admin/room/hotel_list.html", email = email, hotels = hotels)
 
 @app.route('/admin/add_hotel', methods=['GET', 'POST'])
@@ -402,9 +382,11 @@ def add_hotel():
         if hotel_model.addNew(hotel):
             flash('Added hotel', category='success')
             return redirect(url_for('all_hotels'))
-    return render_template("admin/room/add_hotel.html")
+    email = session ['email'] if 'email' in session and session['email'] != '' else ''
+    return render_template("admin/room/add_hotel.html", email = email)
 
-@app.route('/admin/room_list/<int:hotel_id>', methods=['GET', 'POST'])
+
+@app.route('/admin/<int:hotel_id>/room_list')
 @login_required
 def room_list(hotel_id):
     if session['usertype'] != 'admin':
@@ -417,14 +399,35 @@ def room_list(hotel_id):
     hotel = dbModel.Hotel()
     hotels = hotel.getAll()
     # print(hotel_detail)
-    email = session ['email'] if 'email' in session and session['email'] != '' else ''
-    if request.method == 'POST':
-        delete_room = request.form.get('delete_room')
-        print("Deleting hotel with ID:", delete_room)
-        hotel.delete_room(delete_room)
 
+    email = session ['email'] if 'email' in session and session['email'] != '' else ''
     return render_template("admin/room/room_list.html", email=email, rooms=rooms, hotels=hotels)
 
+@app.route('/admin/<int:hotel_id>/add_room', methods=['GET', 'POST'])
+@login_required
+def add_room(hotel_id):
+    if session['usertype'] != 'admin':
+        flash('Unauthorized Access', category='error')
+        return redirect(url_for('homepage'))
+    
+    room_model = dbModel.Room()
+    rooms = room_model.getAll(hotel_id)
+    hotel = dbModel.Hotel()
+    hotels = hotel.getById(hotel_id)
+    status = 'Available'
+    if request.method == 'POST':
+        room = dict()
+        room['hotel_id'] = hotel_id
+        room['room_type'] = request.form['room_type']
+        room['features'] = request.form['features']
+        room['peak_season_price'] = request.form['peak_season_price']
+        room['off_peak_price'] = request.form['off_peak_price']
+        room['status'] = status
+        if room_model.addNew(room):
+            flash('Added new room!', category='success')
+            return redirect(url_for('room_list', hotel_id=hotel_id))
+    email = session ['email'] if 'email' in session and session['email'] != '' else ''
+    return render_template("admin/room/add_room.html", email = email, rooms=rooms, hotels=hotels, status = status)
 
 @app.route('/admin/customers/list', methods=['GET', 'POST'])
 @login_required

@@ -301,9 +301,9 @@ class Room(Model):
     def addNew(self, room):
         try:
             self.dbcursor.execute('INSERT INTO ' + self.tbName + ' (hotel_id, room_type, features, peak_season_price, off_peak_price, status) \
-                                  VALUES (%s, %s, %s, %s, %s, %s, %s)', 
-                                  (room['hotel_id'], room['room_type'], room['features'], room['peak_season_price'], room['off_peak_price'], room['status']))
-            my_result = self.conn.commit()
+                                VALUES (%s, %s, %s, %s, %s, %s)', 
+                                (room['hotel_id'], room['room_type'], room['features'], room['peak_season_price'], room['off_peak_price'], room['status']))
+            self.conn.commit()
         except Error as e:
             print(e)
             return False
@@ -311,6 +311,7 @@ class Room(Model):
             if self.dbcursor.rowcount == 0:
                 return False
         return True
+
 
     def updateRoomStatus(self, room_id, status):
         try:
