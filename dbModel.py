@@ -222,7 +222,7 @@ class Hotel(Model):
     def addNew(self, hotel):
         try:
             self.dbcursor.execute('INSERT INTO ' + self.tbName + 
-                                  ' (city, hotel_name, email, phone, capacity) VALUES (%s, %s, %s, %s, %d)',
+                                  ' (city, hotel_name, email, phone, capacity) VALUES (%s, %s, %s, %s, %s)',
                                   (hotel['city'], hotel['hotel_name'], hotel['email'], hotel['phone'], hotel['capacity']))
             my_result = self.conn.commit()
         except Error as e:

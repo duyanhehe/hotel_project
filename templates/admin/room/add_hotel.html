@@ -1,0 +1,39 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+
+<div class="container pt-4">
+    <h3>Add New Hotel</h3>
+</div>
+
+<div class="container py-4 bg-body-tertiary border">
+    <form action="{{ url_for('add_hotel') }}" method="POST">
+        <div class="form-group">
+            <label for="city">City:</label>
+            <input type="text" class="form-control" id="city" name="city" placeholder="Enter City" required>
+        </div>
+        <div class="form-group">
+            <label for="hotel_name">Hotel Name:</label>
+            <input type="text" class="form-control" id="hotel_name" name="hotel_name" placeholder="Enter Hotel Name" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Hotel Email:</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="Enter Hotel Email" required>
+        </div>
+        <div class="form-group">
+            <label for="phone">Hotel Phone Number:</label>
+            <input type="tel" class="form-control" id="phone" name="phone" pattern="[0-9\+]+" placeholder="Enter Hotel Phone Number" required>
+        </div>
+        <div class="form-group">
+            <label for="capacity">Hotel Capacity:</label>
+            <input type="number" class="form-control" id="capacity" name="capacity" placeholder="Enter Hotel Capacity" required>
+        </div>
+
+        <br>
+        <div align="center">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

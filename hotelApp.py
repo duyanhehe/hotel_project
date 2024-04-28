@@ -373,6 +373,37 @@ def all_hotels():
         hotel.delete(delete_hotel)
     return render_template("admin/room/hotel_list.html", email = email, hotels = hotels)
 
+@app.route('/admin/add_hotel', methods=['GET', 'POST'])
+@login_required
+def add_hotel():
+    if session['usertype'] != 'admin':
+        flash('Unauthorized Access', category='error')
+        return redirect(url_for('homepage'))
+    hotel_model = dbModel.Hotel()
+    if request.method == 'POST':
+        capacity = int(request.form.get('capacity'))
+        hotel = dict()
+        hotel['city'] = request.form['city']
+        hotel['hotel_name'] = request.form['hotel_name']
+        hotel['email'] = request.form['email']
+        hotel['phone'] = request.form['phone']
+        hotel['capacity'] = request.form['capacity']
+
+        if len(hotel['city']) < 1:
+            flash('City name must be at least 1 character', category='error')
+        elif len(hotel['hotel_name']) < 1:
+            flash('Hotel name must be at least 1 character', category='error')
+        elif len(hotel['email']) < 3:
+            flash('Hotel email must be at least 3 characters', category='error')
+        elif len(hotel['phone']) < 9:
+            flash('Hotel phone number must be at least 9 characters.', category='error')
+        elif capacity < 1:
+            flash('Hotel must have at least 1 room', category='error')
+        if hotel_model.addNew(hotel):
+            flash('Added hotel', category='success')
+            return redirect(url_for('all_hotels'))
+    return render_template("admin/room/add_hotel.html")
+
 @app.route('/admin/room_list/<int:hotel_id>', methods=['GET', 'POST'])
 @login_required
 def room_list(hotel_id):
