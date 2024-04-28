@@ -16,19 +16,15 @@
     <form action="" method="POST">
         <div class="form-group">
             <label for="check_in_date" class="h5">Check In Date</label>
-            <input type="date" class="form-control" id="check_in_date" name="check_in_date" value="{{ booking_details[3].strftime('%Y-%m-%d') }}">
+            <input type="date" class="form-control" id="check_in_date" name="check_in_date" value="{{ booking_details[3].strftime('%Y-%m-%d') }}" onchange="updateTotalPrice()">
         </div>
         <div class="form-group">
             <label for="check_out_date" class="h5">Check Out Date</label>
-            <input type="date" class="form-control" id="check_out_date" name="check_out_date" value="{{ booking_details[4].strftime('%Y-%m-%d') }}">
+            <input type="date" class="form-control" id="check_out_date" name="check_out_date" value="{{ booking_details[4].strftime('%Y-%m-%d') }}" onchange="updateTotalPrice()">
         </div>
         <div>
             <h5>Room Type</h5>
             <p>{{booking_details[7]}}</p>
-        </div>
-        <div>
-            <h5>Total Price</h5>
-            <p><span id="total_price">{{booking_details[5]}}</span></p>
         </div>
         <br>
         <div align="center">

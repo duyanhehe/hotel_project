@@ -125,7 +125,7 @@ async function validateForm() {
 function updateTotalPrice() {
     var checkInDate = new Date(document.getElementById("check_in_date").value);
     console.log("Check-in Date:", checkInDate);
-    var current_date = new Date();
+    var current_date = new Date(document.getElementById("booking_date").value);
     console.log("Current Date:", current_date);
     var checkOutDate = new Date(document.getElementById("check_out_date").value);
     console.log("Check-out Date:", checkOutDate);

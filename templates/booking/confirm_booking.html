@@ -40,7 +40,7 @@
         {% endif %}
         <div>
             <h5>Booking Date:</h5>
-            <p>{{ booking_date }}</p>
+            <p id="booking_date">{{ booking_date }}</p>
         </div>
         <form id="bookingForm" action="{{ url_for('confirm_booking', hotel_id=hotel_id, room_id=room_id) }}" method="POST">
             <div class="form-group">

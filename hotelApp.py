@@ -71,15 +71,11 @@ def confirm_booking(hotel_id, room_id):
     booking_model = dbModel.Booking()
     user_model = dbModel.User()
     booking_date = datetime.now().date()  # Define booking_date outside the conditional block
-
     email = session.get('email', '')  # Retrieve email from session
     user_details = user_model.getByEmail(email)
     users_id = user_details[0]
-
     print(user_details)
     total_price = 0
-
-
     if request.method == 'POST':
         check_in_date = request.form['check_in_date']
         check_out_date = request.form['check_out_date']
@@ -112,7 +108,6 @@ def booking_history():
     users_id = user[0]
     print(users_id)
     booking_history = user_model.getBookingHistory(users_id)
-
     print(booking_history)
     return render_template("user/booking/booking_history.html", booking_history = booking_history)
 
@@ -125,12 +120,10 @@ def change_booking(booking_id):
     if request.method == 'POST':
         check_in_date = request.form['check_in_date']
         check_out_date = request.form['check_out_date']
-        
         # Fetch other booking details from the existing booking
         room_id = booking_details[0]
         users_id = booking_details[1]
         booking_date = booking_details[6]
-
         # Construct the updated booking dictionary
         updated_booking = {
             'room_id': room_id,
@@ -139,16 +132,16 @@ def change_booking(booking_id):
             'check_in_date': check_in_date,
             'check_out_date': check_out_date
         }
-
         print("Updated Booking:", updated_booking)  # Print updated booking details
 
         success, message = booking_model.updateBooking(booking_id, updated_booking)
         if success:
+            flash('Changed Booking!',category='success')
             return redirect(url_for('booking_history'))  # Redirect to confirmation page
         else:
             flash(message, category='error')  # Flash error message if update fails
-
-    return render_template("user/booking/edit.html", booking_details=booking_details, booking_id=booking_id)
+    email = session ['email'] if 'email' in session and session['email'] != '' else ''
+    return render_template("user/booking/edit.html", booking_details=booking_details, booking_id=booking_id, email = email)
 
 
 
