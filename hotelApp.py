@@ -109,13 +109,48 @@ def booking_history():
     email = session['email'] if 'email' in session and session['email'] != '' else ''
     user_model = dbModel.User()
     user = user_model.getByEmail(email)
-    user_id = user[0]
-    user_details = user_model.getDetailById(user_id)
+    users_id = user[0]
+    print(users_id)
+    booking_history = user_model.getBookingHistory(users_id)
 
-    user_details = list(user_details)  # Convert user_details to a list if it's not already
+    print(booking_history)
+    return render_template("user/booking/booking_history.html", booking_history = booking_history)
 
-    print(user_details)
-    return render_template("user/booking_history.html", user_details = user_details)
+@app.route('/booking/edit/<int:booking_id>', methods=['GET', 'POST'])
+@login_required
+def change_booking(booking_id):
+    booking_model = dbModel.Booking()
+    booking_details = booking_model.getDetailById(booking_id)
+    print(booking_details)
+    if request.method == 'POST':
+        check_in_date = request.form['check_in_date']
+        check_out_date = request.form['check_out_date']
+        
+        # Fetch other booking details from the existing booking
+        room_id = booking_details[0]
+        users_id = booking_details[1]
+        booking_date = booking_details[6]
+
+        # Construct the updated booking dictionary
+        updated_booking = {
+            'room_id': room_id,
+            'users_id': users_id,
+            'booking_date': booking_date,
+            'check_in_date': check_in_date,
+            'check_out_date': check_out_date
+        }
+
+        print("Updated Booking:", updated_booking)  # Print updated booking details
+
+        success, message = booking_model.updateBooking(booking_id, updated_booking)
+        if success:
+            return redirect(url_for('booking_history'))  # Redirect to confirmation page
+        else:
+            flash(message, category='error')  # Flash error message if update fails
+
+    return render_template("user/booking/edit.html", booking_details=booking_details, booking_id=booking_id)
+
+
 
 @app.route('/contact')
 def contact_page():

@@ -121,6 +121,64 @@ async function validateForm() {
     }
 }
 
+// Calculate and update total price in booking
+function updateTotalPrice() {
+    var checkInDate = new Date(document.getElementById("check_in_date").value);
+    console.log("Check-in Date:", checkInDate);
+    var current_date = new Date();
+    console.log("Current Date:", current_date);
+    var checkOutDate = new Date(document.getElementById("check_out_date").value);
+    console.log("Check-out Date:", checkOutDate);
+    // Calculate the difference in days between check_in_date and current_date
+    var days_difference = (checkInDate - current_date) / (1000 * 60 * 60 * 24);
+    console.log("Days Difference:", days_difference);
+    //  Days staying
+    var timeDifference = checkOutDate.getTime() - checkInDate.getTime();
+    var days_staying = Math.ceil(timeDifference / (1000 * 3600 * 34));
+
+
+    // Determine discount % based on days difference
+    var discount_percentage = 0;
+    if (days_difference >= 80 && days_difference <= 90) {
+        discount_percentage = 0.3; // 30% discount
+    } else if (days_difference >= 60 && days_difference < 80) {
+        discount_percentage = 0.2; // 20% discount
+    } else if (days_difference >= 45 && days_difference < 60) {
+        discount_percentage = 0.1; // 10% discount
+    }
+    console.log("Discount Percentage:", discount_percentage);
+
+    // Fetch peak_season_price and off_peak_price from room_details
+    var peak_season_price = +document.getElementById("peak_season_price").innerText.trim();
+    var off_peak_price = +document.getElementById("off_peak_price").innerText.trim();
+    console.log("Peak Season Price Element Content:", document.getElementById("peak_season_price").innerText);
+    console.log("Off-Peak Price Element Content:", document.getElementById("off_peak_price").innerText);
+
+    // Check if check in date is in peak season (April - August, November - December)
+    var isPeakSeason = checkInDate.getMonth() in [3, 4, 5, 6, 7, 10, 11];
+    console.log("Is Peak Season:", isPeakSeason);
+    var totalPrice = isPeakSeason ? peak_season_price : off_peak_price;
+    console.log("Total Price Before Discount:", totalPrice);
+
+    // Apply discount
+    totalPrice -= totalPrice * discount_percentage;
+    console.log("Total Price After Discount:", totalPrice);
+
+    // Check if days_staying is 0 and if so, keep the total price the same
+    if (days_staying === 0) {
+        console.log("Number of days staying is 0. Keeping the total price the same.");
+    } else {
+        // Calculate the total price multiplied by the number of days staying
+        totalPrice *= days_staying;
+    }
+
+    // Check if totalPrice is a valid number
+    console.log("Is totalPrice a valid number?", !isNaN(totalPrice));
+
+    document.getElementById("total_price").textContent = totalPrice.toFixed(2);
+    console.log(totalPrice)
+}
+
 
 //chart js
 const chartData = {
