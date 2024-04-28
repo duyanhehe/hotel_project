@@ -24,26 +24,28 @@
         {% else %}
             <h3>All Hotels</h3>
         {% endif %}
-        <table class="table table-responsive table-striped text-center">
-            <tr>
-                <th>Hotel</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Capacity</th>
-                <th></th>
-            </tr>
-            {% for hotel in hotels %}
+        <div class="table-responsive">
+            <table class="table table-responsive table-striped text-center">
                 <tr>
-                    <td>{{ hotel[2] }}</td>
-                    <td>{{ hotel[3] }}</td>
-                    <td>{{ hotel[4] }}</td>
-                    <td>{{ hotel[5] }}</td>
-                    <td>
-                        <a href="{{ url_for('room_page', hotel_id=hotel[0]) }}" class="btn btn-primary">View Rooms</a>
-                    </td>
+                    <th>Hotel</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Capacity</th>
+                    <th></th>
                 </tr>
-            {% endfor %}
-        </table>
+                {% for hotel in hotels %}
+                    <tr>
+                        <td>{{ hotel[2] }}</td>
+                        <td>{{ hotel[3] }}</td>
+                        <td>{{ hotel[4] }}</td>
+                        <td>{{ hotel[5] }}</td>
+                        <td>
+                            <a href="{{ url_for('room_page', hotel_id=hotel[0]) }}" class="btn btn-primary">View Rooms</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
     {% else %}
         <p>No hotels found.</p>
     {% endif %}

@@ -89,29 +89,6 @@
                     </ul>
                 </li>
 
-                <!-- Payemnt -->
-                <li class="sidebar-item">
-                    <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
-                        data-bs-target="#payment" aria-expanded="false" aria-controls="payment">
-                        <!-- Payment Icon -->
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-credit-card-2-back-fill" viewBox="0 0 16 16">
-                            <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v5H0zm11.5 1a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zM0 11v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-1z"/>
-                          </svg>
-                        <span>Payment</span>
-                    </a>
-                    <ul id="payment" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
-                        <li class="sidebar-link">
-                            <a href="{{ url_for('payment_methods') }}" class="sidebar-link">Payment Methods</a>
-                        </li>
-                        <li class="sidebar-link">
-                            <a href="#" class="sidebar-link">Invocie List</a>
-                        </li>
-                        <li class="sidebar-link">
-                            <a href="#" class="sidebar-link">Invocie Details</a>
-                        </li>
-                    </ul>
-                </li>
-
                 <!-- Customer -->
                 <li class="sidebar-item">
                     <a href="{{ url_for('customers_list') }}" class="sidebar-link">

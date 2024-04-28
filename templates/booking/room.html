@@ -4,30 +4,31 @@
 
 <div class="container py-4">
   {% if rooms: %}
-  
-  <table class="table table-responsive table-striped text-center">
-      <tr>
-          <th>Room Type</th>
-          <th>Features</th>
-          <th>Peak Season Price</th>
-          <th>Off Peak Price</th>
-          <th>Status</th>
-          <th></th>
-      </tr>
-      {% for room in rooms %}
-      <tr>
-          <td>{{room[2]}}</td>
-          <td>{{room[3]}}</td>
-          <td>{{room[4]}}</td>
-          <td>{{room[5]}}</td>
-          <td><p class="{% if room[6] == 'Available' %} text-success {% else %} text-danger {% endif %}">{{room[6]}}</p></td>
-          <td>
-            <a href="{{ url_for('confirm_booking', hotel_id=room[1], room_id=room[0]) }}" class="btn btn-primary">Add to booking</a>
-          </td>
-      </tr>
-      {% endfor %}
-  </table>
-</ul>
+  <div class="table-responsive">
+    <table class="table table-responsive table-striped text-center">
+        <tr>
+            <th>Room Type</th>
+            <th>Features</th>
+            <th>Peak Season Price</th>
+            <th>Off Peak Price</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+        {% for room in rooms %}
+        <tr>
+            <td>{{room[2]}}</td>
+            <td>{{room[3]}}</td>
+            <td>{{room[4]}}</td>
+            <td>{{room[5]}}</td>
+            <td><p class="{% if room[6] == 'Available' %} text-success {% else %} text-danger {% endif %}">{{room[6]}}</p></td>
+            <td>
+              <a href="{{ url_for('confirm_booking', hotel_id=room[1], room_id=room[0]) }}" class="btn btn-primary">Add to booking</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+  </div>
+
 {% endif %}
 
 

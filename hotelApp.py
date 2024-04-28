@@ -369,13 +369,6 @@ def room_list(hotel_id):
 
     return render_template("admin/room/room_list.html", email=email, rooms=rooms, hotels=hotels)
 
-@app.route('/admin/payment')
-@login_required
-def payment_methods():
-    if session['usertype'] != 'admin':
-        flash('Unauthorized Access', category='error')
-        return redirect(url_for('homepage'))
-    return render_template('admin/payment/methods.html')
 
 @app.route('/admin/customers/list', methods=['GET', 'POST'])
 @login_required
