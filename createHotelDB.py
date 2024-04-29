@@ -88,14 +88,14 @@ def create_tables():
             FOREIGN KEY (room_id) REFERENCES room(room_id) ON DELETE CASCADE
         )""")
 
-        # Create trigger to update room status to "unavailable" when a booking is inserted
+        # Create trigger to update room status to "Booked" when a booking is inserted
         cursor.execute("""
         CREATE TRIGGER update_room_status
         AFTER INSERT ON booking
         FOR EACH ROW
         BEGIN
             UPDATE room
-            SET status = 'Unavailable'
+            SET status = 'Booked'
             WHERE room_id = NEW.room_id;
         END;
         """)

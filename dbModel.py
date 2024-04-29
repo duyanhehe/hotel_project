@@ -42,8 +42,8 @@ class User(Model):
     
     def addNew(self, user):
         try:
-            self.dbcursor.execute('insert into '+ self.tbName + 
-                                ' (email, firstName, lastName, phoneNumber, password_hash, usertype) values (%s, %s, %s, %s, %s, %s)',
+            self.dbcursor.execute('INSERT INTO '+ self.tbName + 
+                                ' (email, firstName, lastName, phoneNumber, password_hash, usertype) VALUES (%s, %s, %s, %s, %s, %s)',
                                     (user['email'], user['firstName'], user['lastName'], user['phoneNumber'], generate_password_hash(user['password']), user['usertype']))
             my_result = self.conn.commit()
         except Error as e:
@@ -54,6 +54,18 @@ class User(Model):
                 return False            
         return True
     
+    def getAll(self, limit = 10):
+        try:
+            self.dbcursor.execute('SELECT * FROM '+ self.tbName + ' ORDER BY users_id DESC LIMIT '+ str(limit))
+            my_result = self.dbcursor.fetchall()
+        except Error as e:
+            print(e)
+            my_result = ()
+        else:    
+            if self.dbcursor.rowcount == 0:
+                my_result = ()            
+        return my_result
+
     def getById(self, users_id):
         try:
             self.dbcursor.execute('select * from '+ self.tbName + ' where users_id = {}'.format(users_id))
@@ -353,6 +365,38 @@ class Room(Model):
             self.conn.commit()
         except Error as e:
             print(e)
+    
+    def countAvailableRooms(self):
+        try:
+            self.dbcursor.execute('SELECT COUNT(*) FROM room WHERE status = "Available"')
+            available_rooms_count = self.dbcursor.fetchone()[0]
+        except Error as e:
+            print(e)
+            available_rooms_count = None
+        return available_rooms_count
+    
+    def countBookedRooms(self):
+        try:
+            self.dbcursor.execute('SELECT COUNT(*) FROM room WHERE status = "Booked"')
+            booked_rooms_count = self.dbcursor.fetchone()[0]
+        except Error as e:
+            print(e)
+            booked_rooms_count = None
+        return booked_rooms_count
+    
+    def countBookedRoomsByType(self):
+        try:
+            self.dbcursor.execute("""
+                SELECT room_type, COUNT(*) AS booked_count
+                FROM room
+                WHERE status = 'Booked'
+                GROUP BY room_type;
+            """)
+            booked_rooms_by_type = self.dbcursor.fetchall()
+        except Error as e:
+            print(e)
+            booked_rooms_by_type = None
+        return booked_rooms_by_type
 
 class Booking(Model):
     def __init__(self):
@@ -453,9 +497,9 @@ class Booking(Model):
             return False, "Error occurred during booking update"
 
     def addNew(self, booking):
-        # Update room status to "unavailable"
+        # Update room status to "Booked"
         room_instance = Room()
-        room_instance.updateRoomStatus(booking['room_id'], 'Unavailable')
+        room_instance.updateRoomStatus(booking['room_id'], 'Booked')
         try:
             success, total_price = self.calculate_total_price(booking)
             if not success:
@@ -609,6 +653,8 @@ class Booking(Model):
                     users ON booking.users_id = users.users_id
                 JOIN 
                     room ON booking.room_id = room.room_id
+                ORDER BY
+                    booking.booking_ID DESC
                 LIMIT %s
             '''
 
@@ -621,6 +667,46 @@ class Booking(Model):
             if not my_result:
                 print("No booking details found.")
         return my_result
+
+    def countTotalBookings(self):
+        try:
+            self.dbcursor.execute('SELECT COUNT(*) FROM ' + self.tbName)
+            total_bookings = self.dbcursor.fetchone()[0]
+        except Error as e:
+            print(e)
+            total_bookings = None
+        return total_bookings
+    
+    def countTotalBookingsForMonth(self, month, year):
+        try:
+            self.dbcursor.execute('''
+                SELECT COUNT(*) 
+                FROM {} 
+                WHERE MONTH(check_in_date) = %s 
+                AND YEAR(check_in_date) = %s
+            '''.format(self.tbName), (month, year))
+            total_bookings = self.dbcursor.fetchone()[0]
+        except Error as e:
+            print(e)
+            total_bookings = None
+        return total_bookings
+    
+    def countTotalBookingsForWeek(self, year, week):
+        # Calculate the start and end dates of the week
+        start_date = datetime.strptime(f'{year}-W{week}-1', "%Y-W%W-%w").date()
+        end_date = start_date + timedelta(days=6)
+
+        try:
+            self.dbcursor.execute('''
+                SELECT COUNT(*) 
+                FROM {} 
+                WHERE check_in_date BETWEEN %s AND %s
+            '''.format(self.tbName), (start_date, end_date))
+            total_bookings = self.dbcursor.fetchone()[0]
+        except Error as e:
+            print(e)
+            total_bookings = None
+        return total_bookings
 
     def get_monthly_sales(self, month, year):
         try:

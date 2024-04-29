@@ -337,16 +337,33 @@ def admin_dashboard():
         return redirect(url_for('homepage'))
     customer = dbModel.User()
     users = customer.getAll(5)
+    room_model = dbModel.Room()
     # print(users)
-    # Get current month and year
+    # Get current week, month, year
     current_month = datetime.now().month
     current_year = datetime.now().year
+    current_week = datetime.now().isocalendar()[1]
     # Query the database to get monthly sales
     booking_model = dbModel.Booking()
+    # Total Booking
+    total_booking = booking_model.countTotalBookings()
+    total_bookings_month = booking_model.countTotalBookingsForMonth(current_month, current_year)
+    total_bookings_week = booking_model.countTotalBookingsForWeek(current_year, current_week)
+    # Monthly Sales
     monthly_sales = booking_model.get_monthly_sales(current_month, current_year)
+    # Top Customers
     top_customers = booking_model.get_top_customers(5)
+    # Count available rooms
+    available_rooms = room_model.countAvailableRooms()
+    # Count booked rooms
+    booked_rooms = room_model.countBookedRooms()
+    # Count booked rooms by room type
+    booked_rooms_by_type = room_model.countBookedRoomsByType()
     email = session ['email'] if 'email' in session and session['email'] != '' else ''
-    return render_template("admin/dashboard.html", email=email, users=users, monthly_sales=monthly_sales, top_customers=top_customers)
+    return render_template("admin/dashboard.html", email=email, users=users, monthly_sales=monthly_sales, 
+                           top_customers=top_customers, total_booking=total_booking, total_bookings_month=total_bookings_month, 
+                           total_bookings_week=total_bookings_week, available_rooms=available_rooms, booked_rooms=booked_rooms,
+                           booked_rooms_by_type=booked_rooms_by_type)
 
 @app.route('/admin/booking/all_bookings')
 @login_required
