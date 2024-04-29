@@ -241,15 +241,7 @@ class Hotel(Model):
         except Error as e:
             print(e)
 
-    def delete_room(self, room_id):
-        try:
-            delete_query = "DELETE FROM room WHERE room_id = %s"
-            self.dbcursor.execute(delete_query, (room_id,))
-            self.conn.commit()
-        except Error as e:
-            print(e)
             
-    
 class Room(Model):
     def __init__(self):
         super().__init__()
@@ -297,6 +289,14 @@ class Room(Model):
             if self.dbcursor.rowcount == 0:
                 my_result = ()
         return my_result
+    
+    def delete(self, room_id):
+        try:
+            delete_query = "DELETE FROM room WHERE room_id = %s"
+            self.dbcursor.execute(delete_query, (room_id,))
+            self.conn.commit()
+        except Error as e:
+            print(e)
 
     def addNew(self, room):
         try:

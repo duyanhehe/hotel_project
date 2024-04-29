@@ -170,6 +170,7 @@ def cancel_booking(booking_id):
             return redirect(url_for('booking_history', booking_id=booking_id))
     else:
         return render_template('user/booking/delete.html', booking_id=booking_id)
+
 @app.route('/contact')
 def contact_page():
     active_page = 'contact'
@@ -385,6 +386,26 @@ def add_hotel():
     email = session ['email'] if 'email' in session and session['email'] != '' else ''
     return render_template("admin/room/add_hotel.html", email = email)
 
+@app.route('/admin/delete_hotel/<int:hotel_id>', methods=['GET', 'POST'])
+@login_required
+def delete_hotel(hotel_id):
+    if session['usertype'] != 'admin':
+        flash('Unauthorized Access', category='error')
+        return redirect(url_for('homepage'))
+    hotel_model = dbModel.Hotel()
+    hotel_details = hotel_model.getDetailById(hotel_id)
+    if request.method == 'POST':
+        confirmation = request.form.get('confirmation')
+        if confirmation == 'yes':
+            hotel_model.delete(hotel_id)
+            flash('Deleted hotel successfully', category='success')
+            return redirect(url_for('all_hotels'))
+        else:
+            flash('Deletion cancelled', category='error')
+            return redirect(url_for('all_hotels'))
+
+    email = session ['email'] if 'email' in session and session['email'] != '' else ''
+    return render_template("admin/room/delete_hotel.html")
 
 @app.route('/admin/<int:hotel_id>/room_list')
 @login_required
