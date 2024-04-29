@@ -1,0 +1,36 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+<div class="container pt-4">
+    <h3>Monthly Sales Report</h3>
+    <p class="text-secondary">Sales for each hotel</p>
+</div>
+
+<div class="container pt-4">
+    <div class="container table-responsive bg-body-tertiary border border-secondary">
+        <h5 class="text-center py-3">Sales Revenue for Each Hotel</h5>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Hotel Name</th>
+                    <th scope="col">Total Sales</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if monthly_sales_by_hotel %}
+                    {% for hotel_sales in monthly_sales_by_hotel %}
+                        <tr>
+                            <td>{{ hotel_sales[1] }}</td>
+                            <td>{{ hotel_sales[2] }} €</td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="2">No sales data available for the current month</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

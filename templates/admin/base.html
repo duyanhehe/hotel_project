@@ -72,10 +72,10 @@
                     </a>
                     <ul id="reports" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                         <li class="sidebar-link">
-                            <a href="#" class="sidebar-link">Monthly Sales</a>
+                            <a href="{{ url_for('monthly_sales_report') }}" class="sidebar-link">Monthly Sales</a>
                         </li>
                         <li class="sidebar-link">
-                            <a href="#" class="sidebar-link">Hotel Sales</a>
+                            <a href="{{ url_for('sales_for_each_hotel') }}" class="sidebar-link">Hotel Sales</a>
                         </li>
                     </ul>
                 </li>

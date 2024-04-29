@@ -1,0 +1,30 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+<div class="container pt-4">
+    <h3>Monthly Sales Report</h3>
+    <p class="text-secondary">Total Sales Revenue for {{ month }} {{ year }}</p>
+</div>
+
+<div class="container pt-4">
+    <div class="container table-responsive bg-body-tertiary border border-secondary">
+        <h5 class="text-center py-3">Total Monthly Sales Revenue</h5>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Month</th>
+                    <th>Year</th>
+                    <th>Total Sales Revenue</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ month }}</td>
+                    <td>{{ year }}</td>
+                    <td>{{ monthly_sales }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

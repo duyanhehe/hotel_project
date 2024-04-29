@@ -323,12 +323,18 @@ def admin_dashboard():
     if session['usertype'] != 'admin':
         flash('Unauthorized Access', category='error')
         return redirect(url_for('homepage'))
-    
     customer = dbModel.User()
     users = customer.getAll(5)
     # print(users)
+    # Get current month and year
+    current_month = datetime.now().month
+    current_year = datetime.now().year
+    # Query the database to get monthly sales
+    booking_model = dbModel.Booking()
+    monthly_sales = booking_model.get_monthly_sales(current_month, current_year)
+    top_customers = booking_model.get_top_customers(5)
     email = session ['email'] if 'email' in session and session['email'] != '' else ''
-    return render_template("admin/dashboard.html", email = email, users = users)
+    return render_template("admin/dashboard.html", email=email, users=users, monthly_sales=monthly_sales, top_customers=top_customers)
 
 @app.route('/admin/booking/all_bookings')
 @login_required
@@ -593,6 +599,54 @@ def customers_edit(users_id):
     else:
         users = customer.getById(users_id)
     return render_template('admin/customers/edit.html', user = users, email = email)
+
+@app.route('/admin/monthly_sales')
+@login_required
+def monthly_sales_report():
+    if session['usertype'] != 'admin':
+        flash('Unauthorized Access', category='error')
+        return redirect(url_for('homepage'))
+    
+    # Get current month and year
+    current_month = datetime.now().month
+    current_year = datetime.now().year
+
+    # Query the database to get monthly sales
+    booking_model = dbModel.Booking()
+    monthly_sales = booking_model.get_monthly_sales(current_month, current_year)
+
+    # Render the template with the monthly sales data
+    return render_template('admin/reports/monthly_sales.html', month=current_month, year=current_year, monthly_sales=monthly_sales)
+
+@app.route('/admin/sales_for_each_hotel')
+@login_required
+def sales_for_each_hotel():
+    if session['usertype'] != 'admin':
+        flash('Unauthorized Access', category='error')
+        return redirect(url_for('homepage'))
+    
+    # Get current month and year
+    current_month = datetime.now().month
+    current_year = datetime.now().year
+
+    # Query the database to get monthly sales for each hotel
+    booking_model = dbModel.Booking()
+    monthly_sales_by_hotel = booking_model.get_monthly_sales_by_hotel(current_month, current_year)
+    return render_template("admin/reports/sales_for_each_hotel.html", monthly_sales_by_hotel=monthly_sales_by_hotel)
+
+@app.route('/admin/top_customers')
+@login_required
+def top_customers():
+    if session['usertype'] != 'admin':
+        flash('Unauthorized Access', category='error')
+        return redirect(url_for('homepage'))
+    
+    # Call the method to get the top customers from the database model
+    booking_model = dbModel.Booking()
+    top_customers = booking_model.get_top_customers(10)
+
+    # Render the template with the top customers data
+    return render_template('admin/customers/top_customers.html', top_customers=top_customers)
 
 # Error handling
 @app.errorhandler(404)

@@ -621,3 +621,52 @@ class Booking(Model):
             if not my_result:
                 print("No booking details found.")
         return my_result
+
+    def get_monthly_sales(self, month, year):
+        try:
+            query = """
+            SELECT SUM(total_price) AS monthly_sales
+            FROM booking
+            WHERE MONTH(booking_date) = %s AND YEAR(booking_date) = %s
+            """
+            self.dbcursor.execute(query, (month, year))
+            result = self.dbcursor.fetchone()
+            monthly_sales = result[0] if result[0] else 0  # If no sales, return 0
+            return monthly_sales
+        except Error as e:
+            print(e)
+            return None
+        
+    def get_monthly_sales_by_hotel(self, current_month, current_year):
+        try:
+            self.dbcursor.execute("""
+                SELECT r.hotel_id, h.hotel_name, SUM(b.total_price) AS total_sales
+                FROM booking b
+                JOIN room r ON b.room_id = r.room_id
+                JOIN hotel h ON r.hotel_id = h.hotel_id
+                WHERE MONTH(b.booking_date) = %s AND YEAR(b.booking_date) = %s
+                GROUP BY r.hotel_id, h.hotel_name
+                ORDER BY total_sales DESC
+            """, (current_month, current_year))
+            monthly_sales_by_hotel = self.dbcursor.fetchall()
+            return monthly_sales_by_hotel
+        except Error as e:
+            print(e)
+            return None
+
+    def get_top_customers(self, limit):
+        try:
+            query = """
+                SELECT u.users_id, u.firstName, u.lastName, u.email, u.phoneNumber, SUM(b.total_price) AS total_spending
+                FROM booking b
+                JOIN users u ON b.users_id = u.users_id
+                GROUP BY u.users_id
+                ORDER BY total_spending DESC
+                LIMIT %s
+            """
+            self.dbcursor.execute(query, (limit,))
+            top_customers = self.dbcursor.fetchall()
+            return top_customers
+        except Error as e:
+            print(e)
+            return None
