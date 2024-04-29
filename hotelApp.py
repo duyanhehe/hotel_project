@@ -352,7 +352,7 @@ def all_hotels():
     hotels = hotel.getAll()
     # print(hotels)
     email = session ['email'] if 'email' in session and session['email'] != '' else ''
-    return render_template("admin/room/hotel_list.html", email = email, hotels = hotels)
+    return render_template("admin/hotel/hotel_list.html", email = email, hotels = hotels)
 
 @app.route('/admin/add_hotel', methods=['GET', 'POST'])
 @login_required
@@ -384,7 +384,7 @@ def add_hotel():
             flash('Added hotel', category='success')
             return redirect(url_for('all_hotels'))
     email = session ['email'] if 'email' in session and session['email'] != '' else ''
-    return render_template("admin/room/add_hotel.html", email = email)
+    return render_template("admin/hotel/add_hotel.html", email = email)
 
 @app.route('/admin/delete_hotel/<int:hotel_id>', methods=['GET', 'POST'])
 @login_required
@@ -405,7 +405,7 @@ def delete_hotel(hotel_id):
             return redirect(url_for('all_hotels'))
 
     email = session ['email'] if 'email' in session and session['email'] != '' else ''
-    return render_template("admin/room/delete_hotel.html")
+    return render_template("admin/hotel/delete_hotel.html")
 
 @app.route('/admin/<int:hotel_id>/room_list')
 @login_required
@@ -449,6 +449,24 @@ def add_room(hotel_id):
             return redirect(url_for('room_list', hotel_id=hotel_id))
     email = session ['email'] if 'email' in session and session['email'] != '' else ''
     return render_template("admin/room/add_room.html", email = email, rooms=rooms, hotels=hotels, status = status)
+
+@app.route('/admin/<int:hotel_id>/delete_room/<int:room_id>', methods=['GET','POST'])
+@login_required
+def delete_room(hotel_id, room_id):
+    room_model = dbModel.Room()
+    room_details = room_model.getDetailById(room_id)
+    print(room_details)
+    email = session ['email'] if 'email' in session and session['email'] != '' else ''
+    if request.method == 'POST':
+        confirmation = request.form.get('confirmation')
+        if confirmation == 'yes':
+            room_model.delete(room_id)
+            flash('Room deleted successfully', category='success')
+            return redirect(url_for('room_list', hotel_id = hotel_id))
+        else:
+            flash('Deletion cancelled', category='error')
+            return redirect(url_for('room_list', hotel_id = hotel_id))
+    return render_template("admin/room/delete_room.html", email=email, hotel_id=hotel_id, room_id=room_id)
 
 @app.route('/admin/customers/list', methods=['GET', 'POST'])
 @login_required
