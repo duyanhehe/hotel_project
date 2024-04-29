@@ -315,7 +315,8 @@ def reset_password():
         
     return render_template("user/auth/reset_password.html", email = email)
 
-# ADMIN
+
+######      ADMIN       #####
 @app.route('/admin/dashboard')
 @login_required
 def admin_dashboard():
@@ -385,6 +386,38 @@ def add_hotel():
             return redirect(url_for('all_hotels'))
     email = session ['email'] if 'email' in session and session['email'] != '' else ''
     return render_template("admin/hotel/add_hotel.html", email = email)
+
+@app.route('/admin/hotel_edit/<int:hotel_id>', methods=['GET', 'POST'])
+@login_required
+def edit_hotel(hotel_id):
+    if session['usertype'] != 'admin':
+        flash('Unauthorized Access', category='error')
+        return redirect(url_for('homepage'))
+
+    hotel_model = dbModel.Hotel()
+    hotel_details = hotel_model.getById(hotel_id)
+
+    if request.method == 'POST':
+        hotel = {
+            'hotel_id': hotel_id,
+            'city': request.form['city'],
+            'hotel_name': request.form['hotel_name'],
+            'email': request.form['email'],
+            'phone': request.form['phone'],
+            'capacity': request.form['capacity']
+        }
+
+        if hotel_model.update(hotel):
+            flash('Update hotel successfully', category='success')
+            print("Redirecting to all_hotels route")
+            return redirect(url_for('all_hotels'))
+        else:
+            flash("Error updating hotel", category='error')
+            return redirect(url_for('edit_hotel', hotel_id=hotel_id))
+
+    email = session['email'] if 'email' in session and session['email'] != '' else ''
+    return render_template("admin/hotel/edit_hotel.html", email=email, hotel_id=hotel_id, hotel_details=hotel_details)
+
 
 @app.route('/admin/delete_hotel/<int:hotel_id>', methods=['GET', 'POST'])
 @login_required
@@ -519,10 +552,12 @@ def customers_edit(users_id):
 
         if customer.update_user(user):
             print('Update successfully')
+            flash('Update user successfully', category='success')
             return redirect(url_for('customers_details', users_id = user['users_id']))
         else:
             print('Error')
             print(user)
+            flash('Error updating user', category='error')
             return redirect(url_for('customers_edit', users_id = user['users_id']))
     else:
         users = customer.getById(users_id)

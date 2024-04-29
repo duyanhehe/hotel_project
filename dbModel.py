@@ -224,14 +224,32 @@ class Hotel(Model):
             self.dbcursor.execute('INSERT INTO ' + self.tbName + 
                                   ' (city, hotel_name, email, phone, capacity) VALUES (%s, %s, %s, %s, %s)',
                                   (hotel['city'], hotel['hotel_name'], hotel['email'], hotel['phone'], hotel['capacity']))
-            my_result = self.conn.commit()
+            self.conn.commit()
         except Error as e:
             print(e)
             return False
         else:
             if self.dbcursor.rowcount == 0:
                 return False
-        return True
+            else:
+                return True
+
+    def update(self, hotel):
+        try:
+            self.dbcursor.execute('UPDATE ' + self.tbName +
+                                  ' SET city = %s, hotel_name = %s, email = %s, phone = %s, capacity = %s \
+                                    where hotel_id = %s',
+                                    (hotel['city'], hotel['hotel_name'], hotel['email'], hotel['phone'], hotel['capacity'], hotel['hotel_id']))
+            self.conn.commit()
+        except Error as e:
+            print(e)
+            return False
+        else:
+            if self.dbcursor.rowcount == -1:
+                return False
+            else:
+                return True
+
 
     def delete(self, hotel_id):
         try:

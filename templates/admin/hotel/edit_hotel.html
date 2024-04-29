@@ -1,0 +1,47 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+
+{% if hotel_details: %}
+<div class="container pt-4">
+    <h3>Edit Hotel</h3>
+    <p class="text-secondary">{{ hotel_details[2] }}</p>
+</div>
+
+<div class="container bg-body-tertiary border py-4">
+    <div class="container">
+        <form action="{{ url_for('edit_hotel', hotel_id=hotel_details[0]) }}" method="POST">
+            <div class="form-group">
+                <label for="city">City:</label>
+                <input type="text" class="form-control" id="city" name="city" value="{{ hotel_details[1] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="hotel_name">Hotel Name:</label>
+                <input type="text" class="form-control" id="hotel_name" name="hotel_name" value="{{ hotel_details[2] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Hotel email:</label>
+                <input type="text" class="form-control" id="email" name="email" value="{{ hotel_details[3] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Hotel Phone Number:</label>
+                <input type="tel" pattern="[0-9\+]+" class="form-control" id="phone" name="phone" value="{{ hotel_details[4] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="capacity">Hotel Capacity:</label>
+                <input type="number" class="form-control" id="capacity" name="capacity" value="{{ hotel_details[5] }}" required>
+            </div>
+            <br>
+            <div align="center">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+        <div class="mt-3" align="center">
+            <a href="{{ url_for('all_hotels')}}">Return</a>
+        </div>
+    </div>
+</div>
+
+{% endif %}
+
+{% endblock %}
