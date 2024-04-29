@@ -670,3 +670,46 @@ class Booking(Model):
         except Error as e:
             print(e)
             return None
+        
+class Contact(Model):
+    def __init__(self):
+        super().__init__()
+        self.tbName = 'contact'
+
+    def addNew(self, contact):
+        try:
+            self.dbcursor.execute("""INSERT INTO contact (name, email, message) VALUES (%s, %s, %s)""", 
+                                    (contact['name'], contact['email'], contact['message']))
+            self.conn.commit()
+        except Error as e:
+            print(e)
+            return False   
+        else:    
+            if self.dbcursor.rowcount == 0:
+                return False            
+        return True
+    
+    def getAll(self, limit=10):
+        try:
+            self.dbcursor.execute("""SELECT * FROM contact ORDER BY contact_id DESC""")
+            my_result = self.dbcursor.fetchall()
+            contacts = []
+            for row in my_result:
+                contact = {
+                    'contact_id': row[0],
+                    'name': row[1],
+                    'email': row[2],
+                    'message': row[3]
+                }
+                contacts.append(contact)
+        except Error as e:
+            print(e)
+            contacts = []
+        return contacts
+    
+    def delete(self, contact_id):
+        try:
+            self.dbcursor.execute("""DELETE FROM contact WHERE contact_id = %s""", (contact_id,))
+            self.conn.commit()
+        except Error as e:
+            print(e)

@@ -100,16 +100,14 @@ def create_tables():
         END;
         """)
 
-        # Create payment table
-        # cursor.execute("""
-        # CREATE TABLE IF NOT EXISTS payment (
-        #     payment_ID INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
-        #     booking_ID INT NOT NULL,
-        #     amount FLOAT NOT NULL,
-        #     payment_date DATE NOT NULL,
-        #     payment_method VARCHAR(50) NOT NULL,
-        #     FOREIGN KEY (booking_ID) REFERENCES bookings(booking_ID)
-        # )""")
+        # Create contact table
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS contact (
+            contact_id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+            name VARCHAR(255) NOT NULL,
+            email VARCHAR(255) NOT NULL,
+            message TEXT NOT NULL
+        )""")
 
         #################       INSERT MOCK DATA        #################
         # Insert Admin User

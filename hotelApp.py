@@ -171,9 +171,21 @@ def cancel_booking(booking_id):
     else:
         return render_template('user/booking/delete.html', booking_id=booking_id)
 
-@app.route('/contact')
+@app.route('/contact', methods=['POST', 'GET'])
 def contact_page():
     active_page = 'contact'
+    if request.method == 'POST':
+        contact = dict()
+        contact['name'] = request.form['name']
+        contact['email'] = request.form['email']
+        contact['message'] = request.form['message']
+        contact_model = dbModel.Contact()
+        if contact_model.addNew(contact):
+            flash("Message sent!", category='success')
+            return redirect(url_for('homepage'))
+        else:
+            flash("Error contacting", category='error')
+            return redirect(url_for('contact_page'))
     return render_template("contact.html", active_page = active_page)
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -647,6 +659,30 @@ def top_customers():
 
     # Render the template with the top customers data
     return render_template('admin/customers/top_customers.html', top_customers=top_customers)
+
+@app.route('/admin/contacts', methods=['GET'])
+@login_required
+def admin_all_contacts():
+    if session['usertype'] != 'admin':
+        flash('Unauthorized Access', category='error')
+        return redirect(url_for('homepage'))
+
+    contact_model = dbModel.Contact()
+    contacts = contact_model.getAll()
+    return render_template('admin/contact.html', contacts=contacts)
+
+@app.route('/admin/contact/delete/<int:contact_id>', methods=['POST'])
+@login_required
+def admin_delete_contact(contact_id):
+    if session['usertype'] != 'admin':
+        flash('Unauthorized Access', category='error')
+        return redirect(url_for('homepage'))
+
+    contact_model = dbModel.Contact()
+    contact_model.delete(contact_id)
+    flash('Contact deleted successfully', category='success')
+    return redirect(url_for('admin_all_contacts'))
+
 
 # Error handling
 @app.errorhandler(404)
