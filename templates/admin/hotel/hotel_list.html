@@ -9,14 +9,8 @@
 <div class="container pt-4">
     <div class="container bg-body-tertiary border border-secondary">
         <div class="d-flex container py-2 bg-light">
-            <div class="container">
-                <select name="booking" id="booking">
-                    <option value="send_email">Send Email</option>
-                    <option value="delete_booking">Delete Booking</option>
-                </select>
-            </div>
+            <div><a href="{{ url_for('add_hotel') }}" class="btn btn-success">Add Hotel</a></div>
             <div class="flex-grow-1"></div>
-            <div><a href="{{ url_for('add_hotel') }}" class="btn btn-primary">Add Hotel</a></div>
             <div>
                 <div class="dropdown dropdown-menu-end">
                     <button class="btn dropdown-toggle-split" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">

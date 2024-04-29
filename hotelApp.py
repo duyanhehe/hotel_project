@@ -451,8 +451,7 @@ def room_list(hotel_id):
     rooms = room.getAll(hotel_id)
 
     hotel = dbModel.Hotel()
-    hotels = hotel.getAll()
-    # print(hotel_detail)
+    hotels = hotel.getById(hotel_id)
 
     email = session ['email'] if 'email' in session and session['email'] != '' else ''
     return render_template("admin/room/room_list.html", email=email, rooms=rooms, hotels=hotels)
@@ -483,9 +482,41 @@ def add_room(hotel_id):
     email = session ['email'] if 'email' in session and session['email'] != '' else ''
     return render_template("admin/room/add_room.html", email = email, rooms=rooms, hotels=hotels, status = status)
 
+@app.route('/admin/<int:hotel_id>/edit_room/<int:room_id>', methods=['GET', 'POST'])
+@login_required
+def edit_room(hotel_id, room_id):
+    if session['usertype'] != 'admin':
+        flash('Unauthorized Access', category='error')
+        return redirect(url_for('homepage'))
+    room_model = dbModel.Room()
+    room_details = room_model.getDetailById(room_id)
+    print(room_details)
+    if request.method == 'POST':
+        room = dict()
+        room['room_id'] = room_id
+        room['hotel_id'] = hotel_id
+        room['room_type'] = request.form['room_type']
+        room['features'] = request.form['features']
+        room['peak_season_price'] = request.form['peak_season_price']
+        room['off_peak_price'] = request.form['off_peak_price']
+        room['status'] = request.form['status']
+
+        if room_model.update(room):
+            flash("Update room successfully", category='success')
+            print("Redirecting to room_lists route")
+            return redirect(url_for('room_list', hotel_id = hotel_id))
+        else:
+            flash("Error updating hotel", category='error')
+            return redirect(url_for('edit_room', hotel_id = hotel_id, room_id = room_id))
+    email = session ['email'] if 'email' in session and session['email'] != '' else ''
+    return render_template("admin/room/edit_room.html", email=email, hotel_id=hotel_id, room_id=room_id, room_details = room_details)
+
 @app.route('/admin/<int:hotel_id>/delete_room/<int:room_id>', methods=['GET','POST'])
 @login_required
 def delete_room(hotel_id, room_id):
+    if session['usertype'] != 'admin':
+        flash('Unauthorized Access', category='error')
+        return redirect(url_for('homepage'))
     room_model = dbModel.Room()
     room_details = room_model.getDetailById(room_id)
     print(room_details)

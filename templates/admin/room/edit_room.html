@@ -1,0 +1,47 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+
+{% if room_details: %}
+<div class="container pt-4">
+    <h3>Edit Room</h3>
+    <p class="text-secondary">{{ room_details[2] }}</p>
+</div>
+
+<div class="container bg-body-tertiary border py-4">
+    <div class="container">
+        <form action="{{ url_for('edit_room', hotel_id=room_details[1], room_id=room_details[0]) }}" method="POST">
+            <div class="form-group">
+                <label for="room_type">Room Type:</label>
+                <input type="text" class="form-control" id="room_type" name="room_type" value="{{ room_details[2] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="features">Room Features:</label>
+                <input type="text" class="form-control" id="features" name="features" value="{{ room_details[3] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="peak_season_price">Peak Season Price:</label>
+                <input type="number" step="0.01" min="0.00" class="form-control" id="peak_season_price" name="peak_season_price" value="{{ room_details[4] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="off_peak_price">Off Peak Price:</label>
+                <input type="number" step="0.01" min="0.00" class="form-control" id="off_peak_price" name="off_peak_price" value="{{ room_details[5] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="status">Room Status:</label>
+                <input type="text" class="form-control" id="status" name="status" value="{{ room_details[6] }}" required>
+            </div>
+            <br>
+            <div align="center">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+        <div class="mt-3" align="center">
+            <a href="{{ url_for('room_list', hotel_id=room_details[1]) }}">Return</a>
+        </div>
+    </div>
+</div>
+
+{% endif %}
+
+{% endblock %}

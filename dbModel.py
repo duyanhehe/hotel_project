@@ -307,14 +307,6 @@ class Room(Model):
             if self.dbcursor.rowcount == 0:
                 my_result = ()
         return my_result
-    
-    def delete(self, room_id):
-        try:
-            delete_query = "DELETE FROM room WHERE room_id = %s"
-            self.dbcursor.execute(delete_query, (room_id,))
-            self.conn.commit()
-        except Error as e:
-            print(e)
 
     def addNew(self, room):
         try:
@@ -330,6 +322,30 @@ class Room(Model):
                 return False
         return True
 
+    def update(self, room):
+        try:
+            self.dbcursor.execute('UPDATE ' + self.tbName +
+                                  ' SET hotel_id = %s, room_type = %s, features = %s, peak_season_price = %s, off_peak_price = %s, status = %s \
+                                    where room_id = %s',
+                                    (room['hotel_id'], room['room_type'], room['features'], room['peak_season_price'], room['off_peak_price'], room['status'], room['room_id']))
+            self.conn.commit()
+        except Error as e:
+            print(e)
+            return False
+        else:
+            if self.dbcursor.rowcount == -1:
+                return False
+            else:
+                return True
+
+
+    def delete(self, room_id):
+        try:
+            delete_query = "DELETE FROM room WHERE room_id = %s"
+            self.dbcursor.execute(delete_query, (room_id,))
+            self.conn.commit()
+        except Error as e:
+            print(e)
 
     def updateRoomStatus(self, room_id, status):
         try:
