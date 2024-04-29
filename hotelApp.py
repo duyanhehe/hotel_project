@@ -377,6 +377,47 @@ def all_bookings():
     print(all_booking)
     return render_template("admin/booking/all_bookings.html", email = email, all_booking = all_booking)
 
+@app.route('/admin/booking/edit/<int:booking_id>', methods=['GET', 'POST'])
+@login_required
+def admin_edit_booking(booking_id):
+    if session['usertype'] != 'admin':
+        flash('Unauthorized Access', category='error')
+        return redirect(url_for('homepage'))
+    booking_model = dbModel.Booking()
+    booking_details = booking_model.getDetailById(booking_id)
+    if request.method == 'POST':
+        booking = dict()
+        booking['booking_ID'] = booking_id
+        booking['check_in_date'] = request.form['check_in_date']
+        booking['check_out_date'] = request.form['check_out_date']
+        booking['total_price'] = request.form['total_price']
+        if booking_model.updateBooking(booking):
+            flash('Updated Booking!', category='success')
+            return redirect(url_for('all_bookings'))
+        else:
+            flash('Failed updating booking', category='error')
+            return redirect(url_for('admin_edit_booking'))
+    return render_template("admin/booking/edit.html", booking_details = booking_details)
+
+@app.route('/admin/booking/delete/<int:booking_id>', methods=['GET', 'POST'])
+@login_required
+def admin_delete_booking(booking_id):
+    if session['usertype'] != 'admin':
+        flash('Unauthorized Access', category='error')
+        return redirect(url_for('homepage'))
+    booking_model = dbModel.Booking()
+    booking_details = booking_model.getDetailById(booking_id)
+    if request.method == 'POST':
+        confirmation = request.form.get('confirmation')
+        if confirmation == 'yes':
+            booking_model.delete_booking(booking_id)
+            flash('Deleted booking successfully', category='success')
+            return redirect(url_for('all_bookings'))
+        else:
+            flash('Error deleting booking', category='error')
+            return redirect(url_for('all_bookings'))
+    return render_template("admin/booking/delete.html")
+
 @app.route('/admin/all_hotels')
 @login_required
 def all_hotels():
@@ -471,8 +512,6 @@ def delete_hotel(hotel_id):
         else:
             flash('Deletion cancelled', category='error')
             return redirect(url_for('all_hotels'))
-
-    email = session ['email'] if 'email' in session and session['email'] != '' else ''
     return render_template("admin/hotel/delete_hotel.html")
 
 @app.route('/admin/<int:hotel_id>/room_list')
@@ -567,7 +606,7 @@ def delete_room(hotel_id, room_id):
             return redirect(url_for('room_list', hotel_id = hotel_id))
     return render_template("admin/room/delete_room.html", email=email, hotel_id=hotel_id, room_id=room_id)
 
-@app.route('/admin/customers/list', methods=['GET', 'POST'])
+@app.route('/admin/customers/list')
 @login_required
 def customers_list():
     if session['usertype'] != 'admin':
@@ -578,11 +617,6 @@ def customers_list():
     users = customer.getAll()
     # print(users)
     email = session ['email'] if 'email' in session and session['email'] != '' else ''
-
-    if request.method == 'POST':
-        delete_customer = request.form.get('delete_customer')
-        # print("Deleting user with ID:", delete_customer)
-        customer.delete(delete_customer)
     return render_template('admin/customers/list.html', email = email, users = users)
 
 @app.route('/admin/customers/<users_id>')
@@ -628,6 +662,26 @@ def customers_edit(users_id):
     else:
         users = customer.getById(users_id)
     return render_template('admin/customers/edit.html', user = users, email = email)
+
+@app.route('/admin/customers/delete/<users_id>', methods=['GET', 'POST'])
+@login_required
+def delete_customer(users_id):
+    if session['usertype'] != 'admin':
+        flash('Unauthorized Access', category='error')
+        return redirect(url_for('homepage'))
+    user_model = dbModel.User()
+    user_details = user_model.getDetailById(users_id)
+    if request.method == 'POST':
+        confirmation = request.form.get('confirmation')
+        if confirmation == 'yes':
+            user_model.delete(users_id)
+            flash('Deleted customer successfully', category='success')
+            return redirect(url_for('customers_list'))
+        else:
+            flash('Deletion cancelled', category='error')
+            return redirect(url_for('customers_list'))
+    return render_template("admin/customers/delete.html")
+
 
 @app.route('/admin/monthly_sales')
 @login_required

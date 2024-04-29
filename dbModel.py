@@ -459,39 +459,11 @@ class Booking(Model):
 
         return True, total_price
 
-    def updateBooking(self, booking_id, new_booking):
+    def updateBooking(self, booking):
         try:
-            original_booking = self.getDetailById(booking_id)
-            if not original_booking:
-                return False, "Booking not found"
-            
-            # Extract original booking details
-            original_check_in_date = original_booking[3]
-            original_check_out_date = original_booking[4]
-            original_booking_date = original_booking[6]
-            original_total_price = original_booking[5]
-
-            # Extract updated booking details
-            updated_check_in_date = new_booking.get('check_in_date', original_check_in_date)
-            updated_check_out_date = new_booking.get('check_out_date', original_check_out_date)
-
-            # Check if check_in_date or check_out_date is changed
-            if updated_check_in_date != original_check_in_date or updated_check_out_date != original_check_out_date:
-                # Recalculate total price if dates are changed
-                new_booking['check_in_date'] = updated_check_in_date
-                new_booking['check_out_date'] = updated_check_out_date
-                success, new_total_price = self.calculate_total_price(new_booking)
-                if not success:
-                    return False, new_total_price
-            else:
-                # Keep the original total price if dates remain unchanged
-                new_total_price = original_total_price
-            
-            print("Updated Booking Details:", new_booking)  # Print updated booking details for troubleshooting
-
             # Update the booking in the database
             self.dbcursor.execute('UPDATE ' + self.tbName + ' SET check_in_date = %s, check_out_date = %s, total_price = %s WHERE booking_ID = %s',
-                                  (updated_check_in_date, updated_check_out_date, new_total_price, booking_id))
+                                  (booking['check_in_date'], booking['check_out_price'], booking['total_price'], booking['booking_ID']))
             self.conn.commit()
 
             return True, "Booking updated successfully"
@@ -607,28 +579,6 @@ class Booking(Model):
         else:
             if self.dbcursor.rowcount == 0:
                 my_result = ()
-        return my_result
-
-    def getDetailByRoomId(self, room_id):
-        try:
-            query = '''
-                SELECT booking.booking_ID, booking.users_id, booking.room_id, booking.check_in_date, booking.check_out_date, 
-                    booking.total_price, booking.booking_date,
-                    users.email, users.firstName, users.lastName, users.phoneNumber,
-                    room.room_type, room.features, room.peak_season_price, room.off_peak_price
-                FROM booking
-                LEFT JOIN users ON booking.users_id = users.users_id
-                LEFT JOIN room ON booking.room_id = room.room_id
-                WHERE booking.room_id = %s
-            '''
-            self.dbcursor.execute(query, (room_id,))
-            my_result = self.dbcursor.fetchall()
-        except Error as e:
-            print("Error retrieving booking details:", e)
-            my_result = ()
-        else:
-            if not my_result:
-                print("No booking details found.")
         return my_result
     
     def getAll(self, limit=10):

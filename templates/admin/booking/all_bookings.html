@@ -11,12 +11,6 @@
 <div class="container pt-4">
     <div class="container bg-body-tertiary border border-secondary">
         <div class="d-flex container py-2 bg-light">
-            <div class="container">
-                <select name="booking" id="booking">
-                    <option value="send_email">Send Email</option>
-                    <option value="delete_booking">Delete Booking</option>
-                </select>
-            </div>
             <div class="flex-grow-1"></div>
             <div>
                 <div class="dropdown dropdown-menu-end">
@@ -35,23 +29,20 @@
                     </ul>
                 </div>
             </div>
-            <!-- <div>
-                <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names..">
-            </div> -->
         </div>
         <div class="container table-responsive py-2">
             <table class="table table-sm table-responsive-md text-center">
                 <tr>
-                    <td>Booking ID</td>
-                    <td>Check In Date</td>
-                    <td>Check Out Date</td>
-                    <td>Total Price</td>
-                    <td>Booking Date</td>
-                    <td>Email</td>
-                    <td>Full Name</td>
-                    <td>Phone Number</td>
-                    <td>Room Type</td>
-                    <td>
+                    <th>Booking ID</th>
+                    <th>Check In Date</th>
+                    <th>Check Out Date</th>
+                    <th>Total Price</th>
+                    <th>Booking Date</th>
+                    <th>Email</th>
+                    <th>Full Name</th>
+                    <th>Phone Number</th>
+                    <th>Room Type</th>
+                    <th>
                         <div class="dropdown dropdown-menu-end">
                             <button class="btn dropdown-toggle-split" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                 <!-- Filter Icon -->
@@ -80,7 +71,7 @@
                                 </li>
                             </ul>
                         </div>
-                    </td>
+                    </th>
                 </tr>
 
                 {% for booking in all_booking %}
@@ -111,23 +102,24 @@
                                     <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
                                 </svg>
                             </button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <ul class="dropdown-menu text-center" aria-labelledby="dropdownMenuButton">
                                 <li>
-                                    <a class="dropdown-item" href="#">
-                                        <!-- Email Icon -->
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope-fill" viewBox="0 0 16 16">
-                                            <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414zM0 4.697v7.104l5.803-3.558zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586zm3.436-.586L16 11.801V4.697z"/>
-                                        </svg>
-                                        Send Email
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="#">
+                                    <a class="text-decoration-none" href="{{ url_for('admin_edit_booking', booking_id=booking[0]) }}">
                                         <!-- Edit Icon -->
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
                                             <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.5.5 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11z"/>
                                           </svg>
                                         Edit
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="text-decoration-none text-danger" href="{{ url_for('admin_delete_booking', booking_id=booking[0]) }}">
+                                        <!-- Delete Icon -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                            <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/>
+                                            </svg>
+                                        Delete
                                     </a>
                                 </li>
                             </ul>
