@@ -6,14 +6,14 @@
   {% if rooms: %}
   <div class="table-responsive">
     <table class="table table-responsive table-striped text-center">
-        <tr>
-            <th>Room Type</th>
-            <th>Features</th>
-            <th>Peak Season Price</th>
-            <th>Off Peak Price</th>
-            <th>Status</th>
-            <th></th>
-        </tr>
+      <tr>
+        <th>Room Type</th>
+        <th>Features</th>
+        <th>Peak Season Price</th>
+        <th>Off Peak Price</th>
+        <th>Status</th>
+        <th></th>
+      </tr>
         {% for room in rooms %}
         <tr>
             <td>{{room[2]}}</td>
@@ -26,8 +26,25 @@
             </td>
         </tr>
         {% endfor %}
+        
     </table>
+    {% else %}
+    <div class="table-responsive">
+      <table class="table table-responsive table-striped text-center">
+        <tr>
+          <th>Room Type</th>
+          <th>Features</th>
+          <th>Peak Season Price</th>
+          <th>Off Peak Price</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+        <tr>
+          <td colspan="6">This hotel does not have any rooms at the moment. <a href="{{ url_for('hotel_page') }}">Return</a></td>
+        </tr>
+      </table>
   </div>
+</div>
 
 {% endif %}
 

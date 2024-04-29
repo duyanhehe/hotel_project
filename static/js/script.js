@@ -136,6 +136,32 @@ function updateTotalPrice() {
     var timeDifference = checkOutDate.getTime() - checkInDate.getTime();
     var days_staying = Math.ceil(timeDifference / (1000 * 3600 * 34));
 
+    // Check if check-in date is before booking date
+    if (checkInDate < bookingDate) {
+        document.getElementById('error_message').innerHTML = "Check-in date cannot be before the booking date.";
+        document.getElementById('error_message').style.display = 'block';
+        document.getElementById("check_in_date").value = ''; // Clear the check-in date
+        document.getElementById("total_price").textContent = ''; // Clear the total price
+        return;
+    }
+
+    // Check if check-out date is before check-in date
+    if (checkOutDate < checkInDate) {
+        document.getElementById('error_message').innerHTML = "Check-out date cannot be before the check-in date.";
+        document.getElementById('error_message').style.display = 'block';
+        document.getElementById("check_out_date").value = ''; // Clear the check-out date
+        document.getElementById("total_price").textContent = ''; // Clear the total price
+        return;
+    }
+
+    // Ensure that the stay duration does not exceed 30 days
+    if (days_staying > 30) {
+        document.getElementById('error_message').innerHTML = "Sorry, the maximum stay duration allowed is 30 days. Please make separate bookings if you require a longer stay.";
+        document.getElementById('error_message').style.display = 'block';
+        document.getElementById("check_out_date").value = ''; // Clear the check-out date
+        document.getElementById("total_price").textContent = ''; // Clear the total price
+        return;
+    }
 
     // Determine discount % based on days difference
     var discount_percentage = 0;

@@ -450,6 +450,9 @@ class Booking(Model):
         if 'check_out_date' in booking:
             check_out_date = datetime.strptime(booking['check_out_date'], '%Y-%m-%d')
             days_staying = (check_out_date - check_in_date).days
+            # Check if the stay duration exceeds the maximum allowed (30 days)
+            if days_staying > 30:
+                return False, "Maximum stay duration exceeded (30 days)"
             total_price *= days_staying
         else:
             days_staying = 0
