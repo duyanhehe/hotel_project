@@ -14,15 +14,15 @@
             <div><a href="{{ url_for('add_hotel') }}" class="btn btn-success">Add Hotel</a></div>
         </div>
         <div class="container table-responsive py-2">
-            <table class="table table-sm text-center" id="myTable">
+            <table class="table table-sm text-center" id="myTable" id="myTable">
                 <thead>
                     <tr>
-                        <th>Hotel ID</th>
-                        <th>City</th>
-                        <th>Hotel Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Capacity</th>
+                        <th onclick="sortTable(0)">Hotel ID</th>
+                        <th onclick="sortTable(1)">City</th>
+                        <th onclick="sortTable(2)">Hotel Name</th>
+                        <th onclick="sortTable(3)">Email</th>
+                        <th onclick="sortsTable(4)">Phone</th>
+                        <th onclick="sortTable(5)">Capacity</th>                    
                         <th></th>
                         <th>
                             <div class="dropdown dropdown-menu-end">

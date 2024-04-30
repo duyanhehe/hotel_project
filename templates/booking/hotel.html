@@ -12,12 +12,11 @@
         <table class="table table-responsive table-striped text-center" id="myTable">
             {% if hotels %}
             <thead>
-                <tr class="header">
-                    <th>City</th>
-                    <th>Hotel</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Capacity</th>
+                <tr class="bg-info">
+                    <th onclick="sortTable(0)">Hotel &#9650;</th>
+                    <th onclick="sortTable(1)">Email &#9650;</th>
+                    <th onclick="sortTable(2)">Phone &#9650;</th>
+                    <th onclick="sortTable(3)">Capacity &#9650;</th>
                     <th></th>
                 </tr>
             </thead>
