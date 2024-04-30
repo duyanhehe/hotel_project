@@ -279,28 +279,74 @@ function updateTotalPrice() {
 
 // populateUL();
 
-$(document).ready(function() {
-    $('#hotelTable th').on('click', function() {
-        console.log('Header clicked');
-        var table = $(this).closest('table');
-        var rows = table.find('tbody > tr').get();
-        var index = $(this).index();
-        var order = $(this).data('order');
+// $(document).ready(function() {
+//     $('#hotelTable th').on('click', function() {
+//         console.log('Header clicked');
+//         var table = $(this).closest('table');
+//         var rows = table.find('tbody > tr').get();
+//         var index = $(this).index();
+//         var order = $(this).data('order');
         
-        rows.sort(function(a, b) {
-            var A = $(a).children('td').eq(index).text().toUpperCase();
-            var B = $(b).children('td').eq(index).text().toUpperCase();
-            if (order == 'desc') {
-                return A < B ? -1 : A > B ? 1 : 0;
-            } else {
-                return A > B ? -1 : A < B ? 1 : 0;
+//         rows.sort(function(a, b) {
+//             var A = $(a).children('td').eq(index).text().toUpperCase();
+//             var B = $(b).children('td').eq(index).text().toUpperCase();
+//             if (order == 'desc') {
+//                 return A < B ? -1 : A > B ? 1 : 0;
+//             } else {
+//                 return A > B ? -1 : A < B ? 1 : 0;
+//             }
+//         });
+        
+//         $.each(rows, function(index, row) {
+//             table.children('tbody').append(row);
+//         });
+//         console.log(order);
+//         $(this).data('order', order == 'desc' ? 'asc' : 'desc');
+//     });
+// });
+
+function sortTable(n) {
+    var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+    table = document.getElementById("myTable");
+    switching = true;
+    // Set the sorting direction to ascending
+    dir = "asc";
+    while (switching) {
+        switching = false;
+        rows = table.rows;
+        // Loop through all table rows (except the first, which contains the table headers)
+        for (i = 1; i < (rows.length - 1); i++) {
+            shouldSwitch = false;
+            // Get the two elements you want to compare, one from current row and one from the next
+            x = rows[i].getElementsByTagName("td")[n];
+            y = rows[i + 1].getElementsByTagName("td")[n];
+            // Check if the two rows should switch place, based on the direction, asc or desc
+            if (dir == "asc") {
+                if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                    // If so, mark as a switch and break the loop
+                    shouldSwitch = true;
+                    break;
+                }
+            } else if (dir == "desc") {
+                if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                    // If so, mark as a switch and break the loop
+                    shouldSwitch = true;
+                    break;
+                }
             }
-        });
-        
-        $.each(rows, function(index, row) {
-            table.children('tbody').append(row);
-        });
-        console.log(order);
-        $(this).data('order', order == 'desc' ? 'asc' : 'desc');
-    });
-});
+        }
+        if (shouldSwitch) {
+            // If a switch has been marked, make the switch and mark that a switch has been done
+            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+            switching = true;
+            // Increase this count each time a switch is done
+            switchcount++;
+        } else {
+            // If no switching has been done AND the direction is "asc", set the direction to "desc" and run the loop again
+            if (switchcount == 0 && dir == "asc") {
+                dir = "desc";
+                switching = true;
+            }
+        }
+    }
+}
