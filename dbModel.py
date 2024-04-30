@@ -196,6 +196,16 @@ class User(Model):
         except Error as e:
             print(e)
             return False
+        
+    def count_total_users(self):
+        try:
+            # Execute the SQL query to count total users
+            self.dbcursor.execute("SELECT COUNT(*) FROM " + self.tbName)
+            total_users = self.dbcursor.fetchone()[0]
+            return total_users
+        except Error as e:
+            print(e)
+            return None
 
 class Hotel(Model):
     def __init__(self):
@@ -262,7 +272,6 @@ class Hotel(Model):
             else:
                 return True
 
-
     def delete(self, hotel_id):
         try:
             delete_query = "DELETE FROM {} WHERE hotel_id = %s".format(self.tbName)
@@ -271,7 +280,36 @@ class Hotel(Model):
         except Error as e:
             print(e)
 
-            
+    def get_lowest_and_highest_booked_hotels(self):
+        try:
+            # Execute the SQL query
+            self.dbcursor.execute("""
+                SELECT hotel.hotel_id, hotel.hotel_name, COALESCE(COUNT(booking.room_id), 0) AS rooms_booked
+                FROM hotel
+                LEFT JOIN room ON hotel.hotel_id = room.hotel_id
+                LEFT JOIN booking ON room.room_id = booking.room_id
+                WHERE room.status = 'Booked'  -- Filter only 'Booked' rooms
+                GROUP BY hotel.hotel_id, hotel.hotel_name
+            """)
+            # Fetch the results
+            results = self.dbcursor.fetchall()
+            # Sort the results based on the rooms_booked column
+            sorted_results = sorted(results, key=lambda x: x[2])
+            # Get the lowest booked hotel
+            lowest_booked_hotel = sorted_results[0] if sorted_results else (None, None, 0)
+            # If the count of booked rooms for the lowest booked hotel is 0,
+            # replace the hotel name with the name of the first hotel in the sorted list
+            if lowest_booked_hotel[2] == 0 and sorted_results:
+                lowest_booked_hotel = sorted_results[0]
+            # Get the highest booked hotel
+            highest_booked_hotel = sorted_results[-1] if sorted_results else (None, None, 0)
+            return lowest_booked_hotel, highest_booked_hotel
+        except Error as e:
+            print(e)
+            return None, None
+
+        
+
 class Room(Model):
     def __init__(self):
         super().__init__()

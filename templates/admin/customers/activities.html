@@ -1,10 +1,15 @@
-{% extends "main.html" %}
+{% extends "admin/base.html" %}
 
 {% block content %}
 <div class="container py-4">
-    <h3 align="center">Booking History</h3>
+    <h3 align="center">User Activities</h3>
+    {% if user %}
+    <p align="center">{{ user[2] }}{{ user[3] }}</p>
+    <p align="center" class="text-secondary">{{ user[1] }}</p>
+    <a align="center" href="{{ url_for('customers_list') }}" class="text-decoration-none">Return</a>
+    {% endif %}
 </div>
-<div class="container bg-body-tertiary border py-4">
+<div class="container bg-body-tertiary py-4 border">
     <table class="table table-sm text-center">
         <thead>
             <tr>
@@ -13,7 +18,6 @@
                 <th>Check Out Date</th>
                 <th>Room Type</th>
                 <th>Total Price</th>
-                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -30,18 +34,12 @@
                     <td>{{ booking[9] }}</td>
                     <!-- Total Price -->
                     <td>{{ booking[5] }}</td>
-                    <!-- links -->
-                    <td>
-                        <a href="{{ url_for('change_booking', booking_id = booking[0]) }}" class="text-decoration-none">Change</a>
-                        <a href="{{ url_for('cancel_booking', booking_id = booking[0]) }}" class="text-decoration-none text-danger">Cancel</a>
-                    </td>
                 </tr>
                 {% endfor %}
             {% else %}
                 <tr>
                     <td colspan="5">
                         <p>No booking history available</p>
-                        <a href="{{ url_for('hotel_page') }}" class="btn btn-primary">BOOK NOW</a>
                     </td>
                 </tr>
             {% endif %}

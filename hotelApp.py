@@ -68,7 +68,6 @@ def confirm_booking(hotel_id, room_id):
     booking_date = datetime.now().date()  # Define booking_date outside the conditional block
     email = session.get('email', '')  # Retrieve email from session
     user_details = user_model.getByEmail(email)
-    users_id = user_details[0]
     print(user_details)
     total_price = 0
     if request.method == 'POST':
@@ -76,7 +75,7 @@ def confirm_booking(hotel_id, room_id):
         check_out_date = request.form['check_out_date']
         # Calculate total price
         booking = {
-            'users_id': users_id,
+            'users_id': user_details[0],
             'room_id': room_id,
             'check_in_date': check_in_date,
             'check_out_date': check_out_date,
@@ -332,6 +331,7 @@ def admin_dashboard():
         return redirect(url_for('homepage'))
     customer = dbModel.User()
     users = customer.getAll(5)
+    hotel_model = dbModel.Hotel()
     room_model = dbModel.Room()
     # print(users)
     # Get current week, month, year
@@ -354,11 +354,13 @@ def admin_dashboard():
     booked_rooms = room_model.countBookedRooms()
     # Count booked rooms by room type
     booked_rooms_by_type = room_model.countBookedRoomsByType()
+    # Count hotel with least room booked and most room booked
+    lowest_hotel, highest_hotel = hotel_model.get_lowest_and_highest_booked_hotels()
     email = session ['email'] if 'email' in session and session['email'] != '' else ''
     return render_template("admin/dashboard.html", email=email, users=users, monthly_sales=monthly_sales, 
                            top_customers=top_customers, total_booking=total_booking, total_bookings_month=total_bookings_month, 
                            total_bookings_week=total_bookings_week, available_rooms=available_rooms, booked_rooms=booked_rooms,
-                           booked_rooms_by_type=booked_rooms_by_type)
+                           booked_rooms_by_type=booked_rooms_by_type, lowest_hotel=lowest_hotel, highest_hotel=highest_hotel)
 
 @app.route('/admin/booking/all_bookings')
 @login_required
@@ -611,9 +613,11 @@ def customers_list():
 
     customer = dbModel.User()
     users = customer.getAll()
+    # Total Customers
+    total_customers = customer.count_total_users()
     # print(users)
     email = session ['email'] if 'email' in session and session['email'] != '' else ''
-    return render_template('admin/customers/list.html', email = email, users = users)
+    return render_template('admin/customers/list.html', email = email, users = users, total_customers = total_customers)
 
 @app.route('/admin/customers/<users_id>')
 @login_required
@@ -626,6 +630,20 @@ def customers_details(users_id):
     user_detail = customer.getDetailById(users_id)
     email = session ['email'] if 'email' in session and session['email'] != '' else ''
     return render_template('admin/customers/view.html', user = user_detail, email = email)
+
+@app.route('/admin/customers/<users_id>/activities')
+@login_required
+def customers_activities(users_id):
+    if session['usertype'] != 'admin':
+        flash('Unauthorized Access', category='error')
+        return redirect(url_for('homepage'))
+    email = session['email'] if 'email' in session and session['email'] != '' else ''
+    user_model = dbModel.User()
+    user = user_model.getById(users_id)
+    print(users_id)
+    booking_history = user_model.getBookingHistory(users_id)
+    print(booking_history)
+    return render_template("admin/customers/activities.html", user=user, booking_history=booking_history)
 
 @app.route('/admin/customers/edit/<users_id>', methods=['GET', 'POST'])
 @login_required
