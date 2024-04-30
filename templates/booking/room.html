@@ -2,18 +2,28 @@
 
 {% block content %}
 
+{% if hotels: %}
+<div class="container py-4">
+  <h3>{{ hotels[2] }}</h3>
+</div>
+{% endif %}
+
 <div class="container py-4">
   {% if rooms: %}
   <div class="table-responsive">
-    <table class="table table-responsive table-striped text-center">
-      <tr>
-        <th>Room Type</th>
-        <th>Features</th>
-        <th>Peak Season Price</th>
-        <th>Off Peak Price</th>
-        <th>Status</th>
-        <th></th>
-      </tr>
+    <input class="form-control" id="myInput" type="text" placeholder="Search.." onkeyup="searchFunction()">
+    <table class="table table-responsive table-striped text-center" id="myTable">
+      <thead>
+        <tr>
+          <th>Room Type</th>
+          <th>Features</th>
+          <th>Peak Season Price</th>
+          <th>Off Peak Price</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="myTable">
         {% for room in rooms %}
         <tr>
             <td>{{room[2]}}</td>
@@ -26,6 +36,7 @@
             </td>
         </tr>
         {% endfor %}
+      </tbody>
         
     </table>
     {% else %}

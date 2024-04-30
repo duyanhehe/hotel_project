@@ -40,9 +40,9 @@
         {% endif %}
         <div>
             <h5>Booking Date:</h5>
-            <p id="booking_date">{{ booking_date }}</p>
+            <p id="booking_date">{{ booking_date | strftime('%Y-%m-%d') }}</p>
         </div>
-        <form id="bookingForm" action="{{ url_for('confirm_booking', hotel_id=hotel_id, room_id=room_id) }}" method="POST">
+        <form id="bookingForm" action="{{ url_for('confirm_booking', hotel_id=hotel_id, room_id=room_id) }}" method="POST" onsubmit="return updateTotalPrice()">
             <div class="form-group">
                 <label for="check_in_date">Check In Date</label>
                 <input type="date" class="form-control" id="check_in_date" name="check_in_date" placeholder="Enter Check In Date" onchange="updateTotalPrice()" required>

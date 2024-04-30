@@ -3,38 +3,28 @@
 {% block content %}
 
 <div class="container py-4">
-    <form method="POST">
-        <div class="form-group">
-            <label for="city">Select City:</label>
-            <select class="form-control" id="city" name="city">
-                <option value="">All Cities</option>
-                {% if hotels: %}
-                {% for hotel in hotels %}
-                <option value="{{ hotel[1] }}" {% if selected_city == hotel[1] %} selected {% endif %} >{{ hotel[1] }}</option>
-                {% endfor %}
-                {% endif %}
-            </select>
-        </div>
-        <button type="submit" class="btn btn-primary">Filter</button>
-    </form>
-    
-    {% if hotels: %}
-        {% if hotels.cities %}
-            <h3>Hotels in {{ hotel[1] }}</h3>
-        {% else %}
-            <h3>All Hotels</h3>
-        {% endif %}
-        <div class="table-responsive">
-            <table class="table table-responsive table-striped text-center">
-                <tr>
+
+    <div class="container py-4">
+        <h3>All Hotels</h3>
+    </div>
+    <div class="table-responsive">
+        <input class="form-control" id="myInput" type="text" placeholder="Search.." onkeyup="searchFunction()">
+        <table class="table table-responsive table-striped text-center" id="myTable">
+            {% if hotels %}
+            <thead>
+                <tr class="header">
+                    <th>City</th>
                     <th>Hotel</th>
                     <th>Email</th>
                     <th>Phone</th>
                     <th>Capacity</th>
                     <th></th>
                 </tr>
+            </thead>
+            <tbody id="myTable">
                 {% for hotel in hotels %}
                     <tr>
+                        <td>{{ hotel[1] }}</td>
                         <td>{{ hotel[2] }}</td>
                         <td>{{ hotel[3] }}</td>
                         <td>{{ hotel[4] }}</td>
@@ -44,11 +34,12 @@
                         </td>
                     </tr>
                 {% endfor %}
-            </table>
-        </div>
-    {% else %}
-        <p>No hotels found.</p>
-    {% endif %}
+                {% else %}
+                    <td colspan="6">No hotels found.</td>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
 </div>
 
 {% endblock %}

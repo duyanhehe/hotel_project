@@ -121,11 +121,37 @@ async function validateForm() {
     }
 }
 
+// Search function
+function searchFunction() {
+    // Declare variables
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("myInput");
+    console.log("Input value:", input.value);
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTable");
+    tr = table.getElementsByTagName("tr");
+  
+    // Loop through all table rows, and hide those who don't match the search query
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td")[0];
+      if (td) {
+        txtValue = td.textContent || td.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  }
+
 // Calculate and update total price in booking
 function updateTotalPrice() {
     var checkInDate = new Date(document.getElementById("check_in_date").value);
     console.log("Check-in Date:", checkInDate);
-    var current_date = new Date(document.getElementById("booking_date").value);
+    var current_date_str = document.getElementById("booking_date").textContent.trim() + 'T00:00:00';
+    console.log("Formatted Date String:", current_date_str);
+    var current_date = new Date(current_date_str);
     console.log("Current Date:", current_date);
     var checkOutDate = new Date(document.getElementById("check_out_date").value);
     console.log("Check-out Date:", checkOutDate);
@@ -137,7 +163,7 @@ function updateTotalPrice() {
     var days_staying = Math.ceil(timeDifference / (1000 * 3600 * 34));
 
     // Check if check-in date is before booking date
-    if (checkInDate < bookingDate) {
+    if (checkInDate < current_date) {
         document.getElementById('error_message').innerHTML = "Check-in date cannot be before the booking date.";
         document.getElementById('error_message').style.display = 'block';
         document.getElementById("check_in_date").value = ''; // Clear the check-in date
@@ -198,12 +224,16 @@ function updateTotalPrice() {
         totalPrice *= days_staying;
     }
 
-    // Check if totalPrice is a valid number
-    console.log("Is totalPrice a valid number?", !isNaN(totalPrice));
-
+    // Display total price only if it's positive
     document.getElementById("total_price").textContent = totalPrice.toFixed(2);
-    console.log(totalPrice)
+    if (totalPrice < 0 ) {
+        return false;
+    } else {
+        return true;
+    }
 }
+
+// 
 
 
 //chart js

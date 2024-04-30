@@ -35,21 +35,16 @@ def homepage():
         email = session['email']
     return render_template("home.html", active_page = active_page, email = email)
 
-@app.route('/booking', methods=['GET', 'POST'])
+@app.route('/booking')
 def hotel_page():
     active_page = 'hotel'
     
     # Get all hotels
     hotel = dbModel.Hotel()
     hotels = hotel.getAll()
-    # Initialize selected_city variable
-    selected_city = None
-    
-    if request.method == 'POST':
-        selected_city = request.form.get('city')
 
     email = session['email'] if 'email' in session and session['email'] != '' else ''
-    return render_template("booking/hotel.html", active_page=active_page, email=email, hotels=hotels, selected_city = selected_city)
+    return render_template("booking/hotel.html", active_page=active_page, email=email, hotels=hotels)
 
 @app.route('/booking/<int:hotel_id>')
 def room_page(hotel_id):
@@ -58,7 +53,7 @@ def room_page(hotel_id):
     rooms = room.getAll(hotel_id)
 
     hotel = dbModel.Hotel()
-    hotels = hotel.getAll()
+    hotels = hotel.getById(hotel_id)
     email = session['email'] if 'email' in session and session['email'] != '' else ''
     return render_template("booking/room.html", active_page=active_page, email=email, rooms=rooms, hotels=hotels)
 
@@ -374,8 +369,9 @@ def all_bookings():
     email = session ['email'] if 'email' in session and session['email'] != '' else ''
     booking_model = dbModel.Booking()
     all_booking = booking_model.getAll()
+    total_booking = booking_model.countTotalBookings()
     print(all_booking)
-    return render_template("admin/booking/all_bookings.html", email = email, all_booking = all_booking)
+    return render_template("admin/booking/all_bookings.html", email = email, all_booking = all_booking, total_booking=total_booking)
 
 @app.route('/admin/booking/edit/<int:booking_id>', methods=['GET', 'POST'])
 @login_required
