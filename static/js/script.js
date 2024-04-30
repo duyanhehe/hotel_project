@@ -236,45 +236,71 @@ function updateTotalPrice() {
 // 
 
 
-//chart js
-const chartData = {
-    labels: ["Python", "Java", "Javascript", "C#", "Others"],
-    data: [30, 17, 10, 7, 36]
-};
+// //chart js
+// const chartData = {
+//     labels: ["Python", "Java", "Javascript", "C#", "Others"],
+//     data: [30, 17, 10, 7, 36]
+// };
 
-const myChart = document.querySelector(".my-chart");
-const ul = document.querySelector(".programming-stats .details ul ");
+// const myChart = document.querySelector(".my-chart");
+// const ul = document.querySelector(".programming-stats .details ul ");
 
-new Chart(myChart, {
-    type:"doughnut",
-    data: {
-        labels: chartData.labels,
-        datasets: [
-            {
-                label: "Language Popularity",
-                data: chartData.data,
-            },
-        ],
-    },
-    options: {
-        hoverBorderWidth: 10,
-        plugins: {
-            legend: {
-                display: true
-            },
-        },
-    },
-}); 
+// new Chart(myChart, {
+//     type:"doughnut",
+//     data: {
+//         labels: chartData.labels,
+//         datasets: [
+//             {
+//                 label: "Language Popularity",
+//                 data: chartData.data,
+//             },
+//         ],
+//     },
+//     options: {
+//         hoverBorderWidth: 10,
+//         plugins: {
+//             legend: {
+//                 display: true
+//             },
+//         },
+//     },
+// }); 
 
-const populateUL = () => {
-    chartData.labels.forEach((l, i) => {
-        let li = document.createElement("li");
-        li.innerHTML = `${l}: <span class='percentage'>${chartData.data[i]}%</span>`;
-        ul.appendChild(li);
+// const populateUL = () => {
+//     chartData.labels.forEach((l, i) => {
+//         let li = document.createElement("li");
+//         li.innerHTML = `${l}: <span class='percentage'>${chartData.data[i]}%</span>`;
+//         ul.appendChild(li);
 
     
 
-    });
-};
+//     });
+// };
 
-populateUL();
+// populateUL();
+
+$(document).ready(function() {
+    $('#hotelTable th').on('click', function() {
+        console.log('Header clicked');
+        var table = $(this).closest('table');
+        var rows = table.find('tbody > tr').get();
+        var index = $(this).index();
+        var order = $(this).data('order');
+        
+        rows.sort(function(a, b) {
+            var A = $(a).children('td').eq(index).text().toUpperCase();
+            var B = $(b).children('td').eq(index).text().toUpperCase();
+            if (order == 'desc') {
+                return A < B ? -1 : A > B ? 1 : 0;
+            } else {
+                return A > B ? -1 : A < B ? 1 : 0;
+            }
+        });
+        
+        $.each(rows, function(index, row) {
+            table.children('tbody').append(row);
+        });
+        console.log(order);
+        $(this).data('order', order == 'desc' ? 'asc' : 'desc');
+    });
+});
