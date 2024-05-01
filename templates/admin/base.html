@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <!-- Tab Icon -->
     <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
-    <title>Admin Hotel</title>
+    <title>Luwerious Admin</title>
 </head>
 <body>
     <div class="wrapper">
@@ -22,7 +22,9 @@
                       </svg>
                 </button>
                 <div class="sidebar-logo">
-                    <a href="#"><span>Dashboard</span></a>
+                    <a href="{{ url_for('admin_dashboard') }}" class="text-decoration-none">
+                        <span>Luwerious Admin</span>
+                    </a>
                 </div>
             </div>
             <ul class="sidebar-nav">
@@ -132,8 +134,8 @@
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
                             <a href="{{ url_for('admin_dashboard') }}" class="nav-link">
+                                <span>Luwerious Hotel Admin Page</span>
                                 <img src="{{ url_for('static', filename='img/faviconHotel.png') }}" class="avatar img-fluid" alt="">
-                                <span>Admin Hotel</span>
                             </a>
                         </li>
                     </ul>
