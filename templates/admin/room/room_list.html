@@ -14,7 +14,7 @@
 <div class="container pt-4">
     <div class="container bg-body-tertiary border border-secondary">
         <div class="d-flex container py-2 bg-light">
-            <input class="form-control" id="myInput" type="text" placeholder="Search.." onkeyup="searchFunction()">
+            <input class="form-control" id="myInput" type="text" placeholder="Search Room Type" onkeyup="searchFunction()">
             <div class="flex-grow-1"></div>
             <div>
                 <a href="{{ url_for('add_room', hotel_id=rooms[0][1]) }}" class="btn btn-success">Add room</a>

@@ -1,0 +1,37 @@
+STEPS
+1. Create venv and install everything in requirements.txt
+2. Create your own dbfunc.py file like this (change hostname, username, password to your own)
+
+import mysql.connector
+from mysql.connector import errorcode
+
+hostname    = "YourHostname"
+db          = "hotel_db"
+username    = "YourUsername"
+passwd  = "YourPassword"
+    
+def getConnection():    
+    try:
+        conn = mysql.connector.connect(host=hostname,                              
+                            user=username,
+                            db = db,
+                            password=passwd)  
+    except mysql.connector.Error as err:
+        if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+            print('User name or Password is not working')
+        elif err.errno == errorcode.ER_BAD_DB_ERROR:
+            print('Database does not exist')
+        else:
+            print(err)                        
+    else:  
+        return conn
+
+3. Run createHotelDB.py file
+4. Run hotelApp.py
+- To login to the admin account:
+    email: admin@gmail.com
+    password: adminpassword
+    + If you want to add more admin user, you have to go into customer list and edit usertype to admin
+- to login to normal account:
+    email: user1@gmail.com
+    password: password

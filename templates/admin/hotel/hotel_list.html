@@ -9,7 +9,7 @@
 <div class="container pt-4">
     <div class="container bg-body-tertiary border border-secondary">
         <div class="d-flex container py-2 bg-light">
-            <input class="form-control" id="myInput" type="text" placeholder="Search.." onkeyup="searchFunction()">
+            <input class="form-control" id="myInput" type="text" placeholder="Search For City" onkeyup="searchFunction()">
             <div class="flex-grow-1"></div>
             <div><a href="{{ url_for('add_hotel') }}" class="btn btn-success">Add Hotel</a></div>
         </div>
@@ -17,8 +17,8 @@
             <table class="table table-sm text-center" id="myTable" id="myTable">
                 <thead>
                     <tr>
-                        <th onclick="sortTable(0)">Hotel ID</th>
-                        <th onclick="sortTable(1)">City</th>
+                        <th onclick="sortTable(0)">City</th>
+                        <th onclick="sortTable(1)">Hotel ID</th>
                         <th onclick="sortTable(2)">Hotel Name</th>
                         <th onclick="sortTable(3)">Email</th>
                         <th onclick="sortTable(4)">Phone</th>
@@ -30,11 +30,17 @@
                 <tbody id="myTable">
                     {% for hotel in hotels %}
                     <tr>
-                        <td>{{hotel[0]}}</td>
+                        <!-- City -->
                         <td>{{hotel[1]}}</td>
+                        <!-- Hotel ID -->
+                        <td>{{hotel[0]}}</td>
+                        <!-- Hotel Name -->
                         <td>{{hotel[2]}}</td>
+                        <!-- Email -->
                         <td>{{hotel[3]}}</td>
+                        <!-- Phone -->
                         <td>{{hotel[4]}}</td>
+                        <!-- Capacity -->
                         <td>{{hotel[5]}}</td>
                         <td>
                             <a class="btn btn-primary" href="{{ url_for('room_list', hotel_id=hotel[0]) }}">

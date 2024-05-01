@@ -8,15 +8,16 @@
         <h3>All Hotels</h3>
     </div>
     <div class="table-responsive">
-        <input class="form-control" id="myInput" type="text" placeholder="Search.." onkeyup="searchFunction()">
+        <input class="form-control" id="myInput" type="text" placeholder="Search For City" onkeyup="searchFunction()">
         <table class="table table-responsive table-striped text-center" id="myTable">
             {% if hotels %}
             <thead>
                 <tr class="bg-info">
-                    <th onclick="sortTable(0)">Hotel &#9650;</th>
-                    <th onclick="sortTable(1)">Email &#9650;</th>
-                    <th onclick="sortTable(2)">Phone &#9650;</th>
-                    <th onclick="sortTable(3)">Capacity &#9650;</th>
+                    <th onclick="sortTable(0)">City</th>
+                    <th onclick="sortTable(1)">Hotel</th>
+                    <th onclick="sortTable(2)">Email</th>
+                    <th onclick="sortTable(3)">Phone</th>
+                    <th onclick="sortTable(4)">Capacity</th>
                     <th></th>
                 </tr>
             </thead>
@@ -30,6 +31,10 @@
                         <td>{{ hotel[5] }}</td>
                         <td>
                             <a href="{{ url_for('room_page', hotel_id=hotel[0]) }}" class="btn btn-primary">View Rooms</a>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
                         </td>
                     </tr>
                 {% endfor %}

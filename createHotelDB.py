@@ -1,7 +1,17 @@
+"""
+TEAM MEMBERS
+- Tran Duy Anh
+- Nguyen Quang Manh
+- Bui Vu Nhat Minh
+"""
+
 import mysql.connector
 from mysql.connector import Error, errorcode
 from werkzeug.security import generate_password_hash
 from dbfunc import hostname, username, passwd
+import random
+import string
+
 def getConnection():    
     try:
         conn = mysql.connector.connect(host=hostname,                              
@@ -20,6 +30,11 @@ def getConnection():
             return conn
         else:
             conn.close()
+
+# Function to generate a random string of fixed length
+def random_string(length):
+    letters = string.ascii_letters
+    return ''.join(random.choice(letters) for i in range(length))
 
 # create tables and insert mock data
 def create_tables():
@@ -116,53 +131,106 @@ def create_tables():
         cursor.execute("""INSERT INTO users (email, firstName, lastName, phoneNumber, password_hash, usertype)
                         VALUES ('admin@gmail.com', 'Ad', 'Min', '1231684968', %s, 'admin')""", (password,))
         
-        # Insert User
-        user_password = generate_password_hash('password')
-        cursor.execute("""INSERT INTO users (email, firstName, lastName, phoneNumber, password_hash, usertype)
-                        VALUES ('test@gmail.com', 'User', 'Test', '123123123', %s, 'standard')""", (user_password,))
+        # Insert users
+        for i in range(10):
+            email = f'user{i+1}@gmail.com'
+            firstName = random_string(5)
+            lastName = random_string(5)
+            phoneNumber = ''.join(random.choices(string.digits, k=9))
+            password_hash = generate_password_hash('password')
+            cursor.execute("""INSERT INTO users (email, firstName, lastName, phoneNumber, password_hash, usertype)
+                            VALUES (%s, %s, %s, %s, %s, 'standard')""",
+                        (email, firstName, lastName, phoneNumber, password_hash))
 
         # Insert hotels
         cursor.execute("""INSERT INTO hotel (city, hotel_name, email, phone, capacity)
-                    VALUES ('Aberdeen', 'Aberdeen Hotel', 'aberdeenHotel@gmail.com', '999999999', 90)""")
+                    VALUES ('Aberdeen', 'Aberdeen Hotel', 'aberdeenHotel@gmail.com', '999999999', 40)""")
         cursor.execute("""INSERT INTO hotel (city, hotel_name, email, phone, capacity)
-                    VALUES ('Belfast', 'Belfast Hotel', 'belfastHotel@gmail.com', '888888888', 80)""")
+                    VALUES ('Belfast', 'Belfast Hotel', 'belfastHotel@gmail.com', '888888888', 30)""")
         cursor.execute("""INSERT INTO hotel (city, hotel_name, email, phone, capacity)
-                    VALUES ('Birmingham', 'Birmingham Hotel', 'birminghamHotel@gmail.com', '777777777', 110)""")
+                    VALUES ('Birmingham', 'Birmingham Hotel', 'birminghamHotel@gmail.com', '777777777', 60)""")
         cursor.execute("""INSERT INTO hotel (city, hotel_name, email, phone, capacity)
-                    VALUES ('Bristol', 'Bristol Hotel', 'bristolHotel@gmail.com', '666666666', 100)""")
+                    VALUES ('Bristol', 'Bristol Hotel', 'bristolHotel@gmail.com', '666666666', 50)""")
         
-        # Insert rooms into aberdeen hotel
-        cursor.execute("""INSERT INTO room (hotel_id, room_type, features, peak_season_price, off_peak_price, status)
-                       VALUES (1, 'Standard', 'Wifi, TV', 59.99, 39.99, 'Available')""")
-        cursor.execute("""INSERT INTO room (hotel_id, room_type, features, peak_season_price, off_peak_price, status)
-                       VALUES (1, 'Double', 'Wifi, TV, mini-bar', 90.00, 70.00, 'Available')""")
-        cursor.execute("""INSERT INTO room (hotel_id, room_type, features, peak_season_price, off_peak_price, status)
-                       VALUES (1, 'Family', 'Wifi, TV, mini-bar, breakfast', 200.00, 120.00, 'Available')""")
-        # Insert rooms into belfast hotel
-        cursor.execute("""INSERT INTO room (hotel_id, room_type, features, peak_season_price, off_peak_price, status)
-                       VALUES (2, 'Standard', 'Wifi, TV, AC', 49.99, 29.99, 'Available')""")
-        cursor.execute("""INSERT INTO room (hotel_id, room_type, features, peak_season_price, off_peak_price, status)
-                       VALUES (2, 'Double', 'Wifi, TV, mini-bar, AC', 80.00, 60.00, 'Available')""")
-        cursor.execute("""INSERT INTO room (hotel_id, room_type, features, peak_season_price, off_peak_price, status)
-                       VALUES (2, 'Family', 'Wifi, TV, AC, mini-bar, breakfast', 190.00, 110.00, 'Available')""")
-        # Insert rooms into birmingham hotel
-        cursor.execute("""INSERT INTO room (hotel_id, room_type, features, peak_season_price, off_peak_price, status)
-                       VALUES (3, 'Standard', 'Wifi, TV, AC', 64.99, 44.99, 'Available')""")
-        cursor.execute("""INSERT INTO room (hotel_id, room_type, features, peak_season_price, off_peak_price, status)
-                       VALUES (3, 'Double', 'Wifi, TV, mini-bar, AC', 95.00, 75.00, 'Available')""")
-        cursor.execute("""INSERT INTO room (hotel_id, room_type, features, peak_season_price, off_peak_price, status)
-                       VALUES (3, 'Family', 'Wifi, TV, AC, mini-bar, breakfast', 205.00, 125.00, 'Available')""")
-        # Insert rooms into bristol hotel
-        cursor.execute("""INSERT INTO room (hotel_id, room_type, features, peak_season_price, off_peak_price, status)
-                       VALUES (4, 'Standard', 'Wifi, TV, AC', 59.99, 39.99, 'Available')""")
-        cursor.execute("""INSERT INTO room (hotel_id, room_type, features, peak_season_price, off_peak_price, status)
-                       VALUES (4, 'Double', 'Wifi, TV, mini-bar, AC', 90.00, 70.00, 'Available')""")
-        cursor.execute("""INSERT INTO room (hotel_id, room_type, features, peak_season_price, off_peak_price, status)
-                       VALUES (4, 'Family', 'Wifi, TV, AC, mini-bar, breakfast', 200.00, 120.00, 'Available')""")
+        ## Insert rooms into aberdeen hotel
+        # Standard Rooms
+        for i in range(0, 12):
+            cursor.execute("""INSERT INTO room (hotel_id, room_type, features, peak_season_price, off_peak_price, status)
+                        VALUES (1, 'Standard', 'Wifi, TV', 60.00, 40.00, 'Available')""")
+        # Double Rooms
+        for i in range(0, 20):
+            cursor.execute("""INSERT INTO room (hotel_id, room_type, features, peak_season_price, off_peak_price, status)
+                        VALUES (1, 'Double', 'Wifi, TV, mini-bar', 72.00, 50.40, 'Available')""")
+        # Family Rooms 
+        for i in range(0, 8):
+            cursor.execute("""INSERT INTO room (hotel_id, room_type, features, peak_season_price, off_peak_price, status)
+                        VALUES (1, 'Family', 'Wifi, TV, mini-bar, breakfast', 90.00, 60.00, 'Available')""")
+            
+        ## Insert rooms into belfast hotel
+        # Standard Rooms
+        for i in range(0, 9):
+            cursor.execute("""INSERT INTO room (hotel_id, room_type, features, peak_season_price, off_peak_price, status)
+                        VALUES (2, 'Standard', 'Wifi, TV, AC', 50.00, 30.00, 'Available')""")
+        # Double Rooms
+        for i in range(0, 15):
+            cursor.execute("""INSERT INTO room (hotel_id, room_type, features, peak_season_price, off_peak_price, status)
+                        VALUES (2, 'Double', 'Wifi, TV, mini-bar, AC', 60.00, 36.00, 'Available')""")
+        # Family Rooms 
+        for i in range(0, 6):
+            cursor.execute("""INSERT INTO room (hotel_id, room_type, features, peak_season_price, off_peak_price, status)
+                        VALUES (2, 'Family', 'Wifi, TV, AC, mini-bar, breakfast', 75.00, 45.00, 'Available')""")
+            
+        ## Insert rooms into birmingham hotel
+        # Standard Rooms
+        for i in range(0, 18):
+            cursor.execute("""INSERT INTO room (hotel_id, room_type, features, peak_season_price, off_peak_price, status)
+                        VALUES (3, 'Standard', 'Wifi, TV, AC', 65.00, 45.00, 'Available')""")
+        # Double Rooms
+        for i in range(0, 30):
+            cursor.execute("""INSERT INTO room (hotel_id, room_type, features, peak_season_price, off_peak_price, status)
+                        VALUES (3, 'Double', 'Wifi, TV, mini-bar, AC', 78.00, 54.00, 'Available')""")
+        # Family Rooms 
+        for i in range(0, 12):
+            cursor.execute("""INSERT INTO room (hotel_id, room_type, features, peak_season_price, off_peak_price, status)
+                        VALUES (3, 'Family', 'Wifi, TV, AC, mini-bar, breakfast', 97.50, 67.50, 'Available')""")
+            
+        ## Insert rooms into bristol hotel
+        # Standard Rooms
+        for i in range(0, 15):
+            cursor.execute("""INSERT INTO room (hotel_id, room_type, features, peak_season_price, off_peak_price, status)
+                        VALUES (4, 'Standard', 'Wifi, TV, AC', 59.99, 39.99, 'Available')""")
+        # Double Rooms
+        for i in range(0, 25):
+            cursor.execute("""INSERT INTO room (hotel_id, room_type, features, peak_season_price, off_peak_price, status)
+                        VALUES (4, 'Double', 'Wifi, TV, mini-bar, AC', 90.00, 70.00, 'Available')""")
+        # Family Rooms 
+        for i in range(0, 10):
+            cursor.execute("""INSERT INTO room (hotel_id, room_type, features, peak_season_price, off_peak_price, status)
+                        VALUES (4, 'Family', 'Wifi, TV, AC, mini-bar, breakfast', 200.00, 120.00, 'Available')""")
 
         # Insert into booking
         cursor.execute("""INSERT INTO booking (users_id, room_id, check_in_date, check_out_date, total_price, booking_date)
-                       VALUES (2, 4, '2024-06-25', '2024-06-28', 49.99, '2024-04-21')""")
+                       VALUES (2, 4, '2024-06-25', '2024-06-28', 60.00, '2024-05-21')""")
+        cursor.execute("""INSERT INTO booking (users_id, room_id, check_in_date, check_out_date, total_price, booking_date)
+                       VALUES (2, 5, '2024-06-25', '2024-06-28', 60.00, '2024-05-21')""")
+        cursor.execute("""INSERT INTO booking (users_id, room_id, check_in_date, check_out_date, total_price, booking_date)
+                       VALUES (2, 6, '2024-06-25', '2024-06-28', 60.00, '2024-05-21')""")
+        cursor.execute("""INSERT INTO booking (users_id, room_id, check_in_date, check_out_date, total_price, booking_date)
+                       VALUES (3, 7, '2024-06-25', '2024-06-28', 60.00, '2024-05-21')""")
+        cursor.execute("""INSERT INTO booking (users_id, room_id, check_in_date, check_out_date, total_price, booking_date)
+                       VALUES (4, 8, '2024-06-25', '2024-06-28', 60.00, '2024-05-21')""")
+        cursor.execute("""INSERT INTO booking (users_id, room_id, check_in_date, check_out_date, total_price, booking_date)
+                       VALUES (5, 9, '2024-06-25', '2024-06-28', 60.00, '2024-05-21')""")
+        cursor.execute("""INSERT INTO booking (users_id, room_id, check_in_date, check_out_date, total_price, booking_date)
+                       VALUES (6, 10, '2024-06-25', '2024-06-28', 60.00, '2024-05-21')""")
+        cursor.execute("""INSERT INTO booking (users_id, room_id, check_in_date, check_out_date, total_price, booking_date)
+                       VALUES (7, 11, '2024-06-25', '2024-06-28', 60.00, '2024-05-21')""")
+        cursor.execute("""INSERT INTO booking (users_id, room_id, check_in_date, check_out_date, total_price, booking_date)
+                       VALUES (8, 12, '2024-06-25', '2024-06-28', 60.00, '2024-05-21')""")
+        cursor.execute("""INSERT INTO booking (users_id, room_id, check_in_date, check_out_date, total_price, booking_date)
+                       VALUES (9, 13, '2024-06-25', '2024-06-28', 72.00, '2024-05-21')""")
+        cursor.execute("""INSERT INTO booking (users_id, room_id, check_in_date, check_out_date, total_price, booking_date)
+                       VALUES (10, 14, '2024-06-25', '2024-06-28', 72.00, '2024-05-21')""")
 
         connection.commit()
         connection.close()

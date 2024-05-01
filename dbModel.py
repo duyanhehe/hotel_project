@@ -1,3 +1,10 @@
+"""
+TEAM MEMBERS
+- Tran Duy Anh
+- Nguyen Quang Manh
+- Bui Vu Nhat Minh
+"""
+
 import mysql.connector, dbfunc
 from mysql.connector import errorcode, Error
 from werkzeug.security import generate_password_hash, check_password_hash

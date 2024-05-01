@@ -1,3 +1,10 @@
+"""
+TEAM MEMBERS
+- Tran Duy Anh
+- Nguyen Quang Manh
+- Bui Vu Nhat Minh
+"""
+
 from flask import Flask, render_template, flash, request, url_for, redirect, session, jsonify
 import dbModel, mysql.connector
 from mysql.connector import Error
@@ -41,7 +48,7 @@ def hotel_page():
     
     # Get all hotels
     hotel = dbModel.Hotel()
-    hotels = hotel.getAll()
+    hotels = hotel.getAll(100)
 
     email = session['email'] if 'email' in session and session['email'] != '' else ''
     return render_template("booking/hotel.html", active_page=active_page, email=email, hotels=hotels)
@@ -50,7 +57,7 @@ def hotel_page():
 def room_page(hotel_id):
     active_page = 'hotel'
     room = dbModel.Room()
-    rooms = room.getAll(hotel_id)
+    rooms = room.getAll(hotel_id, 500)
 
     hotel = dbModel.Hotel()
     hotels = hotel.getById(hotel_id)
@@ -370,7 +377,7 @@ def all_bookings():
         return redirect(url_for('homepage'))
     email = session ['email'] if 'email' in session and session['email'] != '' else ''
     booking_model = dbModel.Booking()
-    all_booking = booking_model.getAll()
+    all_booking = booking_model.getAll(500)
     total_booking = booking_model.countTotalBookings()
     print(all_booking)
     return render_template("admin/booking/all_bookings.html", email = email, all_booking = all_booking, total_booking=total_booking)
@@ -424,7 +431,7 @@ def all_hotels():
         return redirect(url_for('homepage'))
 
     hotel = dbModel.Hotel()
-    hotels = hotel.getAll()
+    hotels = hotel.getAll(100)
     # print(hotels)
     email = session ['email'] if 'email' in session and session['email'] != '' else ''
     return render_template("admin/hotel/hotel_list.html", email = email, hotels = hotels)
@@ -520,7 +527,7 @@ def room_list(hotel_id):
         return redirect(url_for('homepage'))
     
     room = dbModel.Room()
-    rooms = room.getAll(hotel_id)
+    rooms = room.getAll(hotel_id, 500)
 
     hotel = dbModel.Hotel()
     hotels = hotel.getById(hotel_id)
@@ -536,7 +543,7 @@ def add_room(hotel_id):
         return redirect(url_for('homepage'))
     
     room_model = dbModel.Room()
-    rooms = room_model.getAll(hotel_id)
+    rooms = room_model.getAll(hotel_id, 500)
     hotel = dbModel.Hotel()
     hotels = hotel.getById(hotel_id)
     status = 'Available'
@@ -612,7 +619,7 @@ def customers_list():
         return redirect(url_for('homepage'))
 
     customer = dbModel.User()
-    users = customer.getAll()
+    users = customer.getAll(100)
     # Total Customers
     total_customers = customer.count_total_users()
     # print(users)
@@ -753,7 +760,7 @@ def admin_all_contacts():
         return redirect(url_for('homepage'))
 
     contact_model = dbModel.Contact()
-    contacts = contact_model.getAll()
+    contacts = contact_model.getAll(100)
     return render_template('admin/contact.html', contacts=contacts)
 
 @app.route('/admin/contact/delete/<int:contact_id>', methods=['POST'])

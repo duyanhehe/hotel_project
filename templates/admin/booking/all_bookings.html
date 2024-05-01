@@ -11,45 +11,45 @@
 <div class="container pt-4">
     <div class="container bg-body-tertiary border border-secondary">
         <div class="d-flex container py-2 bg-light">
-            <input class="form-control" id="myInput" type="text" placeholder="Search.." onkeyup="searchFunction()">
+            <input class="form-control" id="myInput" type="text" placeholder="Search Name" onkeyup="searchFunction()">
         </div>
         <div class="container table-responsive py-2">
             <table class="table table-sm table-responsive-md text-center" id="myTable">
                 <thead>
                     <tr>
-                        <th>Booking ID</th>
-                        <th>Check In Date</th>
-                        <th>Check Out Date</th>
-                        <th>Total Price</th>
-                        <th>Booking Date</th>
-                        <th>Email</th>
-                        <th>Full Name</th>
-                        <th>Phone Number</th>
-                        <th>Room Type</th>
+                        <th onclick="sortTable(0)">Full Name</th>
+                        <th onclick="sortTable(1)">Email</th>
+                        <th onclick="sortTable(2)">Phone Number</th>
+                        <th onclick="sortTable(3)">Booking Date</th>
+                        <th onclick="sortTable(4)">Check In Date</th>
+                        <th onclick="sortTable(5)">Check Out Date</th>
+                        <th onclick="sortTable(6)">Total Price</th>
+                        <th onclick="sortTable(7)">Room Type</th>
+                        <th onclick="sortTable(8)">Booking ID</th>
                         <th></th>
                     </tr>    
                 </thead>
                 <tbody id="myTable">
                     {% for booking in all_booking %}
                     <tr>
-                        <!-- Booking ID -->
-                        <td>{{ booking[0] }}</td>
+                        <!-- Full Name -->
+                        <td>{{ booking[8] }} {{ booking[9] }}</td>
+                        <!-- Email -->
+                        <td>{{ booking[7] }}</td>
+                        <!-- Phone Number -->
+                        <td>{{ booking[10] }}</td>
+                        <!-- Booking Date -->
+                        <td>{{ booking[6]}}</td>
                         <!-- Check In Date -->
                         <td>{{ booking[3] }}</td>
                         <!-- Check Out Date -->
                         <td>{{ booking[4] }}</td>
                         <!-- Total Price -->
                         <td>{{ booking[5] }}</td>
-                        <!-- Booking Date -->
-                        <td>{{ booking[6]}}</td>
-                        <!-- Email -->
-                        <td>{{ booking[7] }}</td>
-                        <!-- Full Name -->
-                        <td>{{ booking[8] }} {{ booking[9] }}</td>
-                        <!-- Phone Number -->
-                        <td>{{ booking[10] }}</td>
                         <!-- Room Type -->
                         <td>{{ booking[11] }}</td>
+                        <!-- Booking ID -->
+                        <td>{{ booking[0] }}</td>
                         <td>
                             <div class="dropdown dropdown-menu-end">
                                 <button class="btn dropdown-toggle-split" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">

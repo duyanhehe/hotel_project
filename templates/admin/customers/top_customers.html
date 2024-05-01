@@ -4,11 +4,13 @@
 <div class="container pt-4">
     <h3>Top Customers</h3>
     <p class="text-secondary">Customers with the Highest Total Spending</p>
+    <a href="{{ url_for('customers_list') }}" class="text-decoration-none">Return</a>
 </div>
 
 <div class="container pt-4">
-    <div class="container bg-body-tertiary border border-secondary">
+    <div class="container table-responsive bg-body-tertiary border border-secondary">
         <h5 class="text-center py-3">Top Customers by Total Spending</h5>
+
         <table class="table table-striped">
             <thead>
                 <tr>

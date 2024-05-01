@@ -9,7 +9,7 @@
 <div class="container pt-4">
     <div class="container bg-body-tertiary border border-secondary">
         <div class="d-flex container py-2 bg-light">
-            <input class="form-control" id="myInput" type="text" placeholder="Search.." onkeyup="searchFunction()">
+            <input class="form-control" id="myInput" type="text" placeholder="Search Name" onkeyup="searchFunction()">
             <div class="flex-grow-1"></div>
             <div>
                 <a href="{{ url_for('top_customers') }}" class="btn btn-primary">Top Customers</a>
@@ -19,27 +19,27 @@
             <table class="table table-sm text-center" id="myTable">
                 <thead>
                     <tr>
-                        <th>User ID</th>
-                        <th>Email</th>
-                        <th>Name</th>
-                        <th>Phone Number</th>
-                        <th>Usertype</th>
+                        <th onclick="sortTable(0)">Name</th>
+                        <th onclick="sortTable(1)">Email</th>
+                        <th onclick="sortTable(2)">Phone Number</th>
+                        <th onclick="sortTable(3)">Usertype</th>
+                        <th onclick="sortTable(4)">User ID</th>
                         <th></th>
                     </tr>
                 </thead>
                 {% for user in users: %}
                 <tbody id="myTable">
                     <tr>
-                        <!-- User ID -->
-                        <td>{{user[0]}}</td>
-                        <!-- Email -->
-                        <td>{{user[1]}}</td>
                         <!-- Name -->
                         <td>{{user[2]}} {{user[3]}}</td>
+                        <!-- Email -->
+                        <td>{{user[1]}}</td>
                         <!-- Phone Number -->
                         <td>{{user[4]}}</td>
                         <!-- Usertype -->
                         <td>{{user[6]}}</td>
+                        <!-- User ID -->
+                        <td>{{user[0]}}</td>
                         <td>
                             <div class="dropdown dropdown-menu-end">
                                 <button class="btn dropdown-toggle-split" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
