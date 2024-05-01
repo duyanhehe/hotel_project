@@ -404,6 +404,18 @@ class Room(Model):
         except Error as e:
             print(e)
 
+    def getRoomStatus(self, room_id):
+        try:
+            self.dbcursor.execute("SELECT status FROM {} WHERE room_id = %s".format(self.tbName), (room_id,))
+            status = self.dbcursor.fetchone()
+            if status:
+                return status[0]  # Returning the status if found
+            else:
+                return None  # Room not found
+        except Error as e:
+            print(e)
+            return None  # Error occurred
+
     def updateRoomStatus(self, room_id, status):
         try:
             self.dbcursor.execute('UPDATE ' + self.tbName + ' SET status = %s WHERE room_id = %s', (status, room_id))
@@ -519,6 +531,13 @@ class Booking(Model):
     def addNew(self, booking):
         # Update room status to "Booked"
         room_instance = Room()
+        # Check current room status
+        current_status = room_instance.getRoomStatus(booking['room_id'])
+        if current_status == 'Booked':
+            # Room is already booked, return False
+            return False
+        
+        # If the room is not booked, proceed with the insertion
         room_instance.updateRoomStatus(booking['room_id'], 'Booked')
         try:
             success, total_price = self.calculate_total_price(booking)
