@@ -1,6 +1,7 @@
 STEPS
 1. Create venv and install everything in requirements.txt
 2. Create your own dbfunc.py file like this (change hostname, username, password to your own)
+3. make sure your sql server is running
 
 import mysql.connector
 from mysql.connector import errorcode
@@ -27,7 +28,7 @@ def getConnection():
         return conn
 
 3. Run createHotelDB.py file
-4. Run hotelApp.py
+4. Run hotelApp.py and open http://127.0.0.1:5000/ on your web browser
 - To login to the admin account:
     email: admin@gmail.com
     password: adminpassword
@@ -35,3 +36,4 @@ def getConnection():
 - to login to normal account:
     email: user1@gmail.com
     password: password
+- sign up new account
