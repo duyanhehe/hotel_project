@@ -516,11 +516,11 @@ class Booking(Model):
 
         return True, total_price
 
-    def updateBooking(self, booking):
+    def updateBooking(self, booking_id, updated_booking):
         try:
             # Update the booking in the database
-            self.dbcursor.execute('UPDATE ' + self.tbName + ' SET check_in_date = %s, check_out_date = %s, total_price = %s WHERE booking_ID = %s',
-                                  (booking['check_in_date'], booking['check_out_price'], booking['total_price'], booking['booking_ID']))
+            self.dbcursor.execute('UPDATE ' + self.tbName + ' SET room_id = %s, check_in_date = %s, check_out_date = %s, total_price = %s WHERE booking_ID = %s',
+                                (updated_booking['room_id'], updated_booking['check_in_date'], updated_booking['check_out_date'], updated_booking['total_price'], booking_id))
             self.conn.commit()
 
             return True, "Booking updated successfully"

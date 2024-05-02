@@ -92,7 +92,7 @@ def confirm_booking(hotel_id, room_id):
         current_status = room.getRoomStatus(room_id)
         if current_status == 'Booked':
             flash('Sorry, the room is already booked.', category='error')
-            return redirect(url_for('homepage'))  # Redirect to homepage or any other page
+            return redirect(url_for('homepage'))  # Redirect to homepage or any other page-
 
         success, total_price = booking_model.calculate_total_price(booking)
         if success:
