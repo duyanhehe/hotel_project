@@ -138,7 +138,6 @@ def change_booking(booking_id):
             'booking_date': booking_date,
             'check_in_date': check_in_date,
             'check_out_date': check_out_date,
-
         }
         print("Updated Booking:", updated_booking)  # Print updated booking details
 
